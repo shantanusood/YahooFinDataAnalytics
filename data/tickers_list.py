@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import sys
+import pandas as pd
 
 def range_vals(type, list):
     start = 0
@@ -50,7 +51,24 @@ def tickers(type):
         ret = range_vals(type, filelist)
         return filelist[ret[0]:ret[1]]
 
+def ticker_details(type):
+    filename = ""
+    start = 0
+    end = 0
+    data = None
+    list = []
+    if "_" in type:
+        filename = './data/' + type[0:int(type.index('_'))] + '.csv'
+        start = int(type[int(type.index("_"))+1: int(type.index(":"))])
+        end = int(type[int(type.index(":"))+1:])
+        data = pd.read_csv(filename)
+        for i in range(start, end):
+            list.append(dict(data.iloc[i]))
+        return list
+    else:
+        filename = './data/' + type+'.csv'
+        data = pd.read_csv(filename)
+        return data
 
 if __name__ == '__main__':
-    text = tickers(sys.argv[1])
-    print(text)
+    print(ticker_details(sys.argv[1]))

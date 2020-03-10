@@ -5,6 +5,7 @@ import sys
 from src import quote as q, financials as f, bs as b, cf as c 
 import pandas as pd
 from data import tickers_list as tl
+import os.path
 
 def checkCode(req):
     if req.status_code is 200:
@@ -25,16 +26,26 @@ def main():
     if sys.argv[1] == 'quote':
         input = str(sys.argv[2])
         if "_" in input:
+            count = 0
+            details = []
+            if os.path.isfile('./data/'+input[0:int(input.index("_"))] + '.csv'):
+                details = tl.ticker_details(input)
             for i in tl.tickers(input):
                 req = r.get("https://finance.yahoo.com/quote/{0}?p={0}".format(i))
                 try:
                     if checkCode(req):
                         df = q.parse(req.text)
                         pd.set_option('display.max_rows', 5, 'display.max_columns', 100)
-                        print("Quote for: {}".format(i))
+                        print("Quote for: {} ".format(i), end='')
+                        if len(details)>count:
+                            print(details[count])
+                        else:
+                            print("No Details available")
                         print(df)
                 except:
                     print("Exception occured while getting quote for: {0}".format(i))
+                finally:
+                    count = count + 1
         else:
             req = r.get("https://finance.yahoo.com/quote/{0}?p={0}".format(i))
             if checkCode(req):

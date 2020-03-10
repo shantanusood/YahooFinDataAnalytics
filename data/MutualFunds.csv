@@ -1,3 +1,4 @@
+Ticker,Name,Exchange
 APU5.AX,,
 ACV1529-C.BO,,
 IRH7.AX,,
@@ -1124,7 +1125,7 @@ VCSF8.AX,,
 NVG1625-C.BO,,
 R2:AFLT3T.SA,,
 EDJ16-2.SI,,
-ALPHA16L.AT,ALPHA BANK S.A. (CR), Future, D,ATH
+ALPHA16L.AT,ALPHA BANK S.A. (CR) Future D,ATH
 VIG1526-C.BO,,
 MDJ15-3.SI,,
 SGJ15-2.SI,,
@@ -1331,7 +1332,7 @@ VCC6.AX,,
 IR16Z.AX,,
 YAR6P.OL,,
 UBF6.AX,,
-ALPHA17C.AT,ALPHA BANK S.A. (CR), Future, M,ATH
+ALPHA17C.AT,ALPHA BANK S.A. (CR) Future M,ATH
 AR16M.AX,,
 TIT6D.MDD,,
 SAPIJ6.EX,,
@@ -2210,7 +2211,7 @@ NSG16-2.SI,,
 INZ16-3.SI,,
 IDN15-C.SI,,
 R2:BMIN3T.SA,,
-BELA16L.AT,JUMBO S.A. (CR), Future, Dec 16,ATH
+BELA16L.AT,JUMBO S.A. (CR) Future Dec 16,ATH
 TWG15-2.SI,,
 R2:ECPR3T.SA,,
 ILU1524-C.BO,,
@@ -2580,7 +2581,7 @@ R2:CRDE3T.SA,,
 ELZ17-2.SI,,
 NSV15-3.SI,,
 M58FK18-C.SI,,
-JBM16-C.SI,JB future for June 2016, being,SES
+JBM16-C.SI,JB future for June 2016 being,SES
 R2:CLSC3T.SA,,
 MDG16-C.SI,,
 R2:SULT3T.SA,,
@@ -4165,7 +4166,7 @@ DSZ7.AX,,
 V3OZ6.EX,,
 S3IEZ9.EX,S3IEZ9.EX,EUX
 RP86Z.AS,,
-INLOT16L.AT,INTRALOT S.A. (CR), Future, Dec,ATH
+INLOT16L.AT,INTRALOT S.A. (CR) Future Dec,ATH
 DUEFH6.EX,,
 PPSFZ16-3.SI,,
 1ENI7L.MDD,1ENI December 2017 Future,MDD
@@ -4212,9 +4213,9 @@ V2VDZ8.EX,FUTURE ON VEOLIA DIVIDEND,EUX
 FEEDZ7.EX,FEEDZ7.EX,EUX
 DGEFG7.EX,DGEFG7.EX,EUX
 IESIZ6.EX,INTESA SANPAOLO,EUX
-VIO16L.AT,VIO, Future, Dec 16,ATH
+VIO16L.AT,VIO Future Dec 16,ATH
 I3ESZ6.EX,,
-FFGRP16L.AT,FFGRP, Future, Dec 16,ATH
+FFGRP16L.AT,FFGRP Future Dec 16,ATH
 FSMDZ6.EX,,
 DVZ7.AX,,
 PGSFUT6X.OL,,
@@ -4306,7 +4307,7 @@ DNB6N.OL,,
 VS16H.AX,,
 8144571.EX,,
 8122735.EX,,
-TITK16L.AT,TITAN CEMENT COMPANY S.A. (CR),,ATH
+TITK16L.AT,TITAN CEMENT COMPANY S.A. (CR),ATH
 M2CDZ6.EX,,
 DVI6.AX,,
 PESFZ15-2.SI,,
@@ -4332,7 +4333,7 @@ DS18M.AX,SA Peak Load Electricity Strip,ASX
 DIV1529-C.BO,,
 FEXDZ9.EX,FEXDZ9.EX,EUX
 U3BSZ7.EX,U3BSZ7.EX,EUX
-GEKTE16L.AT,GEKTERNA, Future, Dec 16,ATH
+GEKTE16L.AT,GEKTERNA Future Dec 16,ATH
 DPWFF6.EX,,
 FSEDZ7.EX,STOXX Europe 600 Oil & Gas Inde,EUX
 1ENI6LX.MDD,,
@@ -4498,10 +4499,10 @@ DIX1526-C.BO,,
 1DAI7L.MDD,1DAI December 2017 Future,MDD
 M58FZ15-C.SI,,
 J2NJZ6.EX,,
-METKK16L.AT,METKA S.A. (CR), Future, Dec 16,ATH
+METKK16L.AT,METKA S.A. (CR) Future Dec 16,ATH
 DGEFH6.EX,,
 DBKGZ6.EX,,
-FMWNZ6.EX,FUTURE ON MSCI WORLD (NTR, EUR),EUX
+FMWNZ6.EX,FUTURE ON MSCI WORLD (NTR EUR),EUX
 RLG1526-C.BO,,
 M58FZ18-2.SI,,
 DCQ1527-C.BO,,
@@ -4535,7 +4536,7 @@ D2TEZ9.EX,DEUTSCHE TELEKOM,EUX
 DCZ1531-C.BO,,
 9329788.EX,,
 1VIV8L.MDD,1VIV8L.MDD,MDD
-OPAP16L.AT,OPAP S.A. (CR), Future, Dec 16,ATH
+OPAP16L.AT,OPAP S.A. (CR) Future Dec 16,ATH
 DNI7.AX,,
 1G7L.MDD,1G December 2017 Future,MDD
 V4OZ6.EX,,
@@ -4667,16 +4668,16 @@ NUZ15-3.SI,,
 R2TZZ6.EX,,
 RPC7.AX,,
 RP17M.AX,,
-PPC16L.AT,PPC S.A. (CR), Future, Dec 16,ATH
+PPC16L.AT,PPC S.A. (CR) Future Dec 16,ATH
 NDZ17-C.SI,,
 NUZ15-C.SI,,
 FMCNZ6.EX,FUTURE ON MSCI CHINA FREE (NTR),EUX
 DQZ5.AX,,
 SCMHZ7.EX,SCMHZ7.EX,EUX
-MYTIL16L.AT,MYTILINEOS HOLDINGS S.A. (CR),,ATH
+MYTIL16L.AT,MYTILINEOS HOLDINGS S.A. (CR),ATH
 DNO6N.OL,,
 M2OHZ7.EX,LVMH MOET HENNESSY LOUIS VUITTO,EUX
-TENER16L.AT,TERNA ENERGY S.A.(CR), Future,,ATH
+TENER16L.AT,TERNA ENERGY S.A.(CR) Future,ATH
 F2TEZ8.EX,FRANCE TELECOM,EUX
 I6XDZ6.EX,,
 NDZ20-3.SI,,
@@ -4704,7 +4705,7 @@ DNO6U.OL,,
 DVM8.AX,,
 DNT5.AX,,
 D2SMZ6.EX,,
-PPA16L.AT,PPA, Future, Dec 16,ATH
+PPA16L.AT,PPA Future Dec 16,ATH
 NDZ16-3.SI,,
 DBJ1530-C.BO,,
 1ORA6L.MDD,,
@@ -4828,7 +4829,7 @@ SREJZ6.EX,,
 R2:MEND3T.SA,,
 ROGFZ7.EX,Roche Holding,EUX
 8122730.EX,,
-EEE16L.AT,EEE, Future, Dec 16,ATH
+EEE16L.AT,EEE Future Dec 16,ATH
 DNM7.AX,,
 DLU1524-C.BO,,
 EDZ15-2.SI,,
@@ -4924,7 +4925,7 @@ S2SDZ6.EX,,
 1AXA7L.MDD,1AXA7L.MDD,MDD
 DQM6.AX,,
 DNM8.AX,,
-ELLAK16L.AT,ELLAKTOR, Future, Dec 16,ATH
+ELLAK16L.AT,ELLAKTOR Future Dec 16,ATH
 BUK1626-C.BO,,
 T2SCZ6.EX,,
 RLN1530-C.BO,,
@@ -5010,7 +5011,7 @@ HKZ16-2.SI,,
 EYZ20-3.SI,,
 DCG1526-C.BO,,
 DLJ1530-C.BO,,
-ELPE16L.AT,HELLENIC PETROLEUM S.A. (CR), F,ATH
+ELPE16L.AT,HELLENIC PETROLEUM S.A. (CR) F,ATH
 B2ATZ6.EX,,
 QE88Z.AS,,
 61552806.EX,,
@@ -5090,7 +5091,7 @@ DBZ1531-C.BO,,
 EDZ22-3.SI,,
 DVI7.AX,,
 PPSFZ15-C.SI,,
-EUPRO16L.AT,GRIV, Future, Dec 16,ATH
+EUPRO16L.AT,GRIV Future Dec 16,ATH
 GM88Z.AS,,
 DP86Z.AS,,
 JGZ16-2.SI,,
@@ -5425,7 +5426,7 @@ EDH20-C.SI,,
 ELU18-2.SI,,
 HSZ5.AX,,
 EUPRO16C.AT,,
-EUPRO17C.AT,GRIV, Future, Mar 17,ATH
+EUPRO17C.AT,GRIV Future Mar 17,ATH
 HQZ8.AX,,
 GIF1628-C.BO,,
 EXAE17C.AT,HELLENIC EXCHANGES HOLDINGS S.A,ATH
@@ -5456,7 +5457,7 @@ EXAE16F.AT,,
 BVT8.AX,,
 EYM19-3.SI,,
 EDU15-2.SI,,
-ELLAK17C.AT,ELLAKTOR, Future, Mar 17,ATH
+ELLAK17C.AT,ELLAKTOR Future Mar 17,ATH
 PQ19Z.AX,QLD Peak Load Electricity Futur,ASX
 ERICB6O.ST,,
 BQZ8.AX,,
@@ -5473,7 +5474,7 @@ PNH9.AX,,
 PQ19M.AX,QLD Peak Load Electricity Futur,ASX
 EDM23-C.SI,,
 HVZ6.AX,,
-ELPE17C.AT,HELLENIC PETROLEUM S.A. (CR), F,ATH
+ELPE17C.AT,HELLENIC PETROLEUM S.A. (CR) F,ATH
 ELH16-C.SI,,
 HSZ8.AX,,
 BVC6.AX,,
@@ -5564,7 +5565,7 @@ BV17Z.AX,VIC Base Load Quarter Electrici,ASX
 PVP9.AX,,
 EADFG6.EX,,
 PVM9.AX,,
-EEE17C.AT,EEE, Future, Mar 17,ATH
+EEE17C.AT,EEE Future Mar 17,ATH
 EDN15-2.SI,,
 EYM18-3.SI,,
 HS19M.AX,SA Base Load Electricity Strip,ASX
@@ -6416,7 +6417,7 @@ GOBGG6.EX,,
 GYZ7.AX,,
 GX18M.AX,ASX Victorian Wholesale Gas Fut,ASX
 GY17Z.AX,ASX Victorian Wholesale Gas Str,ASX
-GEKTE17C.AT,GEKTERNA, Future, Mar 17,ATH
+GEKTE17C.AT,GEKTERNA Future Mar 17,ATH
 GEKTE16F.AT,,
 GX17Z.AX,ASX Victorian Wholesale Gas Fut,ASX
 R2:RPMG3T.SA,,
@@ -6688,7 +6689,7 @@ INH17-3.SI,,
 IMIFF6.EX,,
 SPM6A.MDD,,
 ICN1530-C.BO,,
-INLOT17C.AT,INTRALOT S.A. (CR), Future, Mar,ATH
+INLOT17C.AT,INTRALOT S.A. (CR) Future Mar,ATH
 ILDFM6.EX,,
 IDEPQ61.MDD,,
 IAK1528-C.BO,,
@@ -7805,7 +7806,7 @@ OMXO206C.ST,,
 MORFH6.EX,,
 SGSLH6.EX,,
 VVUHH6.EX,,
-TENER17C.AT,TERNA ENERGY S.A.(CR), Future,,ATH
+TENER17C.AT,TERNA ENERGY S.A.(CR) Future,ATH
 MYH17-3.SI,,
 RUJ1628-C.BO,,
 MOJ1530-C.BO,,
@@ -7821,12 +7822,12 @@ NDG1625-C.BO,,
 WKU6.AX,,
 WKK5.AX,,
 UHFFK6.EX,,
-PPA17C.AT,PPA, Future, Mar 17,ATH
+PPA17C.AT,PPA Future Mar 17,ATH
 THPGH6.EX,,
 SESFH7.EX,SESFH7.EX,EUX
 REPGH6.EX,,
 RIOGH6.EX,,
-PPC17C.AT,PPC S.A. (CR), Future, Mar 17,ATH
+PPC17C.AT,PPC S.A. (CR) Future Mar 17,ATH
 RUG1526-C.BO,,
 PH1FH6.EX,,
 RSK1626-C.BO,,
@@ -7874,7 +7875,7 @@ SOBI6O.ST,,
 NDM1525-C.BO,,
 WTBFH6.EX,,
 RUH1631-C.BO,,
-VIO17C.AT,VIO, Future, Mar 17,ATH
+VIO17C.AT,VIO Future Mar 17,ATH
 SGLGH6.EX,,
 PCDFH6.EX,,
 NESGH6.EX,,
@@ -8516,7 +8517,7 @@ TWV15-3.SI,,
 70680858.EX,,
 OCX1526-C.BO,,
 T58FV19-C.SI,,
-OPAP17C.AT,OPAP S.A. (CR), Future, Mar 17,ATH
+OPAP17C.AT,OPAP S.A. (CR) Future Mar 17,ATH
 OIM1630-C.BO,,
 R2:TCNO3T.SA,,
 OWH1631-C.BO,,
@@ -8960,7 +8961,7 @@ TOTGG6.EX,,
 THG15-C.SI,,
 TTA13C1602A.BK,,
 TTA28C1603A.BK,,
-TITK17C.AT,TITAN CEMENT COMPANY S.A. (CR),,ATH
+TITK17C.AT,TITAN CEMENT COMPANY S.A. (CR),ATH
 TWH16-C.SI,,
 TPF1628-C.BO,,
 MDK15-C.SI,,
@@ -9075,7 +9076,7 @@ WKK6.AX,,
 WOWCD.AX,WOOLWORTHS FPO,ASX
 WPPFH6.EX,,
 WESCD.AX,WESCD.AX,ASX
-MYTIL17C.AT,MYTILINEOS HOLDINGS S.A. (CR),,ATH
+MYTIL17C.AT,MYTILINEOS HOLDINGS S.A. (CR),ATH
 XJO17U.AX,FUTR MATURING SEP17,ASX
 XZ1515-C.BO,,
 XU1615-C.BO,,
@@ -9090,10 +9091,10 @@ XV1529-C.BO,,
 XX1526-C.BO,,
 XM1515-C.BO,,
 XJ1530-C.BO,,
-BELA17C.AT,JUMBO S.A. (CR), Future, Mar 17,ATH
-METKK17C.AT,METKA S.A. (CR), Future, Mar 17,ATH
+BELA17C.AT,JUMBO S.A. (CR) Future Mar 17,ATH
+METKK17C.AT,METKA S.A. (CR) Future Mar 17,ATH
 XCAHG6.EX,,
-FFGRP17C.AT,FFGRP, Future, Mar 17,ATH
+FFGRP17C.AT,FFGRP Future Mar 17,ATH
 XU1515-C.BO,,
 MFA6H.AS,,
 XN1530-C.BO,,
@@ -9342,7 +9343,7 @@ ARRRX,AB Global Real Estate Investment R,NAS
 QBLGX,Federated MDT Large Cap Growth B,NAS
 WYF1.DU,PRIMA GL WER AD,DUS
 MFVSX,MassMutual Select Focused Value R5,NAS
-IHIGCX,High Yield Corporate Trust, 4-7,NAS
+IHIGCX,High Yield Corporate Trust 4-7,NAS
 MRCZX,MassMutual RetireSMART Cnsrv R4,NAS
 SRRYX,Invesco Strategic Real Return Y,NAS
 LMGAX,Lord Abbett Growth Opportunities A,NAS
@@ -9381,7 +9382,7 @@ KR5239AT6983.KS,HyundaiInvmt Sep Tax Hi Yld PF Bd Bal 5,KSC
 PTBMX,Principal LifeTime 2020 R3,NAS
 QUADRUSUSDIV.TO,Quadrus US Dividend Class (GWLIM) D5,TOR
 BNMCPC0-B.MX,HORIZONTE BAN-C0-B,MEX
-XMHDX,BlackRock MuniHoldings Fd, Inc.,NAS
+XMHDX,BlackRock MuniHoldings Fd Inc.,NAS
 TDACX,AB Multi-Manager Select Retire Allc C,NAS
 KR5373A01913.KS,Hyundai Best Core Target 10 PF Eq-Bal 1,KSC
 K55235B40054.KS,FK Global Technology Feeder Eq-FoF SPRS,KSC
@@ -10548,7 +10549,7 @@ MBINX,MainStay Balanced Inv,NAS
 MMRNX,MassMutual RetireSMART 2050 R3,NAS
 IMASX,VY T. Rowe Price International Stock I,NAS
 F0000028KI.TO,Mackenzie Cdn Lg Cap Div J,TOR
-XCRFX,Cornerstone Total Return Fund, ,NAS
+XCRFX,Cornerstone Total Return Fund ,NAS
 QTRCX,Quaker Global Tactical Allocation C,NAS
 PTUZX,PIMCO Total Return IV A,NAS
 TCQPX,TIAA-CREF Lifecycle 2025 Premier,NAS
@@ -10956,7 +10957,7 @@ TMAFX,Thrivent Moderately Agrsv Allocation I,NAS
 OG77.HM,W&W; Q SL AKEU EUR,HAM
 IE00BL0RDQ42.IR,BNY Mellon Asian Income W USD Inc,ISE
 GTICX,Aberdeen Tax-Free Income C,NAS
-CMPPWX,Guggenheim Defined Portfolios, ,NAS
+CMPPWX,Guggenheim Defined Portfolios ,NAS
 KR5374A99675.KS,CBRE London Office PF Real Estate 1,KSC
 HICOX,Colorado BondShares A Tax-Exempt,NAS
 IE00B739R346.IR,INTECH Global Dividend Z EUR Acc,ISE
@@ -11010,7 +11011,7 @@ XVGIX,Virtus Global Multi-Sector Inco,NAS
 LIGFX,Lord Abbett Multi-Asset Income F,NAS
 IE0002096034.IR,W&W; South East Asian Equity,ISE
 IE00BD3QFK09.IR,Nuveen NWQ Flexible Income C USD Acc,ISE
-XAPBX,Asia Pacific Fund, Inc.,NAS
+XAPBX,Asia Pacific Fund Inc.,NAS
 FQANX,Strategic Advisers Core Inc Multi-Mgr L,NAS
 YUANTASMALLM.TW,Yuanta Small-Medium Cap Fund,TAI
 20345359.IR,JAN EM MKT GBP-U-AC,ISE
@@ -11064,7 +11065,7 @@ V4IB.MU,ZZ2,MUN
 JSGS.MU,HSBC GI SINQ EQ AD,MUN
 GDFIX,Goldman Sachs Short Duration Inc Instl,NAS
 FGM1.BE,DWS MUL OPP LDD,BER
-EXOTX,Manning & Napier Fd, Inc. Ohio ,NAS
+EXOTX,Manning & Napier Fd Inc. Ohio ,NAS
 IHGIX,Hartford Dividend and Growth A,NAS
 KR5237294925.KS,JPMorgan Middle East&Africa; Fdr Eq C2,KSC
 INBURS3B2.MX,INBURSA SIEFORE-B2,MEX
@@ -11454,7 +11455,7 @@ FULCRAFOCUSE.TO,Fulcra Focused Yield,TOR
 BYQI.SG,BAR HO KO EUR-A-INC,STU
 HSUCX,Huntington Situs C,NAS
 F00000WM0K.TO,Quadrus Global Monthly Income (LC) L,TOR
-XFUNX,Royce Focus Trust, Inc.,NAS
+XFUNX,Royce Focus Trust Inc.,NAS
 BFONX,Biondo Focus Investor,NAS
 K55203B73954.KS,Daishin Asia Consumer Equity CW,KSC
 BLARX,Lord Abbett Multi-Asset Balanced Opp R3,NAS
@@ -11815,7 +11816,7 @@ USLIX,JHancock US Global Leaders Growth I,NAS
 DIRVX,Dreyfus International Value I,NAS
 LTPBX,AB 2045 Retirement Strategy B,NAS
 JORNX,Janus Global Select T,NAS
-IQMUNX,Quality Municipal Income Trust,,NAS
+IQMUNX,Quality Municipal Income Trust,NAS
 TMCGX,Turner Emerging Growth Investor,NAS
 SSGJX,State Street Global Eq ex-US Index I,NAS
 QUINCUNCESIC.BC,Quincunce SICAV,BAR
@@ -12020,7 +12021,7 @@ KR5228AJ8190.KS,Allianz China Feeder Equity-FoF CP2 Hdgd,KSC
 LDMBX,Lord Abbett Emerging Markets Currency B,NAS
 ABAAX,Forward Balanced Allocation Instl,NAS
 BVEFX,Becker Value Equity Retail,NAS
-IQTMTX,Quality Municipal Income Trust,,NAS
+IQTMTX,Quality Municipal Income Trust,NAS
 ODEH.HM,SEB IMMO TARG RE FD,HAM
 GB00B850BN01.L,Sarasin Global Higher Dividend P Inc,LSE
 F00000256B.TO,Quadrus Income (Portico) D5,TOR
@@ -13189,7 +13190,7 @@ K55237B91202.KS,JPMorgan Global Macro Fdr Eq Bal-FoF CE,KSC
 120562.BO,Religare Invesco S/T Dir Wk Div,BSE
 GB00B83BJW04.L,Newton Multi Asset Gr Rtl Adv B Net Inc,LSE
 TSCLX,TIAA-CREF Lifestyle Conservative Retail,NAS
-ES0125319006.BC,Cygnus Utilities, Infra. & Renov. S FIL,BAR
+ES0125319006.BC,Cygnus Utilities Infra. & Renov. S FIL,BAR
 HAFRX,Hartford Multi-Asset Income R3,NAS
 USISX,USAA Income Stock,NAS
 F00000UI94.TO,Quadrus Mac Floating Rate Income H,TOR
@@ -13354,7 +13355,7 @@ FGOI.DU,CS IF 14 IL E B BC,DUS
 GB00B7JXNN25.L,Threadneedle Target Return ZNA Acc,LSE
 F00000PWNT.TO,Counsel Canadian Value Class D,TOR
 VGENX,Vanguard Energy Inv,NAS
-SMGPFX,Smart Trust, Zacks GARP Composi,NAS
+SMGPFX,Smart Trust Zacks GARP Composi,NAS
 XC42.BE,FID UK AD,BER
 JGROX,Janus I,NAS
 118396.BO,IDFC SS Inc Inv Dir Qt Div,BSE
@@ -13403,7 +13404,7 @@ WXUC.BE,THRED MTH EX GBP-1,BER
 FPRIX,Franklin Double Tax-Free Income C,NAS
 13750329.SW,LOFCH GLEQRP Z,EBS
 VMAIX,Van Eck Multi-Manager Alternatives I,NAS
-HCEGX,HC Capital Trust, The Growth Eq,NAS
+HCEGX,HC Capital Trust The Growth Eq,NAS
 ODEF.MU,SEB T RET BD FD,MUN
 MIXAX,MainStay Indexed Bond A,NAS
 KAIWESTINVES.BC,Kai West Investment SICAV,BAR
@@ -13428,7 +13429,7 @@ K55214B97539.KS,Eugene Pride PF Bond 88,KSC
 F0000028IM.TO,ivari Quotential Balanced Growth 5FL GIF,TOR
 QUANTUMLIQUI.BO,Quantum Liquid Gr,BSE
 JGOCX,Janus C,NAS
-ES0125319014.BC,Cygnus Utilities, Infra. & Renov. I FIL,BAR
+ES0125319014.BC,Cygnus Utilities Infra. & Renov. I FIL,BAR
 X04U.DE,Commerzbank ETN -2x NKYF Daily Short,BER
 WTMCX,Westcore Mid-Cap Value Dividend Retail,NAS
 NIIAX,Columbia Select International Equity A,NAS
@@ -13743,8 +13744,8 @@ ELSIX,Altegris Equity Long Short I,NAS
 NVAFX,Columbia AMT-Free VA Interm Muni Bd A,NAS
 KR5307AH7040.KS,Yurie PrefStk ArbtrgTrdg PF EqBal-Deriv3,KSC
 QUALITYCOMMO.BC,Quality Commodities FI,BAR
-XMYDX,BlackRock MuniYield Fund, Inc.,NAS
-SMGPEX,Smart Trust, Zacks GARP Composi,NAS
+XMYDX,BlackRock MuniYield Fund Inc.,NAS
+SMGPEX,Smart Trust Zacks GARP Composi,NAS
 STIAX,Federated Strategic Income A,NAS
 KR5212945699.KS,Macquarie VIC History Equity 1 C3,KSC
 GB00B6RRQB82.L,Henderson UK Alpha Z Acc,LSE
@@ -14098,7 +14099,7 @@ FTEMX,Fidelity Total Emerg Mkts,NAS
 VRLMX,Stone Ridge U.S. Large Cap Vari,NAS
 QASGX,Federated MDT Small Cap Growth A,NAS
 MXSBX,Great-West SecureFoundation Bal G,NAS
-XDNIX,Dividend and Income Fd, Inc.,NAS
+XDNIX,Dividend and Income Fd Inc.,NAS
 LLARX,QS Legg Mason Conservative Growth R,NAS
 QFDI.MI,DELTA IMMOBILIARE,MIL
 WWGDX,Westwood Global Dividend Institutional,NAS
@@ -14702,7 +14703,7 @@ PRIMERICABAL.TO,Primerica Balanced Yield,TOR
 OPJ4.HM,TIB COMM A OP RC,HAM
 KR5101AT8414.KS,KIM US Zero Duration HY Fdr Bd-FoF Ae,KSC
 UGMVX,USAA Global Managed Volatility,NAS
-XSWZX,Swiss Helvetia Fund, Inc.,NAS
+XSWZX,Swiss Helvetia Fund Inc.,NAS
 IE00BKRCQD31.IR,Hermes Global Equity ESG Z USD Acc,ISE
 28477119.IR,MAG A&D;/A/05/15/ELI,ISE
 IE00BWV6CS22.IR,Muzinich Europeyield X EUR Hdg Acc,ISE
@@ -15016,7 +15017,7 @@ XR59.MU,SISF EM MKT AD,MUN
 QFVIX,Pear Tree Polaris Foreign Value Instl,NAS
 AUEIX,AQR Large Cap Defensive Style I,NAS
 PYSAX,Putnam Equity Spectrum A,NAS
-CFRDDX,GUGGENHEIM DEFINED PORTFOLIOS, ,NAS
+CFRDDX,GUGGENHEIM DEFINED PORTFOLIOS ,NAS
 GB0002769536.L,Threadneedle Amer Sel Ret Net USD,LSE
 MRGAX,MFS Core Equity A,NAS
 IE00BNCB6038.IR,SPARX Japan Smaller Companies A USD Hdg,ISE
@@ -15220,7 +15221,7 @@ KR5301AX7368.KS,MiraeAsset TIGER Dividend Growth ETF,KSC
 ZPJV.MU,SISF EUR GV BD AC,MUN
 F00000252M.MI,Unipol Insieme Sviluppo,MIL
 SXFIX,Wells Fargo Advantage Municipal Bond Inv,NAS
-TBHDX,Tweedy, Browne Worldwide Hi Div Yld Val,NAS
+TBHDX,Tweedy Browne Worldwide Hi Div Yld Val,NAS
 ABNRX,AB Bond Inflation Strategy R,NAS
 NITIX,Aquila Narragansett Tax-Free Income I,NAS
 VFIUX,Vanguard Interm-Term Treasury Adm,NAS
@@ -15520,7 +15521,7 @@ MGSMX,Deutsche Short-Term Municipal Bond Instl,NAS
 AVFIX,American Beacon Small Cp Val Inst,NAS
 14103643.SW,UBS LB SH EUR UXC,EBS
 KR5223603261.KS,KB Kukto Love BTL PF Special Asset 1,KSC
-CSIPTX,Guggenheim Defined Portfolios, ,NAS
+CSIPTX,Guggenheim Defined Portfolios ,NAS
 12686602.IR,QCP GDP SP B/02/11,ISE
 118322.BO,Canara Robeco Yield Adv Dir Qt Div,BSE
 DPWRX,Dreyfus Worldwide Growth I,NAS
@@ -16011,7 +16012,7 @@ KR5301519983.KS,MiraeAsset LC 7090 Annuity Covsn Fdr Bd1,KSC
 TW000T2275B1.TW,Fuh Hwa Emerging Mkt Hi Yld Bd B,TAI
 XMUSX,BlackRock MuniHoldings Quality ,NAS
 VRFIX,Van Kampen 2035 Retirement Strategy I,NAS
-IHYCTX,High Yield Corporate Trust, 4-7,NAS
+IHYCTX,High Yield Corporate Trust 4-7,NAS
 SFSAX,State Farm Small/Mid Cap Equity A Legacy,NAS
 FLRIX,Franklin LifeSmart 2045 Retire Trgt C,NAS
 JMMULTISTRAT.BO,JM Multi Strategy Div,BSE
@@ -16845,7 +16846,7 @@ MXJUX,Great-West Moderately Cnsrv Pfl II Instl,NAS
 IE0030504009.IR,Bank of America Global Liq USD Liq,ISE
 PXRIX,Virtus Intl Real Estate Securities I,NAS
 IH5Z.MU,JPMIF JAP S EQ AC,MUN
-XGCHX,The Greater China Fund, Inc.,NAS
+XGCHX,The Greater China Fund Inc.,NAS
 XUJB.BE,CAN EQ L JAP CC,BER
 VHCOX,Vanguard Capital Opportunity Inv,NAS
 GB00B2359Z32.L,JPM US Smaller Companies B Acc,LSE
@@ -16855,7 +16856,7 @@ IE00B8CKGY97.IR,MS QTI UCITS B USD Acc,ISE
 IE00B9GCTJ47.IR,Old Mutual US Dividend R GBP Inc,ISE
 FFXIX,Forward EM Corporate Debt Institutional,NAS
 ARSIX,ASTON/River Road Small Cap Value I,NAS
-SMGPBX,Smart Trust, Zacks GARP Composi,NAS
+SMGPBX,Smart Trust Zacks GARP Composi,NAS
 ZANZIBARINVE.BC,Zanzibar Inversiones SICAV,BAR
 DGEIX,DFA Global Equity I,NAS
 PELBX,PIMCO Emerging Local Bond Instl,NAS
@@ -16990,7 +16991,7 @@ WARCX,Wells Fargo Absolute Return C,NAS
 PCKCX,PIMCO StocksPLUS Small C,NAS
 XAKPX,Alliance California Municipal I,NAS
 FFECX,Nuveen Dividend Value C,NAS
-XIFNX,The India Fund, Inc.,NAS
+XIFNX,The India Fund Inc.,NAS
 KR5223AI2538.KS,KB KSTAR China ML CSI100 Fdr ETF,KSC
 GB00B3CQK404.L,Architas Liquidity R Net Acc,LSE
 BBBMX,BBH Limited Duration N,NAS
@@ -17164,7 +17165,7 @@ DFUVX,DFA US Large Cap Value III,NAS
 FSGNX,Nuveen Strategy Balanced Allc A,NAS
 XPCNX,PIMCO Corporate & Income Strate,NAS
 MKNRX,Invesco Global Market Neutral R,NAS
-CULOIX,Guggenheim Defined Portfolios, ,NAS
+CULOIX,Guggenheim Defined Portfolios ,NAS
 803916.IR,S-T USD LQD PTF-RES,ISE
 2289077.SW,DJE DIV & SUBST XPC,EBS
 ATNNX,AQR TM International Momentum Style N,NAS
@@ -17525,7 +17526,7 @@ JICEX,JHancock International Core R6,NAS
 IICWX,Voya International Core W,NAS
 160106.SZ,CHINA SOUTHERN FUN HIGH GTH EQT,SHZ
 IE00B29M3G77.IR,GlobalAccess Europe ex-UK Alpha Z? Acc,ISE
-VKMMCX,Van Kampen 1002,Closed-End Str:,NAS
+VKMMCX,Van Kampen 1002Closed-End Str:,NAS
 KR5213AQ2001.KS,Hanwha Value Focus Feeder Equity 1 S,KSC
 FJFE.BE,ZANT EU HIGHYLD P,BER
 ATTAX,AB Tax-Aware Fixed Income A,NAS
@@ -17676,7 +17677,7 @@ F00000JRZQ.TO,TD Corporate Bond Capital Yield - P,TOR
 FFALX,Franklin Founding Funds Allocation A,NAS
 PRPIX,T. Rowe Price Corporate Income,NAS
 18095310.SW,PICTCH FOBDS Z CHF,EBS
-XRGTX,Royce Global Value Trust, Inc.,NAS
+XRGTX,Royce Global Value Trust Inc.,NAS
 GB0001655124.L,JPM Emerging Europe Equity A Net Acc,LSE
 SSBZX,State Street Target Retirement 2035 A,NAS
 GNYTX,Columbia AMT-Free NY Interm Muni Bd Z,NAS
@@ -17770,7 +17771,7 @@ RBCQUANTEAFE.TO,RBC Quant EAFE Dividend Leaders ETF(USD),TOR
 XXINTEAB2P05.MX,XXINTEA B2P05,MEX
 F000005KOM.TO,IA xtra GS Canadian Balanced (QV),TOR
 TSPF.AS,TRIODOS I S PI RC,AMS
-CMLPFX,Guggenheim Defined Portfolios, ,NAS
+CMLPFX,Guggenheim Defined Portfolios ,NAS
 IT0004885551.MI,Consultinvest Opportunities A,MIL
 133407.BO,JM Balanced Ann Bns princ,BSE
 KR5210AB1417.KS,SHBNPP Glbl HiYld Fdr Bd-FoF 1 Ae Hdgd,KSC
@@ -18037,7 +18038,7 @@ PMUCX,PACE Municipal Fixed Income C,NAS
 MSHAX,MassMutual Premier Short-Duration Bd A,NAS
 GB00B8N45B09.L,IP High Yield Z Inc,LSE
 GB00BSNLQV88.L,Schroder Global Multi-Asset Income Z Inc,LSE
-TBGVX,Tweedy, Browne Global Value,NAS
+TBGVX,Tweedy Browne Global Value,NAS
 USSTX,USAA Tax Exempt Short-Term,NAS
 IE00B57XK066.IR,Nedgroup Inv MultiFunds Balanced GBP A H,ISE
 IE0032834990.IR,First State Asian Quality Bond I,ISE
@@ -18960,7 +18961,7 @@ PSGQX,Prudential Jennison Select Growth Q,NAS
 FBSFX,Fidelity Advisor Short Fxd-Inc B,NAS
 XDSMX,Dreyfus Strategic Municipal Bon,NAS
 F0000006EX.BC,Europopular Consolidado XII PP,BAR
-IQUCTX,Quality Municipal Income Trust,,NAS
+IQUCTX,Quality Municipal Income Trust,NAS
 TW000T1208Y5.TW,Hua Nan Kirin Money Market,TAI
 AGDCX,AB High Income C,NAS
 21580466.SW,SWC(CH)IB TMCHF N,EBS
@@ -19069,7 +19070,7 @@ NMMIX,Nuveen MI Municipal Bond I,NAS
 AIAMPFBVCJAP.HK,AIA MPF - BVC Japan Equity,HKG
 QFSEF.MI,QF SOFIPA EQUITY FD,MIL
 F00000VOIS.KS,Meritz Kor Chn IdxLnkd PF ELS-Deriv 1645,KSC
-XPCMX,PCM Fund, Inc.,NAS
+XPCMX,PCM Fund Inc.,NAS
 PLBTX,Principal California Municipal P,NAS
 XC4X.BE,FID CHINA FOC AC,BER
 FSPHX,Fidelity Select Health Care Portfolio,NAS
@@ -19199,7 +19200,7 @@ GOLD4+B0-E.MX,HORIZONTES 4-B0-E,MEX
 JYJY.BE,JPMF EU EQ AC,BER
 FH4I.SG,AWF GL H YLD BD AHD,STU
 MANUVIERENDS.TO,Manulife Dyn Strat Yld RetiretPlus F,TOR
-HCEIX,HC Capital Tr, The Insti Value ,NAS
+HCEIX,HC Capital Tr The Insti Value ,NAS
 AOGIX,American Century One Choice Agrsv Inv,NAS
 SATDX,Satuit Capital US Smid Cap A,NAS
 RIGKX,RS International K,NAS
@@ -19424,7 +19425,7 @@ RXLDX,Russell LifePoints 2040 Strategy R3,NAS
 K55306B93748.KS,KTB Interest Rt Lnkd Pro PF DLS-Deriv 5,KSC
 KR5366984312.KS,BlackRock World Gold Fdr Eq-FoF C2 Hdgd,KSC
 WBLIX,William Blair Low Duration I,NAS
-IHIYIX,High Yield Corporate Trust, 4-7,NAS
+IHIYIX,High Yield Corporate Trust 4-7,NAS
 14943000.IR,BRIDGEWAT B/4444/07,ISE
 1879601.MC,UBS ESPANA GES ACT,MCE
 PMCEX,PNC Mid Cap Index R4,NAS
@@ -19489,7 +19490,7 @@ FFXSX,Fidelity Limited Term Government,NAS
 FSHIX,Federated Shrt-Interm Dur Muni Instl,NAS
 GB00B71DB365.L,AXA Framlington Managed Income Z Grs Inc,LSE
 F00000UMKK.TO,Manulife US Mthly Hi Inc GIF Sl F EstP,TOR
-CESLYX,Guggenheim Defined Portfolios, ,NAS
+CESLYX,Guggenheim Defined Portfolios ,NAS
 HSBCGOBBIG1.MX,HSBCGOB BIG1,MEX
 LTLRX,AB 2035 Retirement Strategy R,NAS
 18095076.SW,EUROP EX-CHEQ Z EUR,EBS
@@ -19522,7 +19523,7 @@ FJ7A.HM,ADVI AL&CIE; OPTI PC,HAM
 NUSAX,Nationwide Government Bond A,NAS
 IE00BF2GLZ28.IR,Janus Europe Z EUR Inc,ISE
 K55365B79735.KS,Meritz KSE Index Lnkd PF ELS-Deriv 1 USD,KSC
-HCCSX,HC Capital Tr, The Commodity Re,NAS
+HCCSX,HC Capital Tr The Commodity Re,NAS
 NWJBX,Nationwide Ziegler Equity Inc InSvc,NAS
 CDRCX,Columbia Diversified Real Return C,NAS
 ADJPX,AllianzGI NFJ Dividend Value P,NAS
@@ -19771,7 +19772,7 @@ KR5239AI2548.KS,HyundaiInvmt Star Global CLO PF SA FoF 1,KSC
 GSMVX,Goldman Sachs Small/Mid Cap Value Instl,NAS
 IE00BZ08YV70.IR,Guinness Best of China X GBP Acc,ISE
 SNXFX,Schwab 1000 Index,NAS
-IQMISX,Quality Municipal Income Trust,,NAS
+IQMISX,Quality Municipal Income Trust,NAS
 IE00BRHYSH67.IR,Acadian Glbl Lvrg Mkt Netrl Eq UCITS B $,ISE
 F0CAN05P1Q.TO,Quadrus Conservative Folio,TOR
 IE00B3Y4SB54.IR,Sydbank Emerging Markets Value Fund Z1,ISE
@@ -19987,7 +19988,7 @@ XPAZ.BE,PION GL H YLD AC,BER
 UIVD.DU,UNIGLOBAL II AD,DUS
 MASAX,MainStay Unconstrained Bond A,NAS
 OFAIX,O'Shaughnessy All Cap Core I,NAS
-XTAIX,Transamerica Income Shares, Inc,NAS
+XTAIX,Transamerica Income Shares Inc,NAS
 RERGX,American Funds Europacific Growth R6,NAS
 DXELX,Direxion Mthly Emerg Mkts Bull 2X,NAS
 STL0012AU.AX,Bendigo Conservative WS,ASX
@@ -20421,7 +20422,7 @@ VFITX,Vanguard Interm-Term Treasury Inv,NAS
 JHRCX,JHancock Global Cnsrv Abs Ret C,NAS
 VBTIX,Vanguard Total Bond Market Index I,NAS
 MEURX,Franklin Mutual European Z,NAS
-IQMINX,Quality Municipal Income Trust,,NAS
+IQMINX,Quality Municipal Income Trust,NAS
 IE00B7XCGB41.IR,Neuberger Berman US Mlt Cp Opp I $1 Acc,ISE
 F00000T359.TO,Quadrus Income (Portico) L5,TOR
 EGRRX,Eaton Vance Glbl Macro Abs Ret Advtg R,NAS
@@ -20674,7 +20675,7 @@ WACCX,Waddell & Reed Continental Inc C,NAS
 IE00BFH59G15.IR,Neuberger Berman AbsRetMltStrt USD Z Acc,ISE
 JHYFX,Janus High-Yield I,NAS
 RREAX,Russell Global Real Estate Secs A,NAS
-XTKFX,The Turkish Investment Fund, In,NAS
+XTKFX,The Turkish Investment Fund In,NAS
 IE00B3BPRB43.IR,SEI GMF Emerg Mkts Eq GBP Wealth A,ISE
 TPYAX,Touchstone Premium Yield Equity A,NAS
 SDGIX,Dreyfus/Standish Global Fixed Income I,NAS
@@ -20686,7 +20687,7 @@ SYIGIO.CO,Sydinvest Globale Indeksobligationer KL,CPH
 F00000ITGE.TO,Standard Life SI Id Quot Di I GLWB,TOR
 IE00BL0RFX58.IR,Odey Opportunity IP USD,ISE
 CTUSDLI.IR,Western Asset USD Liquidity D,ISE
-XSGFX,Aberdeen Singapore Fund, Inc.,NAS
+XSGFX,Aberdeen Singapore Fund Inc.,NAS
 PGENX,Putnam Global Energy M,NAS
 GLNLX,MFS Global New Discovery R3,NAS
 IE00B96JSV06.IR,Wellington Global Bond USD S Dis H,ISE
@@ -21157,7 +21158,7 @@ ANSIX,Ancora Special Opportunity I,NAS
 KR5311AL2460.KS,PLUS 2Star H-Motor Grp PF ELS-Deriv 3,KSC
 MPPMX,BNY Mellon Intl Appreciation M,NAS
 GB00BYRJXL91.L,Schroder Global Recovery Z Acc,LSE
-INWRDX,New World Leaders Portfolio, Se,NAS
+INWRDX,New World Leaders Portfolio Se,NAS
 PXGAX,Pax World Growth A,NAS
 TNECX,Invesco Balanced-Risk Retire 2050 C,NAS
 F00000OO2W.TO,Standard Life Short Term Bond L,TOR
@@ -21169,7 +21170,7 @@ OPBMX,Oppenheimer Rochester MN Municipal B,NAS
 WBIVX,Whitebox Tactical Advantage Investor,NAS
 F00000OIQS.TO,NEI Ethical Select Income Port B,TOR
 RELIANCEMEDI.BO,Reliance Medium Term Wk Div,BSE
-GB00BR4R5J95.L,Virgin Bond, Gilt, UK and Overseas Share,LSE
+GB00BR4R5J95.L,Virgin Bond Gilt UK and Overseas Share,LSE
 CMNIX,Calamos Market Neutral Income I,NAS
 80015.AX,iShares MSCI South Korea Capped (AU),ASX
 IE00B521MT84.IR,Legg Mason QS MV Glb Eq Gr&Inc; GA IncA ?,ISE
@@ -21381,7 +21382,7 @@ KR5229295658.KS,Eastspring Core Target 20 Feeder Eq C2,KSC
 NRM0116AU.AX,ClearView Mgd Inv Assertive,ASX
 CHKYX,Aquila Churchill Tax-Free Fund of KY Y,NAS
 PVYYX,Putnam Voyager Y,NAS
-SMZKJX,Smart Trust, Zacks Diversified ,NAS
+SMZKJX,Smart Trust Zacks Diversified ,NAS
 FIDELITYMNDP.TO,Fidelity Prm Tact Fxd Inc Cp Yld PP Sr I,TOR
 MOORX,MassMutual Premier Small Cap Opps R4,NAS
 FSTVX,Fidelity Spartan Total Mkt Idx Advtg,NAS
@@ -21541,7 +21542,7 @@ FHJVX,Fidelity Advisor Europe T,NAS
 PMBJX,Principal MidCap J,NAS
 PRJAX,Prudential Jennison Global Opps A,NAS
 NMAAX,Nuveen MA Municipal Bond A,NAS
-XNFJX,AllianzGI NFJ Dividend, Interes,NAS
+XNFJX,AllianzGI NFJ Dividend Interes,NAS
 TMGEX,Turner Midcap Growth Inst,NAS
 SSREX,SSgA Clarion Real Estate N,NAS
 F0HKG06ZYB.HK,Hang Seng MPF-ST Plus-Asia Pacific Eq,HKG
@@ -21623,7 +21624,7 @@ EILTX,Eaton Vance TABS 5 to15 Yr Lad Muni Bd I,NAS
 PAGCX,ESG Managers Growth Port C,NAS
 161831.SZ,Yinhua HSCEI,SHZ
 MPSMX,MassMutual Premier Strat Emerg Mkts R5,NAS
-XNTGX,Tortoise MLP Fund, Inc.,NAS
+XNTGX,Tortoise MLP Fund Inc.,NAS
 NITCX,Aquila Narragansett Tax-Free Income C,NAS
 TDDZX,AB Multi-Manager Select 2020 Z,NAS
 PPTAX,Virtus Quality Large-Cap Value A,NAS
@@ -22027,7 +22028,7 @@ UNVGX,Waddell & Reed Vanguard A,NAS
 SVBAX,JHancock Balanced A,NAS
 DDFIX,Invesco Diversified Dividend R5,NAS
 TMGCX,Touchstone Merger Arbitrage C,NAS
-XMENX,BlackRock MuniEnhanced Fd,  Inc,NAS
+XMENX,BlackRock MuniEnhanced Fd  Inc,NAS
 IE0033534664.IR,Janus Global Real Estate B USD Inc,ISE
 MANULIFEDYNV.TO,Manulife Dyn Val Fd of Cda GIF Sel Inv+,TOR
 KLCIX,Federated Kaufmann Large Cap Instl,NAS
@@ -22177,7 +22178,7 @@ OMSOX,Oppenheimer Main Street Select A,NAS
 IE00BBPJDN22.IR,Invesco Japanese Equity Core Z USD Inc,ISE
 JLPCX,JPMorgan US Large Cap Core Plus C,NAS
 KR5373144363.KS,Hyundai Green Equity 1 A,KSC
-IQUMIX,Quality Municipal Income Trust,,NAS
+IQUMIX,Quality Municipal Income Trust,NAS
 IPARX,Voya Global Perspectives Port A,NAS
 DSLIX,Deutsche Strategic Equity Lg/Shrt Instl,NAS
 GB00BP8RY614.L,Fidelity Index UK P Inc,LSE
@@ -22304,7 +22305,7 @@ SSAIX,SSgA International Stock Selection N,NAS
 K55365B43152.KS,Meritz 2Star Range PF Bond HE2,KSC
 IE00B3WD3974.IR,Ocean Dial Gateway to India C GBP Acc,ISE
 GB00B9J6S412.L,CF Canlife Global High Yield Bd C Inc,LSE
-SMGPGX,Smart Trust, Zacks GARP Composi,NAS
+SMGPGX,Smart Trust Zacks GARP Composi,NAS
 FJRK.MU,FID IBERIA AD,MUN
 ARSFX,Aristotle International Equity I,NAS
 WEMDX,Western Asset Emerging Markets Dbt A2,NAS
@@ -22389,7 +22390,7 @@ GFRRX,Goldman Sachs High Yield Fl Rate R,NAS
 CFACX,American Funds Bond Fund of Amer 529C,NAS
 F00000QC4B.TO,Alto Aggressive Portfolio U,TOR
 USTEX,USAA Tax Exempt Long-Term,NAS
-SMZKHX,Smart Trust, Zacks Diversified ,NAS
+SMZKHX,Smart Trust Zacks Diversified ,NAS
 11101250.SW,LOFCH SWEQ TR Z,EBS
 RQLVX,Russell LifePoints 2055 Strategy R5,NAS
 LSZMX,AB Long/Short Multi-Manager Z,NAS
@@ -22598,7 +22599,7 @@ FXJPRM.IR,FinEx MSCI Japan ETF USD,ISE
 GMIEX,GMO Intl Large/Mid Cap Equity III,NAS
 FVETUX,FT5756: European Target High Qu,NAS
 A0M8G0.DE,BayernInvest Alpha Opportunity Plus,BER
-XMDYX,Mid Cap SPDR 400 Trust, Series ,NAS
+XMDYX,Mid Cap SPDR 400 Trust Series ,NAS
 PDIVX,Aberdeen Core Income Fund Inst ,NAS
 849105.DE,UniGlobal,BER
 ROHKX,Royce Small-Cap Leaders K,NAS
@@ -22855,7 +22856,7 @@ TSELX,Tocqueville Select,NAS
 JIEEX,JHancock International Value Equity I,NAS
 NCVBX,Columbia Convertible Securities B,NAS
 TNDCX,Invesco Balanced-Risk Retire 2040 C,NAS
-SMZKGX,Smart Trust, Zacks Diversified ,NAS
+SMZKGX,Smart Trust Zacks Diversified ,NAS
 NBFAX,Neuberger Berman Focus Adv,NAS
 MIZIX,MassMutual Premier International Eq I,NAS
 KR5309677718.KS,GB Global PF Balanced 1,KSC
@@ -23087,7 +23088,7 @@ IE00BJ7BQ221.IR,Lord Abbett Strategic Income Z ? H Acc,ISE
 CCSFX,JPMorgan Commodities Strategy C,NAS
 VCHSX,VALIC Company I Health Sciences,NAS
 KR5206960951.KS,Kiwoom Frontier New IdxAlp Eq-Drv F1 C3,KSC
-IESRQX,Enhanced Sector Strategy, Secto,NAS
+IESRQX,Enhanced Sector Strategy Secto,NAS
 108249.BO,Reliance Quant Plus Gr,BSE
 AICBX,American Funds Invmt Co of Amer B,NAS
 HJUH.DU,DWS DYN OPP FC  T,DUS
@@ -23605,7 +23606,7 @@ KR5223726682.KS,KB Global Warming Theme Feeder Equity CE,KSC
 10217349.SW,VF L OBL SCHW F ZD,EBS
 AZLAX,American Beacon Zebra Global Eq A,NAS
 GB00B8N44X53.L,IP Pacific Z Acc,LSE
-47846.CO,Alm. Brand Invest, Lange Obligationer,CPH
+47846.CO,Alm. Brand Invest Lange Obligationer,CPH
 29556841.IR,NB EM CUR EUR-I2-AC,ISE
 QUADRUSCOREP.TO,Quadrus Core Plus Bond (Portico) A,TOR
 MPILX,MassMutual Premier Disciplined Value Adm,NAS
@@ -24767,7 +24768,7 @@ GB0030879695.L,JPM Asia A Acc,LSE
 DEDS.DU,DK-CO BD HY EUR CFD,DUS
 FCSMX,Franklin Intl Small Cap Growth C,NAS
 MRNVX,MFS Absolute Return R5,NAS
-CWAVMX,Guggenheim Defined Portfolios, ,NAS
+CWAVMX,Guggenheim Defined Portfolios ,NAS
 KR5381A38926.KS,Koramco Firstep PF RE 5,KSC
 XXINTECB2.MX,MULTIFONDO-B2,MEX
 WFS0429AU.AX,BT WE Advance Intl Fxd Intr Mlt-Blnd,ASX

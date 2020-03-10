@@ -1,3 +1,4 @@
+Ticker,Name,Exchange
 DIA,SPDR Dow Jones Industrial Average ETF,PCX
 AGG,iShares Core US Aggregate Bond ETF,PCX
 ASHR,Deutsche X-trackers Harvest CSI300 CHN A,PCX
@@ -67,7 +68,7 @@ MAUI,AdvisorShares Mkt Adaptive Uncns Inc ETF,NGM
 FXN,First Trust Energy AlphaDEX ETF,PCX
 FXD,First Trust Cnsmr Discret AlphaDEX ETF,PCX
 FTA,First Trust Large Cap Val AlphaDEX ETF,NGM
-EZA,iShares, Inc. - iShares MSCI South Africa ETF,PCX
+EZA,iShares Inc. - iShares MSCI South Africa ETF,PCX
 EMAG,VanEck Vectors EM Aggregate Bond ETF,PCX
 DEWJ,iShares Trust - iShares Adaptive Currency Hedged MSCI Japan ETF,ASE
 DAG,DB Agriculture Double Long ETN,PCX
@@ -97,7 +98,7 @@ AYT,iPath GEMS Asia 8 ETN,PCX
 AOR,iShares Core Growth Allocation ETF,PCX
 AOM,iShares Trust - iShares Core Moderate Allocation ETF,PCX
 ADRD,BLDRS Developed Markets 100 ADR ETF,NGM
-ABE,Aberdeen Emerging Markets Smaller Company Opportunities Fund, Inc.,ASE
+ABE,Aberdeen Emerging Markets Smaller Company Opportunities Fund Inc.,ASE
 AADR,AdvisorShares Dorsey Wright ADR ETF,PCX
 VSS,Vanguard FTSE All-Wld ex-US SmCp ETF,PCX
 STXX,ALPS STOXX Europe 600 ETF,ASE
@@ -129,7 +130,7 @@ AGGY,WisdomTree Trust - WisdomTree Barclays Yield Enhanced U.S. Aggregate Bond F
 ACWF,iShares Edge MSCI Multifactor Global ETF,PCX
 YPRO,AdvisorShares YieldPro ETF,NMS
 XAR,SPDR Series Trust - SPDR S&P Aerospace & Defense ETF,PCX
-VEGI,iShares, Inc. - iShares MSCI Global Agriculture Producers ETF,PCX
+VEGI,iShares Inc. - iShares MSCI Global Agriculture Producers ETF,PCX
 SMMU,PIMCO ETF Trust - PIMCO Short Term Municipal Bond Active Exchange-Traded Fund,PCX
 SLOW,ALPS Sector Low Volatility ETF,ASE
 RWV,Oppenheimer Navellier Ovrl A100 Revn ETF,PCX
@@ -254,7 +255,7 @@ GSAX,ALPS GS Momentum Builder Asia e,PCX
 GLDE,AdvisorShares Trust - AdvisorShares International Gold ETF,PCX
 FWDB,AdvisorShares Trust - AdvisorShares Madrona Global Bond ETF,PCX
 FNY,First Trust Mid Cap Growth AlphaDEX ETF,NGM
-EWO,iShares, Inc. - iShares MSCI Austria Capped ETF,PCX
+EWO,iShares Inc. - iShares MSCI Austria Capped ETF,PCX
 EDOG,ALPS Emerging Sector Dividend Dogs ETF,PCX
 DIRT,iPath Pure Beta Agriculture ETN,PCX
 DEFA,iShares Trust - iShares Adaptive Currency Hedged MSCI EAFE ETF,ASE
@@ -311,7 +312,7 @@ DEZU,iShares Trust - iShares Adaptive Currency Hedged MSCI Eurozone ETF,ASE
 AMPS,iShares Utilities Bond,PCX
 AGZ,iShares Agency Bond ETF,PCX
 AFTY,CSOP ETF Trust - CSOP FTSE China A50 ETF,PCX
-ACWV,iShares, Inc. - iShares Edge MSCI Min Vol Global ETF,ASE
+ACWV,iShares Inc. - iShares Edge MSCI Min Vol Global ETF,ASE
 ACIM,SPDR Index Shares Funds - SPDR MSCI ACWI IMI ETF,PCX
 ZXM.TO,First Asset Morningstar International Momentum Index ETF,TOR
 ZXM-A.TO,First Asset Morningstar International Momentum Index ETF,TOR
@@ -508,7 +509,7 @@ C1UG.L,,
 CLE.PA,CLE.PA,PAR
 BUYB.L,PowerShares Global Funds Ireland plc - PowerShares Global Buyback Achievers UCITS ETF,LSE
 BSX.MI,Lyxor ETF Euro Stoxx 50 Daily Short A/I,MIL
-BBVAI.MC,Accion Ibex 35 ETF, FI Cotizado,MCE
+BBVAI.MC,Accion Ibex 35 ETF FI Cotizado,MCE
 AUM5.MU,AUM5.MU,MUN
 AUM5.HM,AUM5.HM,HAM
 AUUSWH.SW,,
@@ -522,7 +523,7 @@ AFRN.MI,Amundi ETF Floating Rate Euro Corp 1-3,MIL
 AFIN.MI,Amundi ETF Euro Corp Fncls iBoxx,MIL
 AFIN.F,Amundi ETF Euro Corporate Financials iBoxx UCITS ETF,FRA
 AEJL.L,Lyxor UCITS ETF MSCI AC Asia-Pacific ex Japan,LSE
-ACWV.MX,iShares, Inc. - iShares Edge MSCI Min Vol Global ETF,MEX
+ACWV.MX,iShares Inc. - iShares Edge MSCI Min Vol Global ETF,MEX
 ACUSAS.SW,,
 ACCU,AdvisorShares Trust - AdvisorShares Accuvest Global Opportunities ETF,PCX
 AASU.L,Amundi ETF MSCI EM Asia UCITS ETF,LSE
@@ -656,7 +657,7 @@ WTDX.F,WISDOMTR.JAP.EQ.U.E.DLHDZ,FRA
 ZGLDEU.SW,ZKB Gold ETF,EBS
 540Q.DU,540Q.DU,DUS
 EXXV.BE,EXXV.BE,BER
-NAFINDXF1.MX,Fondo De Promocion Bursatil, S.A. De C.V. S.I.C.,MEX
+NAFINDXF1.MX,Fondo De Promocion Bursatil S.A. De C.V. S.I.C.,MEX
 O118.L,,
 18MP.MU,18MP.MU,MUN
 ASI.PA,Lyxor UCITS ETF China Enterprise (HSCEI),PAR
@@ -765,7 +766,7 @@ EXHH.SG,iS.EO Go.B.C.2.5-5.5y.U.ETF DEI,STU
 IVE.AX,iShares Trust - iShares MSCI EAFE ETF,ASX
 FRNU.DE,Amundi ETF Floating Rate USD Corp USD,GER
 UIMT.SG,UBS ETF M PA SR AD,STU
-ARTH4CK15-2.MX,CIBANCO,S.A. INSTITUCION DE BAN,MEX
+ARTH4CK15-2.MX,CIBANCOS.A. INSTITUCION DE BAN,MEX
 FRF-A.TO,,
 18MI.DE,Amundi ETF MSCI Europe UCITS ETF,GER
 ZSILHC.SW,ZKB Silver ETF,EBS
@@ -896,7 +897,7 @@ EXV1.BE,EXV1.BE,BER
 EXHJ.HM,EXHJ.HM,HAM
 GC40.F,Amundi ETF CAC 40 UCITS ETF,FRA
 CE8USD.SW,Amundi ETF MSCI World Ex Europe UCITS ETF,EBS
-IKO.AX,iShares, Inc. - iShares MSCI South Korea Capped ETF,ASX
+IKO.AX,iShares Inc. - iShares MSCI South Korea Capped ETF,ASX
 IQQF.DU,IQQF.DU,DUS
 AJEUAS.SW,UBS ETFs Public Limited Company - MSCI AC Asia Ex Japan SF UCITS ETF,EBS
 HEDF.L,WisdomTree Europe Equity ETF EUR,LSE
@@ -953,7 +954,7 @@ X13H.BE,AMUNDI ETF FTSE MIB,BER
 ^INSPYW,SPDR S&P Euro Dividend Aristocr,NIM
 COMF.AS,GO UCITS ETF Solutions plc - ETFS Longer Dated All Commodities GO UCITS ETF,AMS
 AL9137.MI,AL9137.MI,MIL
-IBK.AX,iShares, Inc. - iShares MSCI BRIC ETF,ASX
+IBK.AX,iShares Inc. - iShares MSCI BRIC ETF,ASX
 XHYS.DE,,
 CI2USD.SW,Amundi ETF MSCI India USD A/I,EBS
 13042145.SW,,
@@ -1143,7 +1144,7 @@ CSIL.L,Lyxor ETF CSI 300 A-Share C-USD,LSE
 21846314.SW,,
 UIM4.BE,UIM4.BE,BER
 GAREN.IS,,
-ABJCK15-2.MX,DEUTSCHE BANK MEXICO, S.A., INS,MEX
+ABJCK15-2.MX,DEUTSCHE BANK MEXICO S.A. INS,MEX
 540E.HM,540E.HM,HAM
 EUN9.MU,EUN9.MU,MUN
 AMEW.F,Amundi ETF MSCI World UCITS ETF,FRA
@@ -1463,7 +1464,7 @@ IS3F.F,iShares Public Limited Company - iShares $ Corp Bond Interest Rate Hedged
 CAHEUA.SW,UBS ETF SICAV - MSCI Canada 100% hedged to EUR UCITS ETF,EBS
 CWE.MI,AMUNDI MSCI WORLD ENERGY UCITS,MIL
 CD6.PA,Amundi ETF MSCI Europe Consumer Discretionary UCITS ETF,PAR
-LATINCK12.MX,BANCO NACIONAL DE M?XICO, S.A.,,MEX
+LATINCK12.MX,BANCO NACIONAL DE M?XICO S.A.,MEX
 WTEC.DE,WisdomTree US SmallCap Dividend ETF,GER
 CI3.MI,AMUNDI EURO INFLATION UCITS ETF,MIL
 JPSR.SW,UBS ETF SICAV - MSCI Japan Socially Responsible UCITS ETF,EBS
@@ -1646,7 +1647,7 @@ AIGG.MI,ETFS GRAINS,MIL
 IBCF.SG,iShsV-S&P500 EUR Hgd U.ETF AccR,STU
 LYLEMB.SW,Lyxor ETF iBoxx $ Liquid EM Sovergn A/I,EBS
 EXHJ.F,iShares Euro Government Bond Capped 5.5-10.5yr UCITS ETF (DE),FRA
-MILATRC16.MX,Actinver Casa De Bolsa, S.A. De C.V. - TRACS Series 16,MEX
+MILATRC16.MX,Actinver Casa De Bolsa S.A. De C.V. - TRACS Series 16,MEX
 CWE.PA,Amundi ETF MSCI World Energy UCITS ETF,PAR
 EUGBBH.SW,UBS ETF SICAV - MSCI EMU 100% hedged to GBP UCITS ETF,EBS
 26498733.IR,,
@@ -2032,7 +2033,7 @@ JNUG,Direxion Daily Jr Gld Mnrs Bull 3X ETF,PCX
 ERX,Direxion Daily Energy Bull 3X ETF,PCX
 SPXS,Direxion Shares ETF Trust - Direxion Daily S&P 500 Bear 3X Shares,PCX
 YINN,Direxion Shares ETF Trust - Direxion Daily FTSE China Bull 3X Shares,PCX
-STZ,Constellation Brands, Inc.,NYQ
+STZ,Constellation Brands Inc.,NYQ
 LABU,Direxion Shares ETF Trust - Direxion Daily S&P Biotech Bull 3x Shares,PCX
 JNK,SPDR Series Trust - SPDR Bloomberg Barclays High Yield Bond ETF,PCX
 UUP,PowerShares DB US Dollar Index Trust - Powershares DB US Dollar Index Bullish Fund,PCX
@@ -2125,7 +2126,7 @@ NYF,iShares Trust - iShares New York Muni Bond ETF,PCX
 MDIV,First Trust Exchange-Traded Fund VI - Multi-Asset Diversified Income Index Fund,NGM
 IEI,iShares Trust - iShares 3-7 Year Treasury Bond ETF,NGM
 IBMH,iShares iBonds Sep 2019 Term Muni Bd ETF,PCX
-HYXU,iShares, Inc. - iShares International High Yield Bond ETF,ASE
+HYXU,iShares Inc. - iShares International High Yield Bond ETF,ASE
 HYEM,VanEck Vectors ETF Trust - VanEck Vectors Emerging Markets High Yield Bond ETF,PCX
 GASX,Direxion Shares ETF Trust - Direxion Daily Natural Gas Related Bear 3X Shares,PCX
 DXGE,WisdomTree Germany Hedged Equity ETF,NGM
@@ -2229,7 +2230,7 @@ BAR,Direxion Daily Gold Bull 3X ETF,PCX
 UAE,iShares MSCI UAE Capped ETF,NGM
 TLO,SPDR Blmbg Barclays Long Term Trs ETF,PCX
 TFLO,iShares Treasury Floating Rate Bond ETF,PCX
-SWH,Stanley Black & Decker, Inc.,ASE
+SWH,Stanley Black & Decker Inc.,ASE
 STIP,iShares Trust - iShares 0-5 Year TIPS Bond ETF,PCX
 PILS,Direxion Daily Pharmctcl&Medcl Br 2X ETF,PCX
 PGM,iPath Bloomberg Platinum SubTR ETN,PCX
@@ -2351,7 +2352,7 @@ MLPC,C-Tracks ETN Bsd on Perf of M/H MLP Fdmt,PCX
 MATL,Direxion Daily Basic Matls Bull 3X ETF,PCX
 LQDH,iShares Interest Rate Hedged Corp Bd ETF,PCX
 LKOR,FlexShares Crdt-Scrd US Lng Corp Bd ETF,NGM
-LEMB,iShares, Inc. - iShares J.P. Morgan EM Local Currency Bond ETF,PCX
+LEMB,iShares Inc. - iShares J.P. Morgan EM Local Currency Bond ETF,PCX
 KORU,Direxion Shares ETF Trust - Direxion Daily MSCI South Korea Bull 3X Shares,PCX
 JGBS,DB Inverse Japanese Govt Bond Futs ETN,PCX
 ITR,SPDR Blmbg Barclays IntmTermCorpBd ETF,PCX
@@ -2364,7 +2365,7 @@ IBME,iShares iBonds Sep 2016 Term Muni Bond,PCX
 HYS,PIMCO 0-5 Year High Yield Corp Bd ETF,PCX
 HYGH,iShares U.S. ETF Trust - iShares Interest Rate Hedged High Yield Bond ETF,PCX
 GRWN,iPath Pure Beta Softs ETN,PCX
-GHYG,iShares, Inc. - iShares Global High Yield Corporate Bond ETF,ASE
+GHYG,iShares Inc. - iShares Global High Yield Corporate Bond ETF,ASE
 FPXI,First Trust Exchange Traded Fund II - First Trust International IPO ETF,NGM
 FEEU,Barclays ETN+ FI Enhanced Europe 50,PCX
 FCOR,Fidelity Corporate Bond ETF,PCX
@@ -2864,7 +2865,7 @@ SYBM.HM,SPDR B.EM.MA.LO.BOND ETF,HAM
 DI4W.HM,,
 VEFB.BE,VANECK CHINAAMC,BER
 ES13.PA,Lyxor ETF MTS 1-3y Spain Gov Bond DR C?,PAR
-ARTHACK10.MX,THE BANK OF NEW YORK MELLON, S.,MEX
+ARTHACK10.MX,THE BANK OF NEW YORK MELLON S.,MEX
 HAA.TO,,
 ^JGBB,WisdomTree Japan Interest Rate,NIM
 36B1.F,ISHSIII-EO C.BD BB-B EOD,FRA
@@ -2909,7 +2910,7 @@ VEFU.BE,VANECK VEC. ETF-BIOTECH,BER
 116850.L,,
 XCHB.SG,,
 36B3.MU,,
-LIVCK15.MX,BANCO INVEX, S.A., INSTITUCION,MEX
+LIVCK15.MX,BANCO INVEX S.A. INSTITUCION,MEX
 BSCM.A,BSCM.A,ASE
 0DFW.BE,,
 TSPTR-88.TA,,
@@ -3027,7 +3028,7 @@ SUSE.L,iShares Euro Corporate Bond Sustainability Screened 0-3yr UCITS ETF,LSE
 HBRL.SW,HSBC MSCI Brazil ETF,EBS
 45RR.L,45RR.L,LSE
 SWEO_ASI6.ST,SWEO_ASI6.ST,
-VTX2CK15.MX,BANCO NACIONAL DE M?XICO, S.A.,,MEX
+VTX2CK15.MX,BANCO NACIONAL DE M?XICO S.A.,MEX
 NBF_FC81_A798B.ST,NBF_FC81_A798B.ST,
 MSBV_XSA2.ST,MSBV_XSA2.ST,
 DDBO_511_A.ST,DDBO_511_A.ST,
@@ -3487,7 +3488,7 @@ SYBQ.DE,SPDR® Barclays 0-5 Year Stlg Corp Bd ETF,GER
 DXSC.MU,DXSC.MU,MUN
 VISO_GTM_1512.ST,VISO_GTM_1512.ST,
 25290594.MA,,
-FFLA3CK15.MX,BANCO INVEX, S.A., INSTITUCION,MEX
+FFLA3CK15.MX,BANCO INVEX S.A. INSTITUCION,MEX
 ESE.PA,BNPP SP500 EUR C,PAR
 UXM-B.TO,First Asset Morningstar US Dividend Target 50 Index ETF,TOR
 5X63.F,ComStage - Commerzbank Bund-Future Double Short TR UCITS ETF,FRA
@@ -3546,7 +3547,7 @@ IBEL.AS,iShares V Public Limited Company - iShares Belgium Government Bond UCITS
 42HW.L,HSBC Bank Plc,LSE
 BJK.MX,VANECK VECTORS GAMING ETF,MEX
 ^QQXT,First Trust NASDAQ-100 Ex-Tech,NIM
-FINWSCK15.MX,BANCO INVEX, S.A., INSTITUCION,MEX
+FINWSCK15.MX,BANCO INVEX S.A. INSTITUCION,MEX
 NBF_9AN_A366.ST,NBF_9AN_A366.ST,
 CEM2.DE,iShares US Equity Buyback Achievers,GER
 ^VXUS,Vanguard Total International St,NIM
@@ -3577,7 +3578,7 @@ SEBO_048W.ST,SEBO_048W.ST,
 FWEU.L,GO UCITS ETF Solutions plc - ETFS Lombard Odier IM Euro Corporate Bond Fundamental GO UCITS ETF,LSE
 M9SH.BE,M9SH.BE,BER
 BBRC.A,BBRC.A,ASE
-ICUADCK10.MX,THE BANK OF NEW YORK MELLON, S.,MEX
+ICUADCK10.MX,THE BANK OF NEW YORK MELLON S.,MEX
 78AJ.L,,
 ARGT_GTM_1996.ST,ARGT_GTM_1996.ST,
 93AZ.L,,
@@ -3714,9 +3715,9 @@ VDC,Vanguard World Fund - Vanguard Consumer Staples ETF,PCX
 EWY,iShares MSCI South Korea Capped ETF,PCX
 DTO,DB Crude Oil Double Short ETN,PCX
 FXP,ProShares UltraShort FTSE China 50,PCX
-THD,iShares, Inc. - iShares MSCI Thailand Capped ETF,PCX
+THD,iShares Inc. - iShares MSCI Thailand Capped ETF,PCX
 CEFL,UBS ETRACS Mthly Py 2xLvg Closed-End ETN,PCX
-EWW,iShares, Inc. - iShares MSCI Mexico Capped ETF,PCX
+EWW,iShares Inc. - iShares MSCI Mexico Capped ETF,PCX
 REZ,iShares Trust - iShares Residential Real Estate Capped ETF,PCX
 ICF,iShares Cohen & Steers REIT ETF,PCX
 EWI,iShares MSCI Italy Capped ETF,PCX
@@ -3728,8 +3729,8 @@ KWEB,KraneShares Trust - KraneShares CSI China Internet ETF,NGM
 INCO,Columbia ETF Trust II - Columbia India Consumer ETF,PCX
 ZROZ,PIMCO ETF Trust - PIMCO 25+ Year Zero Coupon U.S. Treasury Index Exchange-Traded Fund,PCX
 RJI,ELEMENTS Rogers Intl Cmdty TR ETN,PCX
-EWL,iShares, Inc. - iShares MSCI Switzerland Capped ETF,PCX
-EWC,iShares, Inc. - iShares MSCI Canada ETF,PCX
+EWL,iShares Inc. - iShares MSCI Switzerland Capped ETF,PCX
+EWC,iShares Inc. - iShares MSCI Canada ETF,PCX
 CGW,Claymore Exchange-Traded Fund Trust 2 - Guggenheim S&P Global Water Index ETF,PCX
 VCR,Vanguard Consumer Discretionary ETF,PCX
 GCC,WisdomTree Continuous Commodity Index Fund,PCX
@@ -3779,7 +3780,7 @@ HEWG,iShares Currency Hedged MSCI Germany ETF,NGM
 GVAL,Cambria ETF Trust - Cambria Global Value ETF,PCX
 GSC,GS Connect S&P GSCI Enhanced Commodity Total Return ETN,PCX
 FHLC,Fidelity Covington Trust - Fidelity MSCI Health Care Index ETF,PCX
-ERUS,iShares, Inc. - iShares MSCI Russia Capped ETF,PCX
+ERUS,iShares Inc. - iShares MSCI Russia Capped ETF,PCX
 EMDI,iShares MSCI Emerging Mkts Cnsmr Discret,PCX
 EFNL,iShares MSCI Finland Capped ETF,ASE
 DDWM,WisdomTree Dynamic Ccy Hdgd Intl Eq ETF,ASE
@@ -3868,7 +3869,7 @@ PBD,PowerShares Exchange-Traded Fund Trust II - PowerShares Global Clean Energy 
 MLTI,Credit Suisse X-Links Mlt-Ast Hi Inc ETN,PCX
 JHML,JHancock Multifactor Large Cap ETF,PCX
 IGS,ProShares Short Investment Grade Corp,PCX
-IEMG,iShares, Inc. - iShares Core MSCI Emerging Markets ETF,PCX
+IEMG,iShares Inc. - iShares Core MSCI Emerging Markets ETF,PCX
 ICOL,iShares MSCI Colombia Capped ETF,PCX
 IBDN,iShares iBonds Dec 2022 Term Corp ETF,PCX
 IBDK,iShares iBonds Dec 2019 Term Corp ETF,PCX
@@ -3958,7 +3959,7 @@ IBDF,iShares iBonds Dec 2016 Term Corporate,PCX
 IBDA,iShares iBonds Mar 2016 Corporate,PCX
 HEWU,iShares Trust - iShares Currency Hedged MSCI United Kingdom ETF,PCX
 HEWI,iShares Trust - iShares Currency Hedged MSCI Italy ETF,PCX
-HEMV,iShares, Inc. - iShares Edge MSCI Min Vol EM Currency Hedged ETF,ASE
+HEMV,iShares Inc. - iShares Edge MSCI Min Vol EM Currency Hedged ETF,ASE
 FYLD,Cambria ETF Trust - Cambria Foreign Shareholder Yield ETF,ASE
 FXEU,PowerShares Europe Currency Hedged Low Volatility Portfolio,PCX
 FNDA,Schwab Fundamental US Small Company ETF,PCX
@@ -4605,7 +4606,7 @@ CSIO_INK2.ST,CSIO_INK2.ST,
 CB1E50.SW,ComStage 1 - EURO STOXX 50 UCITS ETF,EBS
 CBE3.AS,iShares VII Public Limited Company - iShares Euro Govt Bond 1-3yr UCITS ETF EUR (Acc),AMS
 CSEMAS.SW,iShares VII Public Limited Company - iShares MSCI EM Asia UCITS ETF,EBS
-HEEM.MX,iShares, Inc. - iShares Currency Hedged MSCI Emerging Markets ETF,MEX
+HEEM.MX,iShares Inc. - iShares Currency Hedged MSCI Emerging Markets ETF,MEX
 CFAG.SW,Hedged Long Dated Agri (CHF),EBS
 TCOIL-87.TA,,
 C062.F,ComStage - STOXX Europe 600 Banks NR UCITS ETF,FRA
@@ -4756,7 +4757,7 @@ DXS1.BE,DXS1.BE,BER
 CUT.A,CUT.A,ASE
 CHNP.L,Source CSOP Markets Public Limited Company - CSOP Source FTSE China A50 UCITS ETF,LSE
 EIMI.SW,iShares Public Limited Company - iShares Core MSCI EM IMI UCITS ETF,EBS
-IEMG.MX,iShares, Inc. - iShares Core MSCI Emerging Markets ETF,MEX
+IEMG.MX,iShares Inc. - iShares Core MSCI Emerging Markets ETF,MEX
 C030.DU,COMST.-DJ S.T.30N.U.ETF I,DUS
 CEBF.SG,,
 18MG.F,Amundi ETF MSCI China UCITS ETF,FRA
@@ -4796,7 +4797,7 @@ ISFA.NX,,
 GMGW.HM,CLA.ETF TR.2-GUGGENH.SOL.,HAM
 XCHC.DE,DB X-TR.CSI300 HEA.CARE1C,GER
 QCA2.MU,China AMC Hang Seng Small Cap Index ETF,MUN
-ICUA2CK14.MX,BANCO NACIONAL DE M?XICO, S.A.,,MEX
+ICUA2CK14.MX,BANCO NACIONAL DE M?XICO S.A.,MEX
 HCAN.L,HSBC ETFs Public Limited Company - HSBC MSCI Canada UCITS ETF,LSE
 LYMP.HM,,
 IUSC.SW,iShares VI Public Limited Company - iShares S&P 500 CHF Hedged UCITS ETF,EBS
@@ -5059,7 +5060,7 @@ IDMO,PowerShares S&P Intl Dev Momentum ETF,PCX
 HDEZ,Deutsche X-trackers MSCI Eurozone HiDivY,ASE
 HDEE,Deutsche X-trackers MSCI EMktsHiDvYdHgEq,ASE
 EUDG,WisdomTree Trust - WisdomTree Europe Quality Dividend Growth Fund,PCX
-DXJT,WisdomTree Jpn Hdgd Tech,Media&Telec ETF,PCX
+DXJT,WisdomTree Jpn Hdgd TechMedia&Telec ETF,PCX
 DWTR,PowerShares DWA Tactical Sector Rtn,NGM
 DIVY,Reality Shares DIVS ETF,PCX
 DEW,WisdomTree Trust - WisdomTree Global High Dividend Fund,PCX
@@ -5354,7 +5355,7 @@ EXSA.DU,EXSA.DU,DUS
 XEL2.MI,,
 EFQ8.HM,DK IBOXX EO L.NON-FI.DIV.,HAM
 DBZR.DU,DB X-TR.HSI SH. DAILY 2C,DUS
-INFRACK15.MX,BANCO INVEX, S.A., INSTITUCION,MEX
+INFRACK15.MX,BANCO INVEX S.A. INSTITUCION,MEX
 XOC1.DU,,
 VHYL.PA,,
 BEAR-DNBNORHA.OL,,
@@ -5903,7 +5904,7 @@ LYSP5.SW,Multi Units Luxembourg - Lyxor S&P 500 UCITS ETF,EBS
 LYMF.SG,Lyxor STOXX Eu.Se.Div.30 U.ETFA,STU
 DBPG.SG,DBX S&P500 X2 1C,STU
 SPY,SPDR S&P 500 ETF Trust,PCX
-QQQ,PowerShares QQQ Trust, Series 1,NGM
+QQQ,PowerShares QQQ Trust Series 1,NGM
 XLE,The Select Sector SPDR Trust - The Energy Select Sector SPDR Fund,PCX
 GDX,VanEck Vectors Gold Miners ETF,PCX
 VXX,iPath S&P 500 VIX Short-Term Futures ETN,PCX
@@ -5964,7 +5965,7 @@ EWH,iShares MSCI Hong Kong ETF,PCX
 EUO,ProShares UltraShort Euro,PCX
 VOT,Vanguard Index Funds - Vanguard Mid-Cap Growth ETF,PCX
 FRN,Claymore Exchange-Traded Fund Trust 2 - Guggenheim Frontier Markets ETF,PCX
-EWG,iShares, Inc. - iShares MSCI Germany ETF,PCX
+EWG,iShares Inc. - iShares MSCI Germany ETF,PCX
 EPV,ProShares Trust - ProShares UltraShort FTSE Europe,PCX
 VPL,Vanguard International Equity Index Funds - Vanguard FTSE Pacific ETF,PCX
 VBK,Vanguard Index Funds - Vanguard Small-Cap Growth ETF,PCX
@@ -5975,7 +5976,7 @@ YMLP,VanEck Vectors High Income MLP ETF,PCX
 XES,SPDR Series Trust - SPDR S&P Oil & Gas Equipment & Services ETF,PCX
 SDIV,Global X Funds - Global X SuperDividend ETF,PCX
 REMX,VanEck Vectors ETF Trust - VanEck Vectors Rare Earth/Strategic Metals ETF,PCX
-EZU,iShares, Inc. - iShares MSCI Eurozone ETF,ASE
+EZU,iShares Inc. - iShares MSCI Eurozone ETF,ASE
 EPHE,iShares MSCI Philippines ETF,PCX
 VOX,Vanguard Telecommunication Services ETF,PCX
 SRS,ProShares UltraShort Real Estate,PCX
@@ -6048,7 +6049,7 @@ FTSL,First Trust Exchange-Traded Fund IV - First Trust Senior Loan Fund,NGM
 EZJ,ProShares Ultra MSCI Japan,PCX
 EWQ,iShares MSCI France ETF,PCX
 EEMV,iShares Edge MSCI Min Vol Emerg Mkts ETF,ASE
-EEMS,iShares, Inc. - iShares MSCI Emerging Markets Small-Cap ETF,PCX
+EEMS,iShares Inc. - iShares MSCI Emerging Markets Small-Cap ETF,PCX
 YLCO,Global X Funds - Global X YieldCo Index ETF,NGM
 XTL,SPDR S&P Telecom ETF,PCX
 XSD,SPDR Series Trust - SPDR S&P Semiconductor ETF,PCX
@@ -6097,7 +6098,7 @@ FLTR,VanEck Vectors Investment Grd Fl Rt ETF,PCX
 FLAT,iPath US Treasury Flattener ETN,NGM
 FENY,Fidelity Covington Trust - Fidelity MSCI Energy Index ETF,PCX
 EWUS,iShares MSCI United Kingdom Small-Cp ETF,ASE
-EWN,iShares, Inc. - iShares MSCI Netherlands ETF,PCX
+EWN,iShares Inc. - iShares MSCI Netherlands ETF,PCX
 EWGS,iShares MSCI Germany Small-Cap ETF,ASE
 EUM,ProShares Trust - ProShares Short MSCI Emerging Markets,PCX
 EFZ,ProShares Short MSCI EAFE,PCX
@@ -6139,7 +6140,7 @@ FPE,First Trust Exchange-Traded Fund III - First Trust Preferred Securities and 
 FCOM,Fidelity MSCI Telecommunication Svc ETF,PCX
 EWRI,Guggenheim Russell 1000 Equal Wt ETF,PCX
 EWHS,iShares MSCI Hong Kong Small-Cap,PCX
-EWD,iShares, Inc. - iShares MSCI Sweden Capped ETF,PCX
+EWD,iShares Inc. - iShares MSCI Sweden Capped ETF,PCX
 EUMV,iShares Trust - iShares Edge MSCI Min Vol Europe ETF,PCX
 EMRE,Guggenheim Emerging Markets Rel Est ETF,ASE
 EEV,ProShares UltraShort MSCI Emerging Mkts,PCX
@@ -6467,7 +6468,7 @@ IYF,iShares US Financials ETF,PCX
 MTUM,iShares Edge MSCI USA Momentum Fctr ETF,ASE
 FM,iShares MSCI Frontier 100 ETF,PCX
 SEF,ProShares Trust - ProShares Short Financials,PCX
-NTG,Tortoise MLP Fund, Inc,NYQ
+NTG,Tortoise MLP Fund Inc,NYQ
 VLUE,iShares Trust - iShares Edge MSCI USA Value Factor ETF,ASE
 QUAL,iShares Edge MSCI USA Quality Factor ETF,ASE
 IXG,iShares Global Financials ETF,PCX
@@ -6564,7 +6565,7 @@ SPYP.DU,,
 LU73178258.HM,,
 22499879.IR,,
 CRGH.L,GO UCITS ETF Solutions plc - ETFS Lombard Odier IM Global Corporate Bond Fundamental GO UCITS ETF,LSE
-FFLA4CK15.MX,BANCO INVEX, S.A., INSTITUCION,MEX
+FFLA4CK15.MX,BANCO INVEX S.A. INSTITUCION,MEX
 KSFTS-79.TA,,
 LYM5.DU,,
 SNOP.L,ETFS Foreign Exchange Limited - ETFS Short NOK Long USD,LSE
@@ -6691,7 +6692,7 @@ SPVG.L,PowerShares Global Funds Ireland plc - PowerShares S&P 500 VEQTOR UCITS E
 SEB_K193.ST,SEB_K193.ST,
 FUTS,ProShares Managed Futures Strategy,PCX
 GWT.MI,LYXOR MSCI EMU GROWTH DR UCITS,MIL
-IDF.BE,INDIA FD INC. DL-,001,BER
+IDF.BE,INDIA FD INC. DL-001,BER
 3116447.SW,,
 MTD.NX,,
 VJPN.AS,Vanguard Funds Public Limited Company - Vanguard FTSE Japan UCITS ETF,AMS
@@ -6943,7 +6944,7 @@ RS2K.PA,Amundi ETF Russell 2000 EUR A/I,PAR
 STTS.SW,,
 DX2Z.DE,db x-trackers - S&P Select Frontier UCITS ETF,GER
 SPYZ.BE,SPYZ.BE,BER
-UNG.MX,United States Natural Gas Fund, LP,MEX
+UNG.MX,United States Natural Gas Fund LP,MEX
 JPNK.PA,Amundi ETF Jpx-Nikkei 400 EUR A/I,PAR
 02F4.BE,FT ETF NASDAQ TECH,BER
 FEDF.L,Multi Units Luxembourg - Lyxor Fed Funds US Dollar Cash UCITS ETF,LSE
@@ -7142,7 +7143,7 @@ J10C.BE,CRSH SWISS FRANC TR,BER
 VOOS.F,VOOS.F,
 CI2U.L,Amundi ETF MSCI India UCITS ETF,LSE
 SCYP.L,ETFS Foreign Exchange Limited - ETFS Short CNY Long USD,LSE
-CSCK12.MX,BANCO NACIONAL DE M?XICO, S.A.,,MEX
+CSCK12.MX,BANCO NACIONAL DE M?XICO S.A.,MEX
 SEB_1110P.ST,SEB_1110P.ST,
 MFAI.AS,,
 4GXH.BE,GBL X FTSE AN40,BER
@@ -7165,13 +7166,13 @@ INDL.L,Multi Units France - Lyxor UCITS ETF MSCI Indonesia,LSE
 DBXI.BE,DBXT FTSE MIB 1D,BER
 GWT.MC,,
 GLD,SPDR Gold Shares,PCX
-UNG,United States Natural Gas Fund, LP,PCX
+UNG,United States Natural Gas Fund LP,PCX
 IAU,iShares Gold Trust,PCX
 IWF,iShares Trust - iShares Russell 1000 Growth ETF,PCX
 UGL,ProShares Trust II - ProShares Ultra Gold,PCX
 IVW,iShares S&P 500 Growth ETF,PCX
 IWO,iShares Russell 2000 Growth ETF,PCX
-UGA,United States Gasoline Fund, LP,PCX
+UGA,United States Gasoline Fund LP,PCX
 GLL,ProShares UltraShort Gold,PCX
 IGF,iShares Trust - iShares Global Infrastructure ETF,NGM
 PHYS,Sprott Physical Gold Trust,PCX
@@ -7188,11 +7189,11 @@ JKH,iShares Trust - iShares Morningstar Mid-Cap Growth ETF,PCX
 IXP,iShares Global Telecom ETF,PCX
 IWY,iShares Trust - iShares Russell Top 200 Growth ETF,PCX
 UNL,United States 12 Month Natural Gas,PCX
-PICK,iShares, Inc. - iShares MSCI Global Metals & Mining Producers ETF,ASE
+PICK,iShares Inc. - iShares MSCI Global Metals & Mining Producers ETF,ASE
 IJK,iShares S&P Mid-Cap 400 Growth ETF,PCX
 GGOV,ProShares Trust - ProShares German Sovereign/Sub-Sovereign ETF,PCX
 UKK,ProShares Trust - ProShares Ultra Russell2000 Growth,PCX
-SLVP,iShares, Inc. - iShares MSCI Global Silver Miners ETF,ASE
+SLVP,iShares Inc. - iShares MSCI Global Silver Miners ETF,ASE
 IOO,iShares Global 100 ETF,PCX
 GDXX,ProShares Trust - ProShares Ultra Gold Miners,PCX
 GDXS,ProShares UltraShort Gold Miners,PCX
@@ -7574,7 +7575,7 @@ O089.L,,
 IUSE.DU,IUSE.DU,DUS
 IQQR.F,ISHS-MSCI EAST.EUR.C.DL D,FRA
 IS0F.HM,,
-NGCFICK15.MX,BANCO INVEX, S.A., INSTITUCION,MEX
+NGCFICK15.MX,BANCO INVEX S.A. INSTITUCION,MEX
 IGSG.AS,iShares II Public Limited Company - iShares Dow Jones Global Sustainability Screened UCITS ETF,AMS
 TCMSC-85.TA,,
 CCME.PA,Commerzbank CCBI Investment Funds ICVC - Commerzbank CCBI RQFII Money Market UCITS ETF,PAR
@@ -7712,7 +7713,7 @@ SPYF.SG,SPDR UK ALL GBP-ACC,STU
 IS0H.SG,iShsV-Austria Govt Bond U.ETF R,STU
 IUSP.BE,ISHSIII-EM L.GOV.BD DLDIS,BER
 SMLU.SG,SM GS EQ INEUR G-CT,STU
-UGA.MX,UNITED STATES GASOLINE FUND, LP,MEX
+UGA.MX,UNITED STATES GASOLINE FUND LP,MEX
 IQQP.HM,IQQP.HM,HAM
 IXP.MX,ISHARES GLOBAL TELECOM ETF,MEX
 S5B.SW,,
@@ -7950,7 +7951,7 @@ HDIQ.L,iShares II plc - iShares MSCI USA Quality Dividend UCITS ETF,LSE
 2800.HK,Tracker Fund Of Hong Kong,HKG
 16FB.L,,
 UBUJ.F,UBS (Irl) ETF Public Limited Company - MSCI USA hedged to EUR UCITS ETF,FRA
-EWH.MX,iShares, Inc. - iShares MSCI Hong Kong ETF,MEX
+EWH.MX,iShares Inc. - iShares MSCI Hong Kong ETF,MEX
 H41F.MU,HSBC ETFs Public Limited Company - HSBC MSCI Taiwan UCITS ETF,MUN
 SD7C.HM,THE HEALTH C.SEL.SEC.SPDR,HAM
 IUSE.MI,iShares S&P 500 EUR Hedged,MIL
@@ -7995,7 +7996,7 @@ XACT-LEGEMIDDEL.O,,
 HKOR.SW,HSBC ETFs Public Limited Company - HSBC MSCI Korea UCITS ETF,EBS
 CSGLDC.SW,iShares ETF II (CH) - iShares Gold CHF Hedged (CH),EBS
 HSPB.L,,
-VERTXCK11.MX,HSBC MEXICO, S.A., INSTITUCION,MEX
+VERTXCK11.MX,HSBC MEXICO S.A. INSTITUCION,MEX
 HMYR.SW,HSBC ETFs Public Limited Company - HSBC MSCI Malaysia UCITS ETF,EBS
 SD7C.BE,SEC SPDR HEALTH-SBI,BER
 ZMT.TO,BMO S&P/TSX Equal Weight Global Base Metals Hedged to CAD Index ETF,TOR
@@ -8033,7 +8034,7 @@ VG76.MU,VG76.MU,MUN
 HRST-202.TA,,
 HRLSH-21.TA,,
 HZAR.PA,HSBC ETFs Public Limited Company - HSBC MSCI South Africa UCITS ETF,PAR
-CI3CK11.MX,BANCO MONEX, S.A., INSTITUCION,MEX
+CI3CK11.MX,BANCO MONEX S.A. INSTITUCION,MEX
 82828.HK,Hang Seng Investment Index Funds Series - Hang Seng H-Share Index ETF,HKG
 H4ZE.DE,HSBC MSCI Europe ETF,GER
 SYIVOHY.CO,SYIVOHY.CO,
@@ -8124,7 +8125,7 @@ C068.BE,COMS.-S.E.600 HLTH.UETF I,BER
 QCB.AX,BetaShares Commodities Basket ETF - Currency Hedged (Synthetic),ASX
 RQFI.MI,DB X-TRACKERS HARV CSI300 UCITS,MIL
 STHY.L,PIMCO Fixed Income Source ETFs plc - PIMCO Short-Term High Yield Corporate Bond,LSE
-MHNOSCK10.MX,BANCO NACIONAL DE M?XICO, S.A.,,MEX
+MHNOSCK10.MX,BANCO NACIONAL DE M?XICO S.A.,MEX
 NBF_KC69_A353B.ST,NBF_KC69_A353B.ST,
 PSHSI-55.TA,,
 H4Z0.BE,HSBC MSCI MEX.CAP.UC.ETF,BER
@@ -8263,7 +8264,7 @@ GPGYM3.TI,GPGYM3.TI,TLO
 H4ZJ.MU,H4ZJ.MU,MUN
 IRCP.SW,iShares V Public Limited Company - iShares Euro Corporate Bond Interest Rate Hedged UCITS ETF,EBS
 XHYS.SG,,
-EMHY.MX,iShares, Inc. - iShares Emerging Markets High Yield Bond ETF,MEX
+EMHY.MX,iShares Inc. - iShares Emerging Markets High Yield Bond ETF,MEX
 00650L.TW,Fuh Hwa Daily Hang Seng Leveraged 2X ETF,TAI
 DX2Y.SG,DBXT DB HFI ETF 1C,STU
 H4ZW.F,HSBC ETFs Public Limited Company - HSBC MSCI EM Latin America UCITS ETF,FRA
@@ -8389,7 +8390,7 @@ HRGLD-33.TA,,
 DBZR.SG,,
 4575225.IR,,
 83147.HK,CSOP ETF Series - CSOP FTSE China A50 ETF,HKG
-IHK.AX,iShares, Inc. - iShares MSCI Hong Kong ETF,ASX
+IHK.AX,iShares Inc. - iShares MSCI Hong Kong ETF,ASX
 2827.HK,World Index Shares ETFs - CSI 300 China Tracker,HKG
 H410.F,HSBC ETFs Public Limited Company - HSBC MSCI Emerging Markets UCITS ETF,FRA
 HEDJ.L,WisdomTree Issuer Public Limited Company - WisdomTree Europe Equity UCITS ETF,LSE
@@ -8634,7 +8635,7 @@ HLTW.PA,Multi Units Luxembourg - Lyxor MSCI World Health Care TR UCITS ETF,PAR
 H4ZY.BE,HSBC MSCI CHINA USD,BER
 NDXH.SW,,
 JPHU.PA,Amundi ETF Jpx-Nikkei 400 Daily HUSD A/I,PAR
-PLANICK12.MX,HSBC MEXICO, S.A., INSTITUCION,MEX
+PLANICK12.MX,HSBC MEXICO S.A. INSTITUCION,MEX
 XHCP.DE,DB X-TRACKERS II IBOXX EUR LIQU,GER
 HACK.MX,Factorshares Trust - PureFunds ISE Cyber Security ETF,MEX
 CD8D.NX,,
@@ -8915,7 +8916,7 @@ STN,Stantec Inc.,NYQ
 SCJ,iShares MSCI Japan Small-Cap ETF,PCX
 IYZ,iShares US Telecommunications ETF,PCX
 JKF,iShares Morningstar Large-Cap Value ETF,PCX
-URTH,iShares, Inc. - iShares MSCI World ETF,PCX
+URTH,iShares Inc. - iShares MSCI World ETF,PCX
 IWC,iShares Micro-Cap ETF,PCX
 IVE,iShares Trust - iShares S&P 500 Value ETF,PCX
 OEF,iShares Trust - iShares S&P 100 ETF,PCX
@@ -8973,7 +8974,7 @@ BBEB.L,iShares Euro Corporate Bond BB-B,LSE
 SC0X.BE,SC0X.BE,BER
 EMCB.L,SSgA SPDR ETFs Europe I plc - SPDR BofA Merrill Lynch Emerging Markets Corporate Bond UCITS ETF,LSE
 EXHD.BE,EXHD.BE,BER
-EUSA.MX,iShares, Inc. - iShares MSCI USA Equal Weighted ETF,MEX
+EUSA.MX,iShares Inc. - iShares MSCI USA Equal Weighted ETF,MEX
 IXG.A,IXG.A,ASE
 DHS.SW,WisdomTree Issuer Public Limited Company - WisdomTree US Equity Income UCITS ETF,EBS
 EXSH.SG,ISHS STXEUSDV30,STU
@@ -9051,7 +9052,7 @@ LOWV.MI,SPDR® S&P 500 Low Volatility ETF,MIL
 XRS2.DE,Concept Fund Solutions plc - db x-trackers Russell 2000 UCITS ETF (DR),GER
 IBLN.A,IBLN.A,ASE
 SHBO_1280.ST,SHBO_1280.ST,
-EWC.MX,iShares, Inc. - iShares MSCI Canada ETF,MEX
+EWC.MX,iShares Inc. - iShares MSCI Canada ETF,MEX
 KDAX-234.TA,,
 KSM-3NDX.TA,,
 ^INSYBLD,SPDR Barclays 15+ Year Gilt UCI,NIM
@@ -9104,7 +9105,7 @@ SPYU.DE,SPDR® MSCI Europe Utilities ETF,GER
 IJK.A,IJK.A,ASE
 E044.DE,COMSTAGE ETF COMSTAGE-SHORTMDAX,GER
 CEMA.L,iShares VII Public Limited Company - iShares MSCI EM Asia UCITS ETF,LSE
-THD.MX,iShares, Inc. - iShares MSCI Thailand Capped ETF,MEX
+THD.MX,iShares Inc. - iShares MSCI Thailand Capped ETF,MEX
 C063.HM,CS-STX E.600 BA.RE.UETF I,HAM
 LYPG.F,Multi Units Luxembourg - Lyxor MSCI World Information Technology TR UCITS ETF,FRA
 SC0Q.DE,Source Markets plc - Source STOXX Europe 600 Optimised Telecommunications UCITS,GER
@@ -9442,7 +9443,7 @@ LALL.L,ETFS COMMODITY SECURITIES LIMIT,LSE
 EXX5.DE,iShares Dow Jones U.S. Select Dividend UCITS ETF (DE),GER
 CFEN.SW,Hedged Long Dated Energy (CHF),EBS
 JP1504.MI,JP1504.MI,MIL
-EU340.SW,UBS AG, Jersey,EBS
+EU340.SW,UBS AG Jersey,EBS
 SCFE.L,ETFS COMMODITY SECURITIES LIMIT,LSE
 LYXV.DE,LYXOR ASST MGM LUX JPM EUROP VA,GER
 CSJPS.MI,,
@@ -9527,7 +9528,7 @@ XAXJ.ST,db x-trackers - MSCI AC Asia ex Japan Index UCITS ETF,STO
 20974096.IR,,
 JPSR.NX,,
 LNRG.L,ETFS COMMODITY SECURITIES LIMIT,LSE
-IJP.AX,iShares, Inc. - iShares MSCI Japan ETF,ASX
+IJP.AX,iShares Inc. - iShares MSCI Japan ETF,ASX
 18MM.DE,Amundi ETF MSCI Pacific Ex Japan UCITS ETF,GER
 LU36364122.HM,,
 TNOA.MI,TNOA.MI,MIL
@@ -9562,7 +9563,7 @@ PHAL.L,,
 JPNL.L,Lyxor UCITS ETF Japan (TOPIX),LSE
 JJP.A,JJP.A,ASE
 JBSEWE.SW,,
-EPP.MX,iShares, Inc. - iShares MSCI Pacific ex Japan ETF,MEX
+EPP.MX,iShares Inc. - iShares MSCI Pacific ex Japan ETF,MEX
 XJSS.SG,,
 IJPE.AS,MSCI JAP EH,AMS
 LYQI.DE,Lyxor ETF MSCI AC Asia Ex Japan C-EUR,GER
@@ -9850,7 +9851,7 @@ J40N.BE,PROSHARES ULTRAS.GOLD NEW,BER
 SXRZ.DU,ISHSVII-NIKKEI 225 YN ACC,DUS
 OSB3.L,ETFS Oil Securities Limited - ETFS Brent 3yr,LSE
 PHZN.L,,
-EWJ.MX,iShares, Inc. - iShares MSCI Japan ETF,MEX
+EWJ.MX,iShares Inc. - iShares MSCI Japan ETF,MEX
 JEXE.SG,Source Mkts-S.STX.Japa.Exp.ETFR,STU
 LWEA.MI,ETFS 2X DAILY LONG WHEAT,MIL
 JP1506.MI,JP1506.MI,MIL
@@ -9964,7 +9965,7 @@ PHPM.AS,ETFS Metal Securities Limited - ETFS Physical PM Basket,AMS
 SXR5.F,iShares VII Public Limited Company - iShares MSCI Japan UCITS ETF USD (Acc),FRA
 PHPP.L,ETFS METAL SECURITIES LD ETFS P,LSE
 SSUG.L,ETFS COMMODITY SECURITIES LIMIT,LSE
-SCJ.MX,iShares, Inc. - iShares MSCI Japan Small-Cap ETF,MEX
+SCJ.MX,iShares Inc. - iShares MSCI Japan Small-Cap ETF,MEX
 JP1407.MI,,
 LNRG.MI,ETFS 2X DAILY LONG ENERGY,MIL
 UIM5.SG,UBS ETF MSCI JAP AD,STU
@@ -11245,7 +11246,7 @@ NBF_33AGK_A947.ST,NBF_33AGK_A947.ST,
 C020.BE,COMST.-NIKKEI225 U.ETF I,BER
 NBF_12KUH_A058.ST,NBF_12KUH_A058.ST,
 C011.DU,COMST.-NASDAQ-100 U.ETF I,DUS
-MIFMXCK09.MX,THE BANK OF NEW YORK MELLON, S.,MEX
+MIFMXCK09.MX,THE BANK OF NEW YORK MELLON S.,MEX
 NBF_UC62_A095B.ST,NBF_UC62_A095B.ST,
 NTM.AS,Think Total Market UCITS ETF Neutral,AMS
 67LL.L,HSBC Bank Plc,LSE
@@ -11334,7 +11335,7 @@ EXX7.DE,iShares Nikkei 225 UCITS ETF (DE),GER
 SMLV.MU,SOURCE NASDAQ BIO.ETF ADL,MUN
 ENLACE10.MX,BBVA Bancomer ENLACE Exchange Traded Fund,MEX
 O119.L,ISHARES PLC ISHARES NASDAQ-100,LSE
-NEXX6CK13.MX,BANCO NACIONAL DE M?XICO, S.A.,,MEX
+NEXX6CK13.MX,BANCO NACIONAL DE M?XICO S.A.,MEX
 EQQQ.DE,PowerShares Global Funds Ireland Public Limited Company - PowerShares EQQQ Nasdaq-100 UCITS ETF,GER
 BEAR-ADEL-X3-H.ST,BEAR-ADEL-X3-H.ST,STO
 SEB_K1250.ST,SEB_K1250.ST,
@@ -11388,7 +11389,7 @@ EQQQ.SW,PowerShares Global Funds Ireland Public Limited Company - PowerShares EQ
 LYS0.DE,Multi Units France - Lyxor UCITS ETF Thailand (SET50 NET TR),GER
 PUD-B.TO,Purpose Fund Corp. - Purpose US Dividend Fund,TOR
 INAA.L,iShares Public Limited Company - iShares MSCI North America UCITS ETF,LSE
-NAFINDXM1.MX,Fondo De Promocion Bursatil, S.A. De C.V. S.I.C.,MEX
+NAFINDXM1.MX,Fondo De Promocion Bursatil S.A. De C.V. S.I.C.,MEX
 TGET.AS,Think Global Equity UCITS ETF,AMS
 ^IFNA,^IFNA,NIM
 45RF.L,HSBC BANK PLC MANS LKD ORDS NIG,LSE
@@ -11439,7 +11440,7 @@ NK4F.BE,LYX BRAZ U ETF C US,BER
 NASH.A,NASH.A,ASE
 LYMS.DE,Lyxor UCITS ETF Nasdaq-100,GER
 P28184.MI,,
-MRPCK12.MX,THE BANK OF NEW YORK MELLON, S.,MEX
+MRPCK12.MX,THE BANK OF NEW YORK MELLON S.,MEX
 C011.SW,,
 NBF_EC88_B057B.ST,NBF_EC88_B057B.ST,
 BULL-REC-HA.OL,REC/SHB CT 40,OSL
@@ -11465,7 +11466,7 @@ U11S.NX,EasyETF - BNP Paribas Easy Next 11 UCITS ETF,ENX
 C011.DE,ComStage - Nasdaq-100 UCITS ETF,GER
 94HP.L,HSBC Bank Plc,LSE
 SHRT-BASMET-S-H.S,,
-9XS1.BE,UTD STATES NAT.G. DL-,001,BER
+9XS1.BE,UTD STATES NAT.G. DL-001,BER
 NBF_GC87_B024B.ST,NBF_GC87_B024B.ST,
 FBT.MX,First Trust Exchange-Traded Fund - First Trust NYSE Arca Biotechnology Index Fund,MEX
 26018615.IR,,
@@ -11566,7 +11567,7 @@ IS0N.DE,iShares Netherlands Government Bond,GER
 4GXA.BE,GL.X NASDAQ CHINA TECHN.,BER
 MSBV_GTM_1311.ST,MSBV_GTM_1311.ST,
 NRGU.L,,
-RCOCB09.MX,THE BANK OF NEW YORK MELLON, S.,MEX
+RCOCB09.MX,THE BANK OF NEW YORK MELLON S.,MEX
 NBF_TM_3374.ST,NBF_TM_3374.ST,
 NBF_GC82_A848.ST,NBF_GC82_A848.ST,
 NXF-B.TO,First Asset Energy Giants Covered Call ETF,TOR
@@ -11961,7 +11962,7 @@ RINF,ProShares Inflation Expectations,PCX
 SAA,ProShares Ultra SmallCap600,PCX
 TLL,ProShares UltraShort Telecommunications,PCX
 SINF,ProShares Trust - ProShares UltraPro Short 10 Year TIPS/TSY Spread,PCX
-QQQ.MX,PowerShares QQQ Trust, Series 1,MEX
+QQQ.MX,PowerShares QQQ Trust Series 1,MEX
 PUW.A,PUW.A,ASE
 IBTL.L,iShares IV Public Limited Company - iShares $ Treasury Bond 20+yr UCITS ETF,LSE
 UBUW.NX,,
@@ -12189,7 +12190,7 @@ XLKS.L,Source Markets plc - Source Technology S&P US Select Sector UCITS ETF,LSE
 IUSB.DE,iShares II Public Limited Company - iShares Global Timber & Forestry UCITS ETF,GER
 SLF.AX,SPDR S&P/ASX 200 Listed Property Fund,ASX
 IITU.L,iShares V Public Limited Company - iShares S&P 500 Information Technology Sector UCITS ETF,LSE
-PBFF1CK12.MX,BANCO NACIONAL DE M?XICO, S.A.,,MEX
+PBFF1CK12.MX,BANCO NACIONAL DE M?XICO S.A.,MEX
 PPP.LS,COMS PSI 20 IC,LIS
 IPOL.L,iShares V Public Limited Company - iShares MSCI Poland UCITS ETF,LSE
 PWD.PA,PS FTSE RAFI DVEMS,PAR
@@ -12207,7 +12208,7 @@ SPVX.PA,PowerShares Global Funds Ireland plc - PowerShares S&P 500 VEQTOR UCITS 
 CPXJ.L,iShares VII Public Limited Company - iShares Core MSCI Pacific ex Japan UCITS ETF,LSE
 PJSA.MU,PJSA.MU,MUN
 BUYB.NX,,
-PRANACK15-2.MX,CIBANCO,S.A. INSTITUCION DE BAN,MEX
+PRANACK15-2.MX,CIBANCOS.A. INSTITUCION DE BAN,MEX
 IPRV.SW,iShares II Public Limited Company - iShares Listed Private Equity UCITS ETF,EBS
 PIN.A,PIN.A,ASE
 PMSW.LS,ComStage - MSCI World TRN UCITS ETF,LIS
@@ -12310,7 +12311,7 @@ PSM4-12.TA,,
 EUNB.BE,,
 SEUA.L,,
 6PSK.DU,6PSK.DU,DUS
-^QQQ,PowerShares QQQ Trust, Ser 1,NIM
+^QQQ,PowerShares QQQ Trust Ser 1,NIM
 PEH.MI,POWERSHARES FTSE RAFI EM MKTS U,MIL
 PSSM-220.TA,,
 PMXWD-72.TA,,
@@ -12459,7 +12460,7 @@ IAPD.SW,ISHARES DJ ASIA/PACIFIC SELDIV,EBS
 PLMI.PA,Lyxor ETF PEA FTSE MIB Daily Levrg C-EUR,PAR
 3550169.IR,,
 EMH5.SW,SPDR BofA Merrill Lynch 0-5 Year EM USD Government,EBS
-PMCAPCK14.MX,BANCO INVEX, S.A., INSTITUCION,MEX
+PMCAPCK14.MX,BANCO INVEX S.A. INSTITUCION,MEX
 AUKD.L,,
 XPHI.L,db x-trackers - MSCI Philippines IM Index UCITS ETF (DR),LSE
 IS3R.DE,iShares IV Public Limited Company - iShares Edge MSCI World Momentum Factor UCITS ETF,GER
@@ -12637,7 +12638,7 @@ PSCND-7.TA,,
 EUNJ.DE,iShares III Public Limited Company - iShares MSCI Pacific ex-Japan UCITS ETF (Dist),GER
 PDJD-200.TA,,
 PWD.MI,POWERSH FTSE RAFI EU MID-SMALL,MIL
-PRANACK15.MX,CIBANCO,S.A. INSTITUCION DE BAN,MEX
+PRANACK15.MX,CIBANCOS.A. INSTITUCION DE BAN,MEX
 DJMC.L,iShares Public Limited Company - iShares EURO STOXX Mid UCITS ETF,LSE
 EUNJ.BE,ISHSIII-MSCI PEJ UETFDIST,BER
 SPAP.L,Source Physical Palladium P-ETC,LSE
@@ -12896,7 +12897,7 @@ REQR.MI,Source R Equal-Risk European Equity ETF,MIL
 RWR.A,RWR.A,ASE
 REZ.MX,iShares Trust - iShares Residential Real Estate Capped ETF,MEX
 13403490.SW,,
-ARTH4CK15.MX,CIBANCO,S.A. INSTITUCION DE BAN,MEX
+ARTH4CK15.MX,CIBANCOS.A. INSTITUCION DE BAN,MEX
 534631.BO,Canara Robeco Mutual Fund - Canara Robeco Gold Exchange Traded Fund,BSE
 20503951.SG,THAI 43 SRN REG S,STU
 M9SJ.SG,MA DG RUS I C,STU
@@ -13296,7 +13297,7 @@ CSSLI.SW,iShares (CH) - iShares SLI (CH),EBS
 LYYH.DU,LYX.CTR/C.CRB E-E UE C-EO,DUS
 4JZB.HM,,
 ROUS.A,ROUS.A,ASE
-ERUS.MX,iShares, Inc. - iShares MSCI Russia Capped ETF,MEX
+ERUS.MX,iShares Inc. - iShares MSCI Russia Capped ETF,MEX
 DVEU.F,Source Markets II plc - Source FTSE RAFI Europe Equity Income Physical UCITS ETF,FRA
 M9SA.BE,M9SA.BE,BER
 105695.L,,
@@ -13661,7 +13662,7 @@ TAN.A,TAN.A,ASE
 LQD.MX,iShares Trust - iShares iBoxx $ Investment Grade Corporate Bond ETF,MEX
 I6HB.DU,I6HB.DU,DUS
 ISQW.BE,ISQW.BE,BER
-TUR.MX,iShares, Inc. - iShares MSCI Turkey ETF,MEX
+TUR.MX,iShares Inc. - iShares MSCI Turkey ETF,MEX
 IUST.MU,,
 DXSH.BE,DXSH.BE,BER
 LYPH.DU,MUL-LYX.MSCI W.MA.TRUECEO,DUS
@@ -13708,7 +13709,7 @@ US57.L,Multi Units France - Lyxor UCITS ETF iBoxx $ Treasuries 5-7Y (DR),LSE
 X019.MU,X019.MU,MUN
 025J.BE,VNG TTL STCK MRKETF,BER
 STKI.MI,STKI.MI,MIL
-EWT.MX,iShares, Inc. - iShares MSCI Taiwan Capped ETF,MEX
+EWT.MX,iShares Inc. - iShares MSCI Taiwan Capped ETF,MEX
 EUR-A.TO,First Trust AlphaDEX European Dividend Index ETF (CAD-Hedged),TOR
 DBX5.BE,DBXT MSCI TAIW 1C,BER
 ISVB.BE,,
@@ -14186,7 +14187,7 @@ EL4F.SG,EL4F.SG,STU
 SXLP.MI,SPDR® S&P US Cnsmr Staples Sel Sect ETF,MIL
 XLIS.SW,Source Markets plc - Source Industrials S&P US Select Sector UCITS ETF,EBS
 IS3M.F,iShares IV Public Limited Company - iShares Euro Ultrashort Bond UCITS ETF,FRA
-URTH.MX,iShares, Inc. - iShares MSCI World ETF,MEX
+URTH.MX,iShares Inc. - iShares MSCI World ETF,MEX
 EXSB.BE,EXSB.BE,BER
 CNXT.MX,VanEck Vectors ETF Trust - VanEck Vectors ChinaAMC SME-ChiNext ETF,MEX
 77TZ.L,,
@@ -14390,7 +14391,7 @@ VMOM.NX,,
 15PF.L,HSBC Bank Plc,LSE
 7VNA.MU,Vanguard Malvern Funds - Vanguard Short-Term Inflation-Protected Securities ETF,MUN
 VECP.L,Vanguard Funds Public Limited Company - Vanguard EUR Corporate Bond UCITS ETF,LSE
-EEMV.MX,iShares, Inc. - iShares Edge MSCI Min Vol Emerging Markets ETF,MEX
+EEMV.MX,iShares Inc. - iShares Edge MSCI Min Vol Emerging Markets ETF,MEX
 MIVO.MI,Amundi ETF MSCI Eurp MinimVol Factr A/I,MIL
 EU373.SW,,
 MES.MX,VanEck Vectors ETF Trust - VanEck Vectors Gulf States Index ETF,MEX
@@ -14779,7 +14780,7 @@ WEET.A,WEET.A,ASE
 92TZ.L,92TZ.L,LSE
 40DD.L,40DD.L,LSE
 WTED.SG,WIS EM SMCAP G-CT,STU
-0I88.MU,iShares, Inc. - iShares MSCI World ETF,MUN
+0I88.MU,iShares Inc. - iShares MSCI World ETF,MUN
 SXLF.SW,SSgA SPDR ETFs Europe II Public Limited Company - SPDR S&P U.S. Financials Select Sector UCITS ETF,EBS
 DFE.MX,WisdomTree Trust - WisdomTree Europe SmallCap Dividend Fund,MEX
 92JE.L,HSBC BANK PLC WTS LKD ORD A SHS,LSE
@@ -14889,7 +14890,7 @@ INDW.PA,LYXOR ETF MSC WIND,PAR
 X010.BE,X010.BE,BER
 IQQQ.F,iShares II Public Limited Company - iShares Global Water UCITS ETF,FRA
 UIM7.F,UBS ETF MSCI WLD AD,FRA
-WSMXCK13.MX,DEUTSCHE BANK MEXICO, S.A., INS,MEX
+WSMXCK13.MX,DEUTSCHE BANK MEXICO S.A. INS,MEX
 6PSF.DE,PowerShares Global Water ETF,GER
 WMCR.A,WMCR.A,ASE
 ZPW-U.TO,BMO US PUT WRITE ETF USD,TOR
@@ -15031,7 +15032,7 @@ XLI.A,XLI.A,ASE
 XTN.A,XTN.A,ASE
 16ZZ.L,,
 XAR.A,XAR.A,ASE
-EXICK14.MX,BANCO NACIONAL DE M?XICO, S.A.,,MEX
+EXICK14.MX,BANCO NACIONAL DE M?XICO S.A.,MEX
 47833.L,,
 12QY.L,,
 90IJ.L,HSBC Bank Plc,LSE
@@ -15866,7 +15867,7 @@ AASI.NX,,
 ^AAXJ,iShares MSCI All Country Asia e,NIM
 IAAA.SW,iShares VI Public Limited Company - iShares Global AAA-AA Government Bond UCITS ETF,EBS
 AASG.L,Amundi ETF MSCI EM Asia UCITS ETF,LSE
-ABJCK15.MX,DEUTSCHE BANK MEXICO, S.A., INS,MEX
+ABJCK15.MX,DEUTSCHE BANK MEXICO S.A. INS,MEX
 ABSVE17I_SWE.ST,ABSVE17I_SWE.ST,
 XIDR.MI,XIDR.MI,MIL
 ABACEU20D_SWE.ST,ABACEU20D_SWE.ST,
@@ -15903,7 +15904,7 @@ UEF3.SG,UBS-ETF-U.E.M.UK hd to EO U.E.I,STU
 CE71.L,iShares VII Public Limited Company - iShares Euro Govt Bond 3-7yr UCITS ETF,LSE
 AC2BANK5KSHB.ST,AC2BANK5KSHB.ST,
 S2EUBH.SW,UBSETF MSCI Switzerl hdgEUR a,EBS
-BBVAE.MC,Accion Eurostoxx 50 ETF, FI,MCE
+BBVAE.MC,Accion Eurostoxx 50 ETF FI,MCE
 AC3NORD5KSHB.ST,AC3NORD5KSHB.ST,
 IMIE.PA,SSgA SPDR ETFs Europe I Public Limited Company - SPDR MSCI ACWI IMI UCITS ETF,PAR
 ^AXFN,^AXFN,
@@ -16858,10 +16859,10 @@ IJH.AX,iShares Trust - iShares Core S&P Mid-Cap ETF,ASX
 SPY.AX,SPDR S&P 500 ETF Trust,ASX
 AUCO.SW,ETFS DAXglobal Gold Mining GO ETF,EBS
 SAUS.MI,iShares MSCI Australia,MIL
-EWA.MX,iShares, Inc. - iShares MSCI Australia ETF,MEX
+EWA.MX,iShares Inc. - iShares MSCI Australia ETF,MEX
 AUCO.NX,GO DAXGLB GOLD USD,ENX
 USD.AX,BetaShares U.S. Dollar ETF,ASX
-ISG.AX,iShares, Inc. - iShares MSCI Singapore Capped ETF,ASX
+ISG.AX,iShares Inc. - iShares MSCI Singapore Capped ETF,ASX
 29706036.SW,,
 CANUKD.SW,UBSETF MSCI Canada UKdis,EBS
 AUCO.AS,GO UCITS ETF Solutions plc - ETFS DAXglobal Gold Mining GO UCITS ETF,AMS
@@ -16903,7 +16904,7 @@ SWEO_IM02.ST,SWEO_IM02.ST,
 M7USAS.MI,UBS ETF MAP Balanced 7 SF USD A acc,MIL
 EXV6.MU,EXV6.MU,MUN
 SWEO_ETI06.ST,SWEO_ETI06.ST,
-FFLA2CK15.MX,BANCO INVEX, S.A., INSTITUCION,MEX
+FFLA2CK15.MX,BANCO INVEX S.A. INSTITUCION,MEX
 UBSO_SIF_BACINTS1,,
 SYB4.DE,SPDR® Barclays 3-5 Year Euro Govt Bd ETF,GER
 SWEO_US17.ST,SWEO_US17.ST,
@@ -16951,7 +16952,7 @@ SYBC.SG,SPDR BAR COR BD EUR,STU
 BNK.PA,Lyxor UCITS ETF Stoxx Europe 600 Banks,PAR
 SWEO_ASI1.ST,SWEO_ASI1.ST,
 CSIO_TTD25.ST,CSIO_TTD25.ST,
-DATPCK14.MX,BANCO INVEX, S.A., INSTITUCION,MEX
+DATPCK14.MX,BANCO INVEX S.A. INSTITUCION,MEX
 MSBV_EML3.ST,MSBV_EML3.ST,
 CC2CLN6LSHB.ST,,
 22775610.MU,,
@@ -16978,7 +16979,7 @@ SYBS.F,SSgA SPDR ETFs Europe I Public Limited Company - SPDR Barclays Sterling C
 BAR.A,BAR.A,ASE
 INDX-67.TA,,
 CBIC004310116.MX,,
-CSSGPACBRIC1.ST,Credit Suisse AG, London Branch,
+CSSGPACBRIC1.ST,Credit Suisse AG London Branch,
 16EH.L,16EH.L,LSE
 XCHB.DE,,
 77DN.L,,
@@ -17082,7 +17083,7 @@ CSIO_RAV2.ST,CSIO_RAV2.ST,
 82BV.L,Barclays Bank PLC,LSE
 79CW.L,79CW.L,LSE
 SEKS_KVK7.ST,SEKS_KVK7.ST,
-BALAMCK16.MX,BANCO NACIONAL DE M?XICO, S.A.,,MEX
+BALAMCK16.MX,BANCO NACIONAL DE M?XICO S.A.,MEX
 42FL.L,BARCLAYS BANK PLC WRNT LKD NTS,LSE
 X78140.TI,X78140.TI,TLO
 SGI_GTM_1564.ST,SGI_GTM_1564.ST,
@@ -17257,7 +17258,7 @@ DXS8.DU,DXS8.DU,DUS
 44QX.L,HSBC Bank Plc,LSE
 S7XE.HM,S7XE.HM,HAM
 LYYP.MU,LYXOR ETF ST.EUR.600 BKS,MUN
-BKF.MX,iShares, Inc. - iShares MSCI BRIC ETF,MEX
+BKF.MX,iShares Inc. - iShares MSCI BRIC ETF,MEX
 DXS8.BE,DXS8.BE,BER
 BNK.MI,LYXOR UCITS ETF STOXX EUROPE 60,MIL
 LYBNK.SW,Lyxor UCITS ETF Stoxx Europe 600 Banks,EBS
@@ -17558,8 +17559,8 @@ IUSPF.PK,,
 DX2G.HM,DB X-TR.CAC 40 ETF(DR) 1D,HAM
 CD41.F,ComStage - CAC 40 Short GR UCITS ETF,FRA
 DX2H.F,DX2H.F,
-EIS.MX,iShares, Inc. - iShares MSCI Israel Capped ETF,MEX
-ECH.MX,iShares, Inc. - iShares MSCI Chile Capped ETF,MEX
+EIS.MX,iShares Inc. - iShares MSCI Israel Capped ETF,MEX
+ECH.MX,iShares Inc. - iShares MSCI Chile Capped ETF,MEX
 UIQS.F,UBS ETFs Public Limited Company - MSCI Canada SF UCITS ETF,FRA
 IEMS.SW,iShares III Public Limited Company - iShares MSCI Emerging Markets Small Cap UCITS ETF,EBS
 DX2H.BE,,
@@ -18210,7 +18211,7 @@ EIRL.MX,iShares Trust - iShares MSCI Ireland Capped ETF,MEX
 ISVU.BE,ISHSINC-MSCI CH CAPP. ETF,BER
 4ZJ1.HM,,
 ISVS.BE,ISVS.BE,BER
-EWI.MX,iShares, Inc. - iShares MSCI Italy Capped ETF,MEX
+EWI.MX,iShares Inc. - iShares MSCI Italy Capped ETF,MEX
 EUN5.MU,ISHSIII-C.EO CORP.B.EODIS,MUN
 SXR8.MU,SXR8.MU,MUN
 IS3K.BE,ISH USD SH DU USD,BER
@@ -18307,7 +18308,7 @@ CSEU.AS,,
 CSLS.A,CSLS.A,ASE
 CSM.A,CSM.A,ASE
 CSUSS.MI,ISHARES MSCI USA SMALL CAP UCIT,MIL
-CS2CK15.MX,BANCO NACIONAL DE M?XICO, S.A.,,MEX
+CS2CK15.MX,BANCO NACIONAL DE M?XICO S.A.,MEX
 CSIO_TTT18.ST,CSIO_TTT18.ST,
 CSBGE0.MI,ISHARES EU GOVT BOND 7-10Y UCIT,MIL
 CSEMAS.MI,ISHARES MSCI EM ASIA UCITS ETF,MIL
@@ -19340,7 +19341,7 @@ IQQ2.MU,,
 DIG.A,DIG.A,ASE
 EDVD.L,SSgA SPDR ETFs Europe I Public Limited Company - SPDR S&P Emerging Markets Dividend UCITS ETF,LSE
 EUE.L,iShares II Public Limited Company - iShares EURO STOXX 50 UCITS ETF (Dist),LSE
-DVYE.MX,iShares, Inc. - iShares Emerging Markets Dividend ETF,MEX
+DVYE.MX,iShares Inc. - iShares Emerging Markets Dividend ETF,MEX
 SPYD.F,SSgA SPDR ETFs Europe I Public Limited Company - SPDR S&P US Dividend Aristocrats UCITS ETF,FRA
 DIVI.A,DIVI.A,ASE
 DIM.A,DIM.A,ASE
@@ -19441,7 +19442,7 @@ DSVO.MI,DSVO.MI,MIL
 DTH.A,DTH.A,ASE
 DTN.A,DTN.A,ASE
 DTO.A,DTO.A,ASE
-IGNIACK15.MX,DEUTSCHE BANK MEXICO, S.A., INS,MEX
+IGNIACK15.MX,DEUTSCHE BANK MEXICO S.A. INS,MEX
 DTD.A,DTD.A,ASE
 DUST.A,DUST.A,ASE
 DUG.A,DUG.A,ASE
@@ -19469,7 +19470,7 @@ DZZ.A,DZZ.A,ASE
 IEER.SW,ISHARES MSCI EST EU UCITS,EBS
 ISQA.MU,ISQA.MU,MUN
 IEER.AS,ISHARES EASTE10/40,AMS
-ESR.MX,iShares, Inc. - iShares MSCI Emerging Markets Eastern Europe ETF,MEX
+ESR.MX,iShares Inc. - iShares MSCI Emerging Markets Eastern Europe ETF,MEX
 IUSV.BE,,
 IEER.NX,,
 0BYI.MU,iShares Trust - iShares Edge MSCI Min Vol EAFE ETF,MUN
@@ -19501,7 +19502,7 @@ EEMS.A,EEMS.A,ASE
 EEH.A,EEH.A,ASE
 EET.A,EET.A,ASE
 ^EEME,^EEME,NIM
-EEM.MX,iShares, Inc. - iShares MSCI Emerging Markets ETF,MEX
+EEM.MX,iShares Inc. - iShares MSCI Emerging Markets ETF,MEX
 M9SZ.DE,,
 EFFE.A,EFFE.A,ASE
 EFIE.L,Source Markets plc - Source Goldman Sachs Equity Factor Index World UCITS ETF,LSE
@@ -19567,7 +19568,7 @@ EMCR.A,EMCR.A,ASE
 EMRG.L,SSgA SPDR ETFs Europe I Public Limited Company - SPDR MSCI Emerging Markets UCITS ETF,LSE
 SXRJ.DU,SXRJ.DU,DUS
 SEMA.MI,ISHARES MSCI EM UCITS ETF USD A,MIL
-LEMB.MX,iShares, Inc. - iShares J.P. Morgan EM Local Currency Bond ETF,MEX
+LEMB.MX,iShares Inc. - iShares J.P. Morgan EM Local Currency Bond ETF,MEX
 EMEO.PA,SSgA SPDR ETFs Europe I Public Limited Company - SPDR MSCI EM Europe UCITS ETF,PAR
 ^INSPYXE,SPDR MSCI Emerging Markets Smal,NIM
 SYBE.F,SSgA SPDR ETFs Europe I plc - SPDR BofA Merrill Lynch Emerging Markets Corporate Bond UCITS ETF,FRA
@@ -19776,7 +19777,7 @@ SC0G.MU,SC0G.MU,MUN
 12632798.SW,,
 SC0S.F,SOU 600 IND EUR-AC,FRA
 EUN1.HM,EUN1.HM,HAM
-EZU.MX,iShares, Inc. - iShares MSCI Eurozone ETF,MEX
+EZU.MX,iShares Inc. - iShares MSCI Eurozone ETF,MEX
 SC0D.MU,SC0D.MU,MUN
 IBCI.SG,iShs EO Inf.Li.Gov.Bd U.ETF(D)R,STU
 SC0U.F,SOURCE-S.ST.E.600OP.BKS A,FRA
@@ -19855,7 +19856,7 @@ EWRI.A,EWRI.A,ASE
 EWD.MX,ISHARES MSCI SWEDEN CAPPED ETF,MEX
 EWI.A,EWI.A,ASE
 EWT.A,EWT.A,ASE
-EWS.MX,iShares, Inc. - iShares MSCI Singapore Capped ETF,MEX
+EWS.MX,iShares Inc. - iShares MSCI Singapore Capped ETF,MEX
 EWRS.A,EWRS.A,ASE
 EWRM.A,EWRM.A,ASE
 EWL.A,EWL.A,ASE
@@ -19869,7 +19870,7 @@ EWZS.A,EWZS.A,ASE
 EWK.A,EWK.A,ASE
 EWD.A,EWD.A,ASE
 EWW.A,EWW.A,ASE
-EWM.MX,iShares, Inc. - iShares MSCI Malaysia ETF,MEX
+EWM.MX,iShares Inc. - iShares MSCI Malaysia ETF,MEX
 EWZ.A,EWZ.A,ASE
 EWJ.A,EWJ.A,ASE
 EWAS.A,EWAS.A,ASE
@@ -19904,7 +19905,7 @@ EZJ.A,EZJ.A,ASE
 EZU.A,EZU.A,ASE
 EZY.A,EZY.A,ASE
 EZM.A,EZM.A,ASE
-EZA.MX,iShares, Inc. - iShares MSCI South Africa ETF,MEX
+EZA.MX,iShares Inc. - iShares MSCI South Africa ETF,MEX
 EZA.A,EZA.A,ASE
 FAN.A,FAN.A,ASE
 FAD.A,FAD.A,ASE
@@ -19991,7 +19992,7 @@ FLOT.A,FLOT.A,ASE
 FMK.A,FMK.A,ASE
 M9SY.DU,,
 M9SY.DE,,
-FM.MX,iShares, Inc. - iShares MSCI Frontier 100 ETF,MEX
+FM.MX,iShares Inc. - iShares MSCI Frontier 100 ETF,MEX
 M9SY.F,RBS Market Access - MSCI Frontier Markets Index UCITS ETF,
 FMF.A,FMF.A,ASE
 FNDF.A,FNDF.A,ASE
@@ -20859,7 +20860,7 @@ MVV.A,MVV.A,ASE
 MXI.A,MXI.A,ASE
 UDITRACISHRS.MX,iShares S&P/VALMER Mexico UDITRAC,MEX
 MXUS.SW,Source Markets plc - Source MSCI USA UCITS ETF,EBS
-UMSTRACISHRS.MX,BANCO NACIONAL DE M?XICO, S.A.,,MEX
+UMSTRACISHRS.MX,BANCO NACIONAL DE M?XICO S.A.,MEX
 M5TRACISHRS.MX,iShares S&P/VALMER Mexico M5TRAC,MEX
 SMARTRC14.MX,Actinver Casa de Bolsa - SMART TRAC 14 ETF,MEX
 MZZ.A,MZZ.A,ASE
