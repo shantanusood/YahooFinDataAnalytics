@@ -13,7 +13,7 @@
 
 ## Examples:
 
-#|Example|Explanation|
+1.|./predict.py AAPL growth 0|Revenue growth for the last 3 years if it is greater 0|
 --- | --- | --- |
 1. |./predict.py *AAPL growth 0|Revenue growth for the last 3 years if it is greater 0| ---
 --- | --- | --- |
