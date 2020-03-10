@@ -47,7 +47,7 @@ def main():
                 finally:
                     count = count + 1
         else:
-            req = r.get("https://finance.yahoo.com/quote/{0}?p={0}".format(i))
+            req = r.get("https://finance.yahoo.com/quote/{0}?p={0}".format(input))
             if checkCode(req):
                 df = q.parse(req.text)
                 pd.set_option('display.max_rows', 5, 'display.max_columns', 100)
