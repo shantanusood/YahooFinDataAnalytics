@@ -8,7 +8,7 @@
 * Python3
 
 ### Documentation:
-*Usage: ./predict.py [spy|dow|ndx|rus|cst|filename_start:end] [growth|div|pe|cash|profit|ratio] (only for pe)[lt|gt] [0-9|floater]
+* Usage: ./predict.py [spy|dow|ndx|rus|cst|filename_start:end] [growth|div|pe|cash|profit|ratio] (only for pe)[lt|gt] [0-9|floater]
 
         arg[1]: Selecting the data list to run filtering on
                spy: Ticker list for S&P 500 stocks
@@ -32,15 +32,17 @@
                div: dividend yield
                pe: price to earning ratio of a stock
                cash:
-               profit:
-               ratio:
+               profit: (Total Revenue) - (Cost of revenue + Selling General & Administrative)
+               ratio: (Total Revenue) / (Net Income + Research & Development)
+
         arg[3]: This is only applicable for pe, for others it is default to gt
                lt: less than
                gt: greater than
+
         arg[4]: For div this is can be a floating point value as well, for growth, pe, cap, it is a number
 
 
-*Usage: ./script.py [quote|fin|bs|cf] [ticker]
+* Usage: ./script.py [quote|fin|bs|cf] [ticker]
 
         quote: returns the basic data for the ticker as a dataframe
         fin: returns the income statement for the ticker as a dataframe
@@ -71,3 +73,5 @@ S|Example|Explanation|
 1.|./predict.py *AAPL growth 0|Revenue growth for the last 3 years if it is greater 0|
 2.|./predict.py Stocks_10:15 growth -99|Revenue growth for the last 3 years for the stocks indexed 10 to 15 from the Stocks.txt for all growth|
 3.|./script.py quote MSFT|Will give you basic info about the microsoft stock|
+4.|./preict.py Stocks_120:140 profit|Provides the growth of profit for the last 3 years, with 0th index being the latest year|
+5.|./preict.py Stocks_120:140 ratio|Provides the ratio of Total revenue to expenses for the last 3 years, with 0th index being the latest year|

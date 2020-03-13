@@ -30,8 +30,8 @@ def main():
                div: dividend yield
                pe: price to earning ratio of a stock
                cash:
-               profit:
-               ratio:
+               profit: (Total Revenue) - (Cost of revenue + Selling General & Administrative)
+               ratio: (Total Revenue) / (Net Income + Research & Development)
         arg[3]: This is only applicable for pe, for others it is default to gt
                lt: less than
                gt: greater than
