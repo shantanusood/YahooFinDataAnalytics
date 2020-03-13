@@ -5,23 +5,28 @@ import sys
 import traceback 
 import re
 
-def filter(tickers, filter):
+def filter(tickers, filter, metadata):
     if filter == "growth":
-        growth(tickers)
+        growth(tickers, metadata)
     elif filter == "div":
-        dividend(tickers)
+        dividend(tickers, metadata)
     elif filter == "pe":
-        pe_ratio(tickers)
+        pe_ratio(tickers, metadata)
     elif filter == "profit":
-        profit(tickers)
+        profit(tickers, metadata)
     elif filter == "ratio":
-        ratio(tickers)
+        ratio(tickers, metadata)
+    elif filter == "cash":
+        cash(tickers, metadata)
+    else:
+        print("Invalid filter, usage:")
+        print("./predict.py [spy|dow|ndx|rus|cst|*filter|filename_start:end] [growth|div|pe|cash|profit|ratio] (only for pe)[lt|gt] [0-9|floater]")
 
 
-def growth(tickers):
+def growth(tickers, metadata):
     code = 0
     test = lambda x: (x>=int(sys.argv[3]))
-
+    l = []
     for i in tickers:
         try:
             ret_tickers = []
@@ -36,14 +41,20 @@ def growth(tickers):
                     ret_tickers.append(x)
             if len(ret_tickers) == 3:
                 print(ret_tickers, end=' ')
-                print(i)
+                l = [val for val in metadata if val['Ticker']==str(i)]
+                if len(l)>0:
+                    print(" -----------------INFO------------> ", end='')
+                    print(l[0])
+                else:
+                    print(i)
         except:
             print("Exception occured, this is the status code {0}, and this is the ticker - {1}".format(code, i)) 
             #traceback.print_exc()
 
-def dividend(tickers):
+def dividend(tickers, metadata):
     code = 0
     test = lambda x: (x>=float(sys.argv[3]))
+    l = []
     for i in tickers:
         try:
             req0 = r.get("https://finance.yahoo.com/quote/{0}?p={0}".format(i))
@@ -52,15 +63,21 @@ def dividend(tickers):
             val = re.search("[0-9]*[.][0-9]*", str(str(quote['Forward Dividend & Yield']).split(' ')[5]))
             if val:
                 if test(float(val.group())):
-                    print(i, end=' ')
-                    print(val.group())
+                    print(val.group(), end='')
+                    l = [val for val in metadata if val['Ticker']==str(i)]
+                    if len(l)>0:
+                        print(" -----------------INFO------------> ", end='')
+                        print(l[0])
+                    else:
+                        print(i)
         except:
             print("Exception occured, this is the status code {0}, and this is the ticker - {1}".format(code, i))
             #traceback.print_exc()
 
-def pe_ratio(tickers):
+def pe_ratio(tickers, metadata):
     code = 0
     test = False
+    l = []
     if str(sys.argv[3]) == 'lt':
         test = lambda x: (x<=float(sys.argv[4]))
     elif str(sys.argv[3]) == 'gt':
@@ -72,13 +89,19 @@ def pe_ratio(tickers):
             quote = q.parse(req0.text)
             pe = float(quote['PE Ratio (TTM)'])
             if test(pe):
-                print(i, end=' ')
-                print(pe)
+                print(pe, end='')
+                l = [val for val in metadata if val['Ticker']==str(i)]
+                if len(l)>0:
+                    print(" -----------------INFO------------> ", end='')
+                    print(l[0])
+                else:
+                    print(i)
         except:
             print("Exception occured, this is the status code {0}, and this is the ticker - {1}".format(code, i))
             #traceback.print_exc()
 
-def ratio(tickers):
+def ratio(tickers, metadata):
+    l = []
     for i in tickers:
         try:
             req1 = r.get("https://finance.yahoo.com/quote/{0}/financials?p={0}".format(i))
@@ -94,13 +117,18 @@ def ratio(tickers):
             change = list(pd.Series(prof[::-1]).pct_change())[1:]
             rate = [round(i, 3) for i in change][::-1][1:]
             print(rate, end='')
-            print(" ", end='')
-            print(i)
+            l = [val for val in metadata if val['Ticker']==str(i)]
+            if len(l)>0:
+                print(" -----------------INFO------------> ", end='')
+                print(l[0])
+            else:
+                print(i)
         except:
             print("Exception occured, this is the status code {0}, and this is the ticker - {1}".format(code, i))
             #traceback.print_exc()
 
-def profit(tickers):
+def profit(tickers, metadata):
+    l = []
     for i in tickers:
         try:
             req1 = r.get("https://finance.yahoo.com/quote/{0}/financials?p={0}".format(i))
@@ -116,10 +144,41 @@ def profit(tickers):
             change = list(pd.Series(prof[::-1]).pct_change())[1:]
             rate = [round(i*100,3) for i in change][::-1][1:]
             print(rate, end='')
-            print(" ", end='')
-            print(i)
+            l = [val for val in metadata if val['Ticker']==str(i)]
+            if len(l)>0:
+                print(" -----------------INFO------------> ", end='')
+                print(l[0])
+            else:
+                print(i)
         except:
             print("Exception occured, this is the status code {0}, and this is the ticker - {1}".format(code, i))
             #traceback.print_exc()
 
+def cash(tickers, metadata):
+    code = 0
+    l = []
+    test = lambda x: (x>=int(sys.argv[3]))
+    for i in tickers:
+        try:
+            ret_tickers = []
+            req1 = r.get("https://finance.yahoo.com/quote/{0}/cash-flow?p={0}".format(i))
+            code = req1.status_code
+            cf = c.getCashFlow(req1.text)
+            revenue = [int(i.replace(",","")) for i in list(cf['Free Cash Flow'])]
+            change = list(pd.Series(revenue[::-1]).pct_change())[1:]
+            rate = [round(i*100) for i in change][::-1][1:]
+            for x in rate:
+                if test(x):
+                    ret_tickers.append(x)
+            if len(ret_tickers) == 3:
+                print(ret_tickers, end=' ')
+                l = [val for val in metadata if val['Ticker']==str(i)]
+                if len(l)>0:
+                    print(" -----------------INFO------------> ", end='')
+                    print(l[0])
+                else:
+                    print(i)
+        except:
+            print("Exception occured, this is the status code {0}, and this is the ticker - {1}".format(code, i)) 
+            #traceback.print_exc()
 

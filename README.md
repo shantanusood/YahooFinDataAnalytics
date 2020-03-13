@@ -8,7 +8,7 @@
 * Python3
 
 ### Documentation:
-* Usage: ./predict.py [spy|dow|ndx|rus|cst|filename_start:end] [growth|div|pe|cash|profit|ratio] (only for pe)[lt|gt] [0-9|floater]
+* Usage: ./predict.py [spy|dow|ndx|rus|cst|*ticker|filename_start:end] [growth|div|pe|cash|profit|ratio] (only for pe)[lt|gt] [0-9|floater]
 
         arg[1]: Selecting the data list to run filtering on
                spy: Ticker list for S&P 500 stocks
@@ -16,6 +16,7 @@
                ndx: Tickers list for Nasdaq stocks
                rus: Tickers list for russel 2000 stocks
                cst: Can be set in /data/tickers_list, it is the custom list of tickers
+               *ticker: If you want to apply filter to a single ticker then use this, for example *AAPL
                filename_start:end: filename are the ticker list file name, which are the csv files in /data/ folder
                    ------------------------------------------------------------------------------------------------------------------------------
                    |./predict.py Stocks_1001:1003 div 0 |  This returns the div>0 for stocks index 1001 (inclusive) to 1003 (not inclusive)     |
@@ -28,10 +29,10 @@
                    ------------------------------------------------------------------------------------------------------------------------------
 
         arg[2]: Type of filter to apply to the data list
-               growth: Revenue growth year over year
+               growth: Revenue growth year over year (latest year at 0th index)
                div: dividend yield
                pe: price to earning ratio of a stock
-               cash:
+               cash: Free cash flow growth over year (latest year at 0th index)
                profit: (Total Revenue) - (Cost of revenue + Selling General & Administrative)
                ratio: (Total Revenue) / (Net Income + Research & Development)
 
@@ -39,8 +40,7 @@
                lt: less than
                gt: greater than
 
-        arg[4]: For div this is can be a floating point value as well, for growth, pe, cap, it is a number
-
+        arg[4]: For div this is can be a floating point value as well, for growth, pe, cash it is a number, and it is left empty for profit and ratio
 
 * Usage: ./script.py [quote|fin|bs|cf] [ticker]
 
