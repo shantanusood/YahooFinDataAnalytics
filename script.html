@@ -19,11 +19,14 @@
 <tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
 <td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="src.bs.html">src.bs</a><br>
 <a href="src.cf.html">src.cf</a><br>
-</td><td width="25%" valign=top><a href="src.financials.html">src.financials</a><br>
-<a href="numpy.html">numpy</a><br>
+<a href="src.financials.html">src.financials</a><br>
+</td><td width="25%" valign=top><a href="numpy.html">numpy</a><br>
+<a href="os.html">os</a><br>
+<a href="pandas.html">pandas</a><br>
 </td><td width="25%" valign=top><a href="src.quote.html">src.quote</a><br>
 <a href="requests.html">requests</a><br>
-</td><td width="25%" valign=top><a href="sys.html">sys</a><br>
+<a href="sys.html">sys</a><br>
+</td><td width="25%" valign=top><a href="data.tickers_list.html">data.tickers_list</a><br>
 </td></tr></table></td></tr></table><p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#eeaa77">
@@ -33,9 +36,25 @@
 <tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
 <td width="100%"><dl><dt><a name="-checkCode"><strong>checkCode</strong></a>(req)</dt></dl>
  <dl><dt><a name="-main"><strong>main</strong></a>()</dt><dd><tt>Usage:&nbsp;./script.py&nbsp;[quote|fin|bs|cf]&nbsp;[ticker]<br>
-quote:&nbsp;returns&nbsp;the&nbsp;basic&nbsp;data&nbsp;for&nbsp;the&nbsp;ticker&nbsp;as&nbsp;a&nbsp;dataframe<br>
-fin:&nbsp;returns&nbsp;the&nbsp;income&nbsp;statement&nbsp;for&nbsp;the&nbsp;ticker&nbsp;as&nbsp;a&nbsp;dataframe<br>
-bs:&nbsp;returns&nbsp;the&nbsp;balance&nbsp;sheet&nbsp;for&nbsp;the&nbsp;ticker&nbsp;as&nbsp;a&nbsp;dataframe<br>
-cf:&nbsp;returns&nbsp;the&nbsp;cash&nbsp;flow&nbsp;for&nbsp;the&nbsp;ticker&nbsp;as&nbsp;a&nbsp;dataframe</tt></dd></dl>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;quote:&nbsp;returns&nbsp;the&nbsp;basic&nbsp;data&nbsp;for&nbsp;the&nbsp;ticker&nbsp;as&nbsp;a&nbsp;dataframe<br>
+&nbsp;&nbsp;&nbsp;&nbsp;fin:&nbsp;returns&nbsp;the&nbsp;income&nbsp;statement&nbsp;for&nbsp;the&nbsp;ticker&nbsp;as&nbsp;a&nbsp;dataframe<br>
+&nbsp;&nbsp;&nbsp;&nbsp;bs:&nbsp;returns&nbsp;the&nbsp;balance&nbsp;sheet&nbsp;for&nbsp;the&nbsp;ticker&nbsp;as&nbsp;a&nbsp;dataframe<br>
+&nbsp;&nbsp;&nbsp;&nbsp;cf:&nbsp;returns&nbsp;the&nbsp;cash&nbsp;flow&nbsp;for&nbsp;the&nbsp;ticker&nbsp;as&nbsp;a&nbsp;dataframe<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;You&nbsp;can&nbsp;also&nbsp;get&nbsp;quote&nbsp;for&nbsp;various&nbsp;other&nbsp;securities,&nbsp;and&nbsp;a&nbsp;group&nbsp;of&nbsp;securities.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;There&nbsp;is&nbsp;a&nbsp;universe&nbsp;of&nbsp;securty&nbsp;tickers&nbsp;that&nbsp;can&nbsp;be&nbsp;found&nbsp;in&nbsp;/data/&nbsp;folder.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;There&nbsp;are&nbsp;csv&nbsp;files&nbsp;where&nbsp;the&nbsp;ticker&nbsp;information&nbsp;is&nbsp;saved.&nbsp;Below&nbsp;are&nbsp;examples&nbsp;on&nbsp;how&nbsp;to&nbsp;query:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;./script.py&nbsp;quote&nbsp;filename_startindex:endindex<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Examples:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;------------------------------------------------------------------------------------------------------------------------------<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|./script.py&nbsp;Stocks_1001:1003&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;This&nbsp;returns&nbsp;the&nbsp;quote&nbsp;for&nbsp;stocks&nbsp;index&nbsp;1001&nbsp;(inclusive)&nbsp;to&nbsp;1003&nbsp;(not&nbsp;inclusive)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;------------------------------------------------------------------------------------------------------------------------------<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|./script.py&nbsp;Currency_2011:2016&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;This&nbsp;returns&nbsp;the&nbsp;quote&nbsp;for&nbsp;currency&nbsp;index&nbsp;2011&nbsp;(inclusive)&nbsp;to&nbsp;2016&nbsp;(not&nbsp;inclusive)&nbsp;&nbsp;&nbsp;|<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;------------------------------------------------------------------------------------------------------------------------------<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;To&nbsp;get&nbsp;the&nbsp;index&nbsp;of&nbsp;required&nbsp;tickers&nbsp;in&nbsp;a&nbsp;file&nbsp;use&nbsp;the&nbsp;grep&nbsp;command,&nbsp;for&nbsp;example:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;------------------------------------------------------------------------------------------------------------------------------<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|grep&nbsp;-in&nbsp;apple&nbsp;Stocks.csv&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;This&nbsp;returns&nbsp;all&nbsp;lines&nbsp;&amp;&nbsp;line&nbsp;number&nbsp;containing&nbsp;"Apple"&nbsp;startindex&nbsp;=&nbsp;line&nbsp;number&nbsp;-&nbsp;2&nbsp;|<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;------------------------------------------------------------------------------------------------------------------------------</tt></dd></dl>
 </td></tr></table>
 </body></html>

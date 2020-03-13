@@ -12,8 +12,11 @@ def filter(tickers, filter):
         dividend(tickers)
     elif filter == "pe":
         pe_ratio(tickers)
-    elif filter == "cap":
-        market_cap(tickers)
+    elif filter == "profit":
+        profit(tickers)
+    elif filter == "ratio":
+        ratio(tickers)
+
 
 def growth(tickers):
     code = 0
@@ -75,9 +78,48 @@ def pe_ratio(tickers):
             print("Exception occured, this is the status code {0}, and this is the ticker - {1}".format(code, i))
             #traceback.print_exc()
 
-def market_cap(tickers):
+def ratio(tickers):
     for i in tickers:
-        req0 = r.get("https://finance.yahoo.com/quote/{0}?p={0}".format(i))
-        req1 = r.get("https://finance.yahoo.com/quote/{0}/financials?p={0}".format(i))
-        quote = q.parse(req0.text)
-        fin = f.getFinancialNumbers(req1.text)
+        try:
+            req1 = r.get("https://finance.yahoo.com/quote/{0}/financials?p={0}".format(i))
+            code = req1.status_code
+            fin = f.getFinancialNumbers(req1.text)
+            revenue = [int(i.replace(",","")) for i in list(fin['Total Revenue'])]
+            net = [int(i.replace(",","")) for i in list(fin['Net Income'])]
+            rd = [int(i.replace(",","")) for i in list(fin['Research Development'])]
+            prof = []
+            for x in range(0, len(revenue)):
+                t = revenue[x] / (net[x] + rd[x])
+                prof.append(t)
+            change = list(pd.Series(prof[::-1]).pct_change())[1:]
+            rate = [round(i, 3) for i in change][::-1][1:]
+            print(rate, end='')
+            print(" ", end='')
+            print(i)
+        except:
+            print("Exception occured, this is the status code {0}, and this is the ticker - {1}".format(code, i))
+            #traceback.print_exc()
+
+def profit(tickers):
+    for i in tickers:
+        try:
+            req1 = r.get("https://finance.yahoo.com/quote/{0}/financials?p={0}".format(i))
+            code = req1.status_code
+            fin = f.getFinancialNumbers(req1.text)
+            revenue = [int(i.replace(",","")) for i in list(fin['Total Revenue'])]
+            cost = [int(i.replace(",","")) for i in list(fin['Cost of Revenue'])]
+            sga = [int(i.replace(",","")) for i in list(fin['Selling General and Administrative'])]
+            prof = []
+            for x in range(0, len(revenue)):
+                t = revenue[x] - (cost[x] + sga[x])
+                prof.append(t)
+            change = list(pd.Series(prof[::-1]).pct_change())[1:]
+            rate = [round(i*100,3) for i in change][::-1][1:]
+            print(rate, end='')
+            print(" ", end='')
+            print(i)
+        except:
+            print("Exception occured, this is the status code {0}, and this is the ticker - {1}".format(code, i))
+            #traceback.print_exc()
+
+
