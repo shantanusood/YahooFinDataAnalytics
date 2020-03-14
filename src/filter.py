@@ -5,28 +5,29 @@ import sys
 import traceback 
 import re
 
-def filter(tickers, filter, metadata):
+def filter(tickers, filter, metadata, val_filter_1, val_filter_2):
     if filter == "growth":
-        growth(tickers, metadata)
+        return growth(tickers, metadata, val_filter_1)
     elif filter == "div":
-        dividend(tickers, metadata)
+        return dividend(tickers, metadata, val_filter_1)
     elif filter == "pe":
-        pe_ratio(tickers, metadata)
+        return pe_ratio(tickers, metadata, val_filter_1, val_filter_2)
     elif filter == "profit":
-        profit(tickers, metadata)
+        return profit(tickers, metadata)
     elif filter == "ratio":
-        ratio(tickers, metadata)
+        return ratio(tickers, metadata)
     elif filter == "cash":
-        cash(tickers, metadata)
+        return cash(tickers, metadata, val_filter_1)
     else:
-        print("Invalid filter, usage:")
-        print("./predict.py [spy|dow|ndx|rus|cst|*filter|filename_start:end] [growth|div|pe|cash|profit|ratio] (only for pe)[lt|gt] [0-9|floater]")
+        print("Invalid filter, usage:", end='')
+        print("'./predict.py [spy|dow|ndx|rus|cst|*filter|filename_start:end] [growth|div|pe|cash|profit|ratio] (only for pe)[lt|gt] [0-9|floater]'")
 
 
-def growth(tickers, metadata):
+def growth(tickers, metadata, val_filter_1):
     code = 0
-    test = lambda x: (x>=int(sys.argv[3]))
+    test = lambda x: (x>=int(val_filter_1))
     l = []
+    data_return = {}
     for i in tickers:
         try:
             ret_tickers = []
@@ -40,21 +41,26 @@ def growth(tickers, metadata):
                 if test(x):
                     ret_tickers.append(x)
             if len(ret_tickers) == 3:
+                data_return[i] = ret_tickers
                 print(ret_tickers, end=' ')
                 l = [val for val in metadata if val['Ticker']==str(i)]
                 if len(l)>0:
                     print(" -----------------INFO------------> ", end='')
                     print(l[0])
                 else:
+                    print(" ---Ticker (No Info available)--> ", end='')
                     print(i)
         except:
             print("Exception occured, this is the status code {0}, and this is the ticker - {1}".format(code, i)) 
             #traceback.print_exc()
 
-def dividend(tickers, metadata):
+    return data_return
+
+def dividend(tickers, metadata, val_filter_1):
     code = 0
-    test = lambda x: (x>=float(sys.argv[3]))
+    test = lambda x: (x>=float(val_filter_1))
     l = []
+    data_return = {}
     for i in tickers:
         try:
             req0 = r.get("https://finance.yahoo.com/quote/{0}?p={0}".format(i))
@@ -69,19 +75,23 @@ def dividend(tickers, metadata):
                         print(" -----------------INFO------------> ", end='')
                         print(l[0])
                     else:
+                        print(" ---Ticker (No Info available)--> ", end='')
                         print(i)
+                    data_return[i] = float(val.group())
         except:
             print("Exception occured, this is the status code {0}, and this is the ticker - {1}".format(code, i))
             #traceback.print_exc()
+    return data_return
 
-def pe_ratio(tickers, metadata):
+def pe_ratio(tickers, metadata, val_filter_1, val_filter_2):
     code = 0
     test = False
     l = []
-    if str(sys.argv[3]) == 'lt':
-        test = lambda x: (x<=float(sys.argv[4]))
-    elif str(sys.argv[3]) == 'gt':
-        test = lambda x: (x>=float(sys.argv[4]))
+    data_return = {}
+    if str(val_filter_1) == 'lt':
+        test = lambda x: (x<=float(val_filter_2))
+    elif str(val_filter_1) == 'gt':
+        test = lambda x: (x>=float(val_filter_2))
     for i in tickers:
         try:
             req0 = r.get("https://finance.yahoo.com/quote/{0}?p={0}".format(i))
@@ -95,13 +105,17 @@ def pe_ratio(tickers, metadata):
                     print(" -----------------INFO------------> ", end='')
                     print(l[0])
                 else:
+                    print(" ---Ticker (No Info available)--> ", end='')
                     print(i)
+                data_return[i] = pe
         except:
             print("Exception occured, this is the status code {0}, and this is the ticker - {1}".format(code, i))
             #traceback.print_exc()
+    return data_return
 
 def ratio(tickers, metadata):
     l = []
+    data_return = {}
     for i in tickers:
         try:
             req1 = r.get("https://finance.yahoo.com/quote/{0}/financials?p={0}".format(i))
@@ -114,21 +128,26 @@ def ratio(tickers, metadata):
             for x in range(0, len(revenue)):
                 t = revenue[x] / (net[x] + rd[x])
                 prof.append(t)
-            change = list(pd.Series(prof[::-1]).pct_change())[1:]
-            rate = [round(i, 3) for i in change][::-1][1:]
+            #change = list(pd.Series(prof[::-1]).pct_change())[1:]
+            rate = [round(i, 3) for i in prof][1:]
             print(rate, end='')
             l = [val for val in metadata if val['Ticker']==str(i)]
             if len(l)>0:
                 print(" -----------------INFO------------> ", end='')
                 print(l[0])
             else:
+                print(" ---Ticker (No Info available)--> ", end='')
                 print(i)
+            data_return[i] = rate
         except:
             print("Exception occured, this is the status code {0}, and this is the ticker - {1}".format(code, i))
             #traceback.print_exc()
+    return data_return
 
 def profit(tickers, metadata):
     l = []
+    data_return = {}
+    #locale.setlocale(locale.LC_ALL, '')
     for i in tickers:
         try:
             req1 = r.get("https://finance.yahoo.com/quote/{0}/financials?p={0}".format(i))
@@ -141,23 +160,30 @@ def profit(tickers, metadata):
             for x in range(0, len(revenue)):
                 t = revenue[x] - (cost[x] + sga[x])
                 prof.append(t)
+            print("Net Profit: ", end='')
+            print(['{:,}'.format(i)+',000' for i in prof[1:]], end='')
             change = list(pd.Series(prof[::-1]).pct_change())[1:]
             rate = [round(i*100,3) for i in change][::-1][1:]
+            print("; % Profit change (y/y): ", end='')
             print(rate, end='')
             l = [val for val in metadata if val['Ticker']==str(i)]
             if len(l)>0:
                 print(" -----------------INFO------------> ", end='')
                 print(l[0])
             else:
+                print(" ---Ticker (No Info available)--> ", end='')
                 print(i)
+            data_return[i] = (prof[1:], rate)
         except:
             print("Exception occured, this is the status code {0}, and this is the ticker - {1}".format(code, i))
             #traceback.print_exc()
+    return data_return
 
-def cash(tickers, metadata):
+def cash(tickers, metadata, val_filter_1):
     code = 0
     l = []
-    test = lambda x: (x>=int(sys.argv[3]))
+    data_return = {}
+    test = lambda x: (x>=int(val_filter_1))
     for i in tickers:
         try:
             ret_tickers = []
@@ -177,8 +203,11 @@ def cash(tickers, metadata):
                     print(" -----------------INFO------------> ", end='')
                     print(l[0])
                 else:
+                    print(" ---Ticker (No Info available)--> ", end='')
                     print(i)
+                data_return[i] = ret_tickers
+
         except:
             print("Exception occured, this is the status code {0}, and this is the ticker - {1}".format(code, i)) 
             #traceback.print_exc()
-
+    return data_return

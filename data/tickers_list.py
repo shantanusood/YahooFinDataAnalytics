@@ -37,7 +37,7 @@ def tickers(type):
     elif "cst" in type:
         ret = range_vals(type, cst)
         return cst[ret[0]:ret[1]]
-    elif "*" in type:
+    elif "^" in type:
         tick = str(type[1:])
         return [tick]
     else:

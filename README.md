@@ -73,5 +73,23 @@ S|Example|Explanation|
 1.|./predict.py *AAPL growth 0|Revenue growth for the last 3 years if it is greater 0|
 2.|./predict.py Stocks_10:15 growth -99|Revenue growth for the last 3 years for the stocks indexed 10 to 15 from the Stocks.txt for all growth|
 3.|./script.py quote MSFT|Will give you basic info about the microsoft stock|
-4.|./preict.py Stocks_120:140 profit|Provides the growth of profit for the last 3 years, with 0th index being the latest year|
-5.|./preict.py Stocks_120:140 ratio|Provides the ratio of Total revenue to expenses for the last 3 years, with 0th index being the latest year|
+4.|./predict.py Stocks_120:140 profit|Provides the growth of profit for the last 3 years, with 0th index being the latest year|
+5.|./predict.py Stocks_120:140 ratio|Provides the ratio of Total revenue to expenses for the last 3 years, with 0th index being the latest year|
+6.|./predict.py ^aapl growth 0|Total revenue growth for ticker 'aapl'|
+7.|./predict.py spy_32:34 growth -99|Total revenue growth for tickers in spy.txt (SP500 list) from index 32 to 39|
+8.|./predict.py Stocks_32:34 growth -99|Total revenue growth for tickers in filename Stocks.csv frm index 32 to 39|
+9.|./predict.py ^aapl div 0|Dividend (values greater than 0) for ticker 'aapl'|
+10.|./predict.py spy_32:34 div 0|Dividend (values greater than 0) for tickers in spy.txt (SP500 list) from index 32 to 39|
+11.|./predict.py Stocks_32:34 div 0|Dividend (values greater than 0) for tickers in filename Stocks.csv frm index 32 to 39|
+12.|./predict.py Stocks_32:35 pe gt 0|PE (values greater than 0 (use lt for less than)) for tickers in filename Stocks.csv frm index 32 to 39|
+13.|./predict.py spy_32:34 pe gt 0|PE (values greater than 0 (use lt for less than)) for tickers in spy.txt (SP500 list) from index 32 to 39|
+14.|./predict.py ^aapl pe gt 0|PE (values greater than 0 (use lt for less than)) for ticker 'aapl'|
+15.|./predict.py ^aapl ratio|Ratio (see documentation above for formula) for ticker 'aapl'|
+16.|./predict.py spy_32:34 ratio|Ratio (see documentation above for formula) for tickers in spy.txt (SP500 list) from index 32 to 39|
+17.|./predict.py Stocks_30_35 ratio|Ratio (see documentation above for formula) for tickers in filename Stocks.csv frm index 32 to 39|
+18.|./predict.py ^aapl profit|Profit as tuple (Net profit as a list on index 0 and profit growth % as a list on 1 index) for ticker 'aapl'|
+19.|./predict.py spy_32:39 profit|Profit as tuple (Net profit as a list on index 0 and profit growth % as a list on 1 index)  for tickers in spy.txt (SP500 list) from index 32 to 39|
+20.|./predict.py Stocks_30:35 profit|Profit as tuple (Net profit as a list on index 0 and profit growth % as a list on 1 index) for tickers in filename Stocks.csv frm index 32 to 39|
+21.|./predict.py ^aapl cash -99|Free Cash growth for ticker 'aapl'|
+22.|./predict.py spy_32:39 cash -99|Free Cash growth for tickers in spy.txt (SP500 list) from index 32 to 39|
+23.|./predict.py Stocks_32:39 cash -9|Free Cash growth for tickers in filename Stocks.csv frm index 32 to 39|

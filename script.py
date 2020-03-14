@@ -85,6 +85,9 @@ def main():
             df = c.getCashFlow(req.text)
             pd.set_option('display.max_rows', 10, 'display.max_columns', 100)
             print(df)
+    else:
+        print("Invalid data request type, usage: ", end='')
+        print("'./script.py [quote|fin|bs|cf] [ticker]'")
 
 if __name__ == '__main__':
     main()

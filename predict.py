@@ -41,12 +41,21 @@ def main():
     """
     input = sys.argv[1]
     metadata = []
+    val_filter_1 = ''
+    val_filter_2 = ''
+    if len(sys.argv)==4:
+        val_filter_1 = sys.argv[3]
+    elif len(sys.argv)==5:
+        val_filter_1 = sys.argv[3]
+        val_filter_2 = sys.argv[4]
+
     if "_" in input:
         if os.path.isfile('./data/'+input[0:int(input.index("_"))] + '.csv'):
             metadata = t.ticker_details(input)
     tickers = t.tickers(sys.argv[1])
     filter = sys.argv[2]
-    f.filter(tickers, filter, metadata)
+
+    print(f.filter(tickers, filter, metadata, val_filter_1, val_filter_2))
 
 
 if __name__ == "__main__":
