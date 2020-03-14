@@ -55,7 +55,7 @@ def main():
     tickers = t.tickers(sys.argv[1])
     filter = sys.argv[2]
 
-    print(f.filter(tickers, filter, metadata, val_filter_1, val_filter_2))
+    f.filter(tickers, filter, metadata, val_filter_1, val_filter_2)
 
 
 if __name__ == "__main__":
