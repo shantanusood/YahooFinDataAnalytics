@@ -4,6 +4,7 @@ import pandas as pd
 import sys 
 import traceback 
 import re
+from src.helpers import commons as cm
 
 def filter(tickers, filter, metadata, val_filter_1, val_filter_2):
     if filter == "growth":
@@ -31,9 +32,9 @@ def growth(tickers, metadata, val_filter_1):
     for i in tickers:
         try:
             ret_tickers = []
-            req1 = r.get("https://finance.yahoo.com/quote/{0}/financials?p={0}".format(i))
-            code = req1.status_code
-            fin = f.getFinancialNumbers(req1.text)
+            resp = cm.getHtml("financial", i) 
+            code = resp[0]
+            fin = f.getFinancialNumbers(resp[1])
             revenue = [int(i.replace(",","")) for i in list(fin['Total Revenue'])]
             change = list(pd.Series(revenue[::-1]).pct_change())[1:]
             rate = [round(i*100) for i in change][::-1][1:]
@@ -63,9 +64,9 @@ def dividend(tickers, metadata, val_filter_1):
     data_return = {}
     for i in tickers:
         try:
-            req0 = r.get("https://finance.yahoo.com/quote/{0}?p={0}".format(i))
-            code = req0.status_code
-            quote = q.parse(req0.text)
+            resp = cm.getHtml("quote", i)
+            code = resp[0]
+            quote = q.parse(resp[1])
             val = re.search("[0-9]*[.][0-9]*", str(str(quote['Forward Dividend & Yield']).split(' ')[5]))
             if val:
                 if test(float(val.group())):
@@ -94,9 +95,9 @@ def pe_ratio(tickers, metadata, val_filter_1, val_filter_2):
         test = lambda x: (x>=float(val_filter_2))
     for i in tickers:
         try:
-            req0 = r.get("https://finance.yahoo.com/quote/{0}?p={0}".format(i))
-            code = req0.status_code
-            quote = q.parse(req0.text)
+            resp = cm.getHtml("quote", i)
+            code = resp[0]
+            quote = q.parse(resp[1])
             pe = float(quote['PE Ratio (TTM)'])
             if test(pe):
                 print(pe, end='')
@@ -118,9 +119,9 @@ def ratio(tickers, metadata):
     data_return = {}
     for i in tickers:
         try:
-            req1 = r.get("https://finance.yahoo.com/quote/{0}/financials?p={0}".format(i))
-            code = req1.status_code
-            fin = f.getFinancialNumbers(req1.text)
+            resp = cm.getHtml("financial", i)
+            code = resp[0]
+            fin = f.getFinancialNumbers(resp[1])
             revenue = [int(i.replace(",","")) for i in list(fin['Total Revenue'])]
             net = [int(i.replace(",","")) for i in list(fin['Net Income'])]
             rd = [int(i.replace(",","")) for i in list(fin['Research Development'])]
@@ -150,9 +151,9 @@ def profit(tickers, metadata):
     #locale.setlocale(locale.LC_ALL, '')
     for i in tickers:
         try:
-            req1 = r.get("https://finance.yahoo.com/quote/{0}/financials?p={0}".format(i))
-            code = req1.status_code
-            fin = f.getFinancialNumbers(req1.text)
+            resp = cm.getHtml("financial", i)
+            code = resp[0]
+            fin = f.getFinancialNumbers(resp[1])
             revenue = [int(i.replace(",","")) for i in list(fin['Total Revenue'])]
             cost = [int(i.replace(",","")) for i in list(fin['Cost of Revenue'])]
             sga = [int(i.replace(",","")) for i in list(fin['Selling General and Administrative'])]
@@ -187,9 +188,9 @@ def cash(tickers, metadata, val_filter_1):
     for i in tickers:
         try:
             ret_tickers = []
-            req1 = r.get("https://finance.yahoo.com/quote/{0}/cash-flow?p={0}".format(i))
-            code = req1.status_code
-            cf = c.getCashFlow(req1.text)
+            resp = cm.getHtml("cf", i)
+            code = resp[0]
+            cf = c.getCashFlow(resp[1])
             revenue = [int(i.replace(",","")) for i in list(cf['Free Cash Flow'])]
             change = list(pd.Series(revenue[::-1]).pct_change())[1:]
             rate = [round(i*100) for i in change][::-1][1:]
