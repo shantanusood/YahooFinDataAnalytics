@@ -41,22 +41,23 @@ def quide():
 def quote(filter, tickers):
     ret = s.main(filter, tickers)
     if isinstance(ret, pd.DataFrame):
-        return ret.to_json(orient='records', lines=True)
+        return ret.to_json()
     else:
         ret_j = {}
         for i in ret:
-            ret_j[i] = ret[i].to_json(orient='records', lines=True)
-        return json.dumps(ret_j)
+            ret_j[i] = ret[i].to_json()
+            print(ret_j[i])
+        return ret_j
 
 @app.route('/filters/<tickerlist>/<filter>')
 def withStdInput(tickerlist, filter):
-    return str(f.filter(t.tickers(tickerlist), filter, getMetadata(tickerlist), "", ""))
+    return json.dumps(f.filter(t.tickers(tickerlist), filter, getMetadata(tickerlist), "", ""))
 
 @app.route('/filters/<tickers>/<filter>/<third>')
 def withThirdInput(tickers, filter, third):
-    return str(f.filter(t.tickers(tickers), filter, getMetadata(tickers), third, ""))
+    return json.dumps(f.filter(t.tickers(tickers), filter, getMetadata(tickers), third, ""))
 
 @app.route('/filters/<tickers>/<filter>/<third>/<fourth>')
 def withFourthInput(tickers, filter, third, fourth):
-    return str(f.filter(t.tickers(tickers), filter, getMetadata(tickers), third, fourth))
+    return json.dumps(f.filter(t.tickers(tickers), filter, getMetadata(tickers), third, fourth))
 
