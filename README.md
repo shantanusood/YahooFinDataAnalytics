@@ -5,10 +5,12 @@
 
 ### Quick Start
 * Steps:
-        pip3 install -r requirements.txt
-        export FLASK_APP=flask_shell.py (linux)
-        set FLASK_APP=flask_shell.py (windows)
-        flask run
+
+        * pip3 install -r requirements.txt
+        * export FLASK_APP=flask_shell.py (linux)
+        * set FLASK_APP=flask_shell.py (windows)
+        * flask run
+
 * Go to http://localhost:5000/
 
 ### Requirements to run the project:
