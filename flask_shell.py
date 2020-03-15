@@ -5,8 +5,10 @@ import pandas as pd
 from data import tickers_list as t
 from src import filter as f
 import os
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 def getMetadata(input):
     metadata = []
