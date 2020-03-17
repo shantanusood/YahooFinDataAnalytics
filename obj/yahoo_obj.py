@@ -23,7 +23,25 @@ def performance_annual_data():
     return "section[data-yaft-module$='Performance'] >div:nth-child(3) > div > div > span:nth-child(3)"
 
 def history_label():
-    return "table[data-test='historical-prices'] > thead"
+    return "table[data-test='historical-prices'] > thead > tr > th > span"
 
-def history_data():
-    return "table[data-test='historical-prices'] > tbody > tr > td > span"
+def history_date():
+    return "table[data-test='historical-prices'] > tbody > tr > td:nth-child(1) > span"
+
+def history_open():
+    return "table[data-test='historical-prices'] > tbody > tr > td:nth-child(2) > span"
+
+def history_high():
+    return "table[data-test='historical-prices'] > tbody > tr > td:nth-child(3) > span"
+
+def history_low():
+    return "table[data-test='historical-prices'] > tbody > tr > td:nth-child(4) > span"
+
+def history_close():
+    return "table[data-test='historical-prices'] > tbody > tr > td:nth-child(5) > span"
+
+def history_adj_close():
+    return "table[data-test='historical-prices'] > tbody > tr > td:nth-child(6) > span"
+
+def history_vol():
+    return "table[data-test='historical-prices'] > tbody > tr > td:nth-child(7) > span"
