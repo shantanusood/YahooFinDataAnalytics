@@ -23,13 +23,13 @@ def getHistoryData(html, ticker):
     count = 0
     print("Historical data for {0}:".format(ticker))
     try:
-        dict[labels[0]] = date
-        dict[labels[1]] = open
-        dict[labels[2]] = high
-        dict[labels[3]] = low
-        dict[labels[4]] = close
-        dict[labels[5]] = adj_close
-        dict[labels[6]] = vol
+        dict[labels[0]] = date[::-1]
+        dict[labels[1]] = open[::-1]
+        dict[labels[2]] = high[::-1]
+        dict[labels[3]] = low[::-1]
+        dict[labels[4]] = close[::-1]
+        dict[labels[5]] = adj_close[::-1]
+        dict[labels[6]] = vol[::-1]
         print(dict)
     except:
         traceback.print_exc()
