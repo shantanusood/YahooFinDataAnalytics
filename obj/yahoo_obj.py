@@ -21,3 +21,9 @@ def performance_annual_label():
 
 def performance_annual_data():
     return "section[data-yaft-module$='Performance'] >div:nth-child(3) > div > div > span:nth-child(3)"
+
+def history_label():
+    return "table[data-test='historical-prices'] > thead"
+
+def history_data():
+    return "table[data-test='historical-prices'] > tbody > tr > td > span"
