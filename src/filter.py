@@ -7,6 +7,7 @@ import re
 from src.helpers import commons as cm
 from src import perf as p
 from src import hist as h
+from src import holdings as hl
 
 def filter(tickers, filter, metadata, val_filter_1, val_filter_2):
     if filter == "growth":
@@ -25,6 +26,8 @@ def filter(tickers, filter, metadata, val_filter_1, val_filter_2):
         return p.performance(tickers, metadata, val_filter_1)
     elif filter == "hist":
         return h.history(tickers, metadata)
+    elif filter == "hld":
+        return hl.holdings(tickers, metadata)
     else:
         print("Invalid filter, usage:", end='')
         print("'./predict.py [spy|dow|ndx|rus|cst|*filter|filename_start:end] [growth|div|pe|cash|profit|ratio] (only for pe)[lt|gt] [0-9|floater]'")

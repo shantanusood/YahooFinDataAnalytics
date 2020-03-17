@@ -45,3 +45,10 @@ def history_adj_close():
 
 def history_vol():
     return "table[data-test='historical-prices'] > tbody > tr > td:nth-child(7) > span"
+
+def holdings_top_name():
+    return "div[data-test='top-holdings'] > table > tbody > tr > td:nth-child(1)"
+
+def holdings_top_assets():
+    return "div[data-test='top-holdings'] > table > tbody > tr > td:nth-child(3)"
+
