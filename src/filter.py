@@ -5,7 +5,7 @@ import sys
 import traceback 
 import re
 from src.helpers import commons as cm
-import perf as p
+from src import perf as p
 
 def filter(tickers, filter, metadata, val_filter_1, val_filter_2):
     if filter == "growth":
@@ -21,7 +21,7 @@ def filter(tickers, filter, metadata, val_filter_1, val_filter_2):
     elif filter == "cash":
         return cash(tickers, metadata, val_filter_1)
     elif filter == "perf":
-        return p.performance(tickers, metadata)
+        return p.performance(tickers, metadata, val_filter_1)
     else:
         print("Invalid filter, usage:", end='')
         print("'./predict.py [spy|dow|ndx|rus|cst|*filter|filename_start:end] [growth|div|pe|cash|profit|ratio] (only for pe)[lt|gt] [0-9|floater]'")
