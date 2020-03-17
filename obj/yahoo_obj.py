@@ -9,3 +9,15 @@ def current_value():
 
 def quote_table():
     return "div[data-test='right-summary-table'] > table > tbody > tr > td"
+
+def performance_trailing_label():
+    return "section[data-yaft-module$='Performance'] >div:nth-child(2) > div > div >span:nth-child(1)"
+
+def performance_trailing_data():
+    return "section[data-yaft-module$='Performance'] >div:nth-child(2) > div > div >span:nth-child(2)"
+
+def performance_annual_label():
+    return "section[data-yaft-module$='Performance'] >div:nth-child(3) > div > div > span:nth-child(1)"
+
+def performance_annual_data():
+    return "section[data-yaft-module$='Performance'] >div:nth-child(3) > div > div > span:nth-child(3)"
