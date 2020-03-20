@@ -30,7 +30,7 @@ def filter(tickers, filter, metadata, val_filter_1, val_filter_2):
     elif filter == "hld":
         return hl.holdings(tickers, metadata, val_filter_1)
     elif filter == "risk":
-        return ri.risk(tickers, metadata, val_filter_1)
+        return ri.risk(tickers, metadata)
     else:
         print("Invalid filter, usage:", end='')
         print("'./predict.py [spy|dow|ndx|rus|cst|*filter|filename_start:end] [growth|div|pe|cash|profit|ratio] (only for pe)[lt|gt] [0-9|floater]'")
