@@ -52,5 +52,14 @@ def holdings_top_name():
 def holdings_top_assets():
     return "div[data-test='top-holdings'] > table > tbody > tr > td:nth-child(3)"
 
+def holdings_portfolio_comp():
+    return "section[class*='smartphone'] > div:nth-child(1) > div:nth-child(1) > div > div > span:nth-child(2)"
+
+def holdings_sector():
+    return "section[class*='smartphone'] > div:nth-child(1) > div:nth-child(2) > div > div > span"
+
+def holdings_bond():
+    return "section[class*='smartphone'] > div:nth-child(2) > div:nth-child(2) > div > div > span"
+
 def risk(row):
     return "section[data-yaft-module$='Performance'] > div > div > div:nth-child("+row+") > div > span"
