@@ -52,3 +52,5 @@ def holdings_top_name():
 def holdings_top_assets():
     return "div[data-test='top-holdings'] > table > tbody > tr > td:nth-child(3)"
 
+def risk(row):
+    return "section[data-yaft-module$='Performance'] > div > div > div:nth-child("+row+") > div > span"

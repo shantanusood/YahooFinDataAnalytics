@@ -26,4 +26,6 @@ def linkList(type, ticker):
         return "https://finance.yahoo.com/quote/{0}/history?p={0}".format(ticker)
     elif type == "hld":
         return "https://finance.yahoo.com/quote/{0}/holdings?p={0}".format(ticker)
+    elif type == "risk":
+        return "https://finance.yahoo.com/quote/{0}/risk?p={0}".format(ticker)
 

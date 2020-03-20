@@ -10,11 +10,11 @@ def getHistoryData(html, ticker):
     test = lambda x: str(x)!='Dividend'
     soup = BeautifulSoup(html, 'html.parser')
     date = [i.text for i in soup.select(y.history_date()) if test(i.text)]
-    open = [float(i.text) for i in soup.select(y.history_open()) if test(i.text)]
-    high = [float(i.text) for i in soup.select(y.history_high()) if test(i.text)]
-    low = [float(i.text) for i in soup.select(y.history_low()) if test(i.text)]
-    close = [float(i.text) for i in soup.select(y.history_close()) if test(i.text)]
-    adj_close = [float(i.text) for i in soup.select(y.history_adj_close()) if test(i.text)]
+    open = [float(i.text.replace(',','')) for i in soup.select(y.history_open()) if test(i.text)]
+    high = [float(i.text.replace(',','')) for i in soup.select(y.history_high()) if test(i.text)]
+    low = [float(i.text.replace(',','')) for i in soup.select(y.history_low()) if test(i.text)]
+    close = [float(i.text.replace(',','')) for i in soup.select(y.history_close()) if test(i.text)]
+    adj_close = [float(i.text.replace(',','')) for i in soup.select(y.history_adj_close()) if test(i.text)]
     vol = [int(i.text.replace(',','')) for i in soup.select(y.history_vol()) if test(i.text)]
     labels = [i.text for i in soup.select(y.history_label()) if test(i.text)]
     print(labels)
