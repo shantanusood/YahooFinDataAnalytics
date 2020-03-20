@@ -24,10 +24,12 @@ def getComposition(html, ticker):
     soup = BeautifulSoup(html, 'html.parser')
     name = [i.text for i in soup.select(y.holdings_portfolio_comp())]
     dict = {}
+    l1 = [name[0]]
+    l2 = [name[1]]
     print("Composition data for {0}:".format(ticker))
     try:
-        dict['Stocks'] = float(name[0][:-1])
-        dict['Bonds'] = float(name[1][:-1])
+        dict['Stocks'] = l1
+        dict['Bonds'] = l2
     except:
         traceback.print_exc()
     print(dict)
