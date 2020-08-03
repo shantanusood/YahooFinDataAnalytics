@@ -1,0 +1,4 @@
+Type		Api Name	Link				Python
+-----------------------------------------------------------------------------------------------------
+Financial	twelvedata	https://twelvedata.com/		https://pypi.org/project/twelvedata/
+ApiList				https://github.com/public-apis	
