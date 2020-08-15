@@ -1,4 +1,6 @@
 from flask import Flask
+import time
+import datetime as dt
 import script as s
 import json
 import pandas as pd
@@ -12,6 +14,7 @@ from obj import yahoo_obj as y
 from src.helpers import commons as cm
 from data import tickers_list as tl
 import traceback
+import collections
 
 app = Flask(__name__)
 CORS(app)
@@ -42,6 +45,95 @@ def quide():
 </body>
 </html>
 """
+@app.route('/data/daily')
+def dailyProgress():
+    with open('./data/daily.json', 'r') as data_file:
+        return data_file.read()
+
+@app.route('/data/daily/<fidelity>/<robinhood>/<tastyworks>/<retirement>/<fidelityc>/<robinhoodc>/<tastyworksc>/<retirementc>')
+def dailyProgressModify(fidelity, robinhood, tastyworks, retirement, fidelityc, robinhoodc, tastyworksc, retirementc):
+    wrt = "["
+    data_lst = []
+    with open('./data/daily.json', 'r') as data_file:
+        data = json.loads(data_file.read())
+        data_lst = list(data)
+        date = list(data_lst[0]['date'])
+        t = dt.datetime.strptime(str(dt.date.today()), '%Y-%m-%d').date()
+        date.append(str(t.strftime('%m/%d/%Y')))
+        data_lst[0]['date'] = date
+        fid = list(data_lst[1]['fidelity'])
+        fid.append(int(fidelity))
+        data_lst[1]['fidelity'] = fid
+        rob = list(data_lst[2]['robinhood'])
+        data_lst[2]['robinhood'] = rob
+        rob.append(int(robinhood))
+        tasty = list(data_lst[3]['tastyworks'])
+        tasty.append(int(tastyworks))
+        data_lst[3]['tastyworks'] = tasty
+        ret = list(data_lst[4]['retirement'])
+        ret.append(int(retirement))
+        data_lst[4]['retirement'] = ret
+        total = list(data_lst[5]['total'])
+        total.append(int(fidelity)+int(robinhood)+int(tastyworks))
+        data_lst[5]['total'] = total
+
+        if int(fidelityc) != 0:
+            data_lst[1]['fidelity'] = [x+int(fidelityc) for x in fid]
+        if int(robinhoodc) != 0:
+            data_lst[2]['robinhood'] = [x+int(robinhoodc) for x in rob]
+        if int(tastyworksc) != 0:
+            data_lst[3]['tastyworks'] = [x+int(tastyworksc) for x in tasty]
+        if int(retirementc) != 0:
+            data_lst[4]['retirement'] = [x+int(retirementc) for x in ret]
+        if int(fidelityc) != 0 or int(robinhoodc) != 0 or int(tastyworksc) != 0:
+            incr = int(fidelityc) + int(robinhoodc) + int(tastyworksc)
+            data_lst[5]['total'] = total = [x + incr for x in total]
+
+    with open('./data/daily.json', 'w') as file:
+        print(data_lst)
+        file.write(str(data_lst).replace("'", "\""))
+        file.close()
+    return "DONE"
+
+
+@app.route('/data/daily/<index>/<type>/<filter>')
+def filterHistData(index, type, filter):
+    with open('./data/daily.json', 'r') as data_file:
+        data = json.loads(data_file.read())
+        date = dt.datetime.strptime(str(dt.date.today()), '%Y-%m-%d').date()
+        if str(filter).__eq__('1Wk'):
+            date = date - dt.timedelta(days = 7)
+        elif str(filter).__eq__('1Mon'):
+            date = date - dt.timedelta(days = 30)
+        elif str(filter).__eq__('3Mon'):
+            date = date - dt.timedelta(days = 93)
+        elif str(filter).__eq__('6Mon'):
+            date = date - dt.timedelta(days = 187)
+        elif str(filter).__eq__('1Year'):
+            date = date - dt.timedelta(days = 365)
+        elif str(filter).__eq__('2Year'):
+            date = date - dt.timedelta(days=730)
+        elif str(filter).__eq__('All'):
+            date = date
+        else:
+            date = dt.datetime.strptime('01/01/'+str(date.year), '%m/%d/%Y').date()
+        isFound = False
+        i = 0
+        newDateLst = []
+        newTypeLst = []
+        for x in data[0]['date']:
+            in_date = dt.datetime.strptime(str(x), '%m/%d/%Y').date()
+            if in_date == date or (in_date - dt.timedelta(days = 1)) == date or (in_date - dt.timedelta(days = 2)) == date:
+                newDateLst = list(data[0]['date'])[i:]
+                newTypeLst = list(data[int(index)][str(type)])[i:]
+                isFound = True
+                break
+            i = i + 1
+        if isFound==False:
+            newDateLst = data[0]['date']
+            newTypeLst = data[int(index)][str(type)]
+        dct = {'date': newDateLst, type: newTypeLst, 'change': str(round((int(newTypeLst[-1])-int(newTypeLst[0]))*100/int(newTypeLst[0]), 2))+'%'}
+        return json.loads(json.dumps(dct))
 
 @app.route('/data/<filter>/<tickers>')
 def quote(filter, tickers):
@@ -55,6 +147,41 @@ def quote(filter, tickers):
             print(ret_j[i])
         return ret_j
 
+@app.route('/data/expiration')
+def byExpirationDate():
+    with open('./data/monitoring.json', 'r') as data_file:
+        data = json.loads(data_file.read())
+        dct = {}
+        for x in data:
+            f_lst = list(x['positions']['fidelity']['exp'])
+            fc_lst = list(x['positions']['fidelity']['coll'])
+            counter = 0
+            for f in f_lst:
+                try:
+                    dct[f] = dct[f] + int(fc_lst[counter])
+                except:
+                    dct[f] = int(fc_lst[counter])
+                counter = counter + 1
+            r_lst = list(x['positions']['robinhood']['exp'])
+            rc_lst = list(x['positions']['robinhood']['coll'])
+            counter = 0
+            for r in r_lst:
+                try:
+                    dct[r] = dct[r] + int(rc_lst[counter])
+                except:
+                    dct[r] = int(rc_lst[counter])
+                counter = counter + 1
+            t_lst = list(x['positions']['tastyworks']['exp'])
+            tc_lst = list(x['positions']['tastyworks']['coll'])
+            counter = 0
+            for t in t_lst:
+                try:
+                    dct[t] = dct[t] + int(tc_lst[counter])
+                except:
+                    dct[t] = int(tc_lst[counter])
+                counter = counter + 1
+        return json.loads(json.dumps(dct))
+
 @app.route('/data/monitoring')
 def returnMonitoring():
     #with open('./data/monitoring.json', 'r') as data_file:
@@ -67,10 +194,22 @@ def returnMonitoring():
         data = json.loads(data_file.read())
         for x in data:
             resp = cm.getHtml("quote", x['ticker'])
+            try:
+                collateral = list(x['positions']['fidelity']['coll']) + list(x['positions']['tastyworks']['coll']) + list(x['positions']['robinhood']['coll'])
+                collateral = list(map(int, collateral))
+                x['total'] = sum(collateral)
+            except:
+                print(traceback.format_exc())
+                pass
             if resp[0] == 200:
-                df = parse(resp[1])
-                x['price'] = df.iloc[0]['value']
-                price = float(x['price'])
+                try:
+                    df = parse(resp[1])
+                    x['price'] = df.iloc[0]['value']
+                    price = float(x['price'].replace(',', ''))
+                except Exception:
+                    x['price'] = 0
+                    price = float(x['price'])
+                    print(traceback.format_exc())
             counter = 0
             for vals in list(x['positions']['fidelity']['call']):
                 if " " in vals:
@@ -102,98 +241,98 @@ def returnMonitoring():
                     x['positions']['robinhood']['put'][counter] = vals[:vals.index(" ")]
                 counter = counter + 1
             counter = 0
-
-            calls = list(x['positions']['fidelity']['call']) + list(x['positions']['tastyworks']['call']) + list(x['positions']['robinhood']['call'])
-            calls = list(map(float, calls))
+            x['ordered'] = json.loads('{"call": [], "put": []}')
             try:
                 counter = 0
-                calls_min = min(calls)
-                if int(str(calls_min)[str(calls_min).index(".")+1:]) == 0:
-                    for vals in list(x['positions']['fidelity']['call']):
-                        if vals == str(int(calls_min)):
-                            divi = (float(vals) - price)*100/price
-                            x['positions']['fidelity']['call'][counter] = vals + " (" + str(round(divi, 2)) + "%)"
-                        counter = counter + 1
-                    counter = 0
-                    for vals in list(x['positions']['tastyworks']['call']):
-                        if vals == str(int(calls_min)):
-                            divi = (float(vals) - price)*100/price
-                            x['positions']['tastyworks']['call'][counter] = vals + " (" + str(round(divi, 2)) + "%)"
-                        counter = counter + 1
-                    counter = 0
-                    for vals in list(x['positions']['robinhood']['call']):
-                        if vals == str(int(calls_min)):
-                            divi = (float(vals) - price)*100/price
-                            x['positions']['robinhood']['call'][counter] = vals + " (" + str(round(divi, 2)) + "%)"
-                        counter = counter + 1
-                    counter = 0
-                else:
-                    for vals in list(x['positions']['fidelity']['call']):
-                        if vals == str(calls_min):
-                            divi = (float(vals) - price)*100/price
-                            x['positions']['fidelity']['call'][counter] = vals + " (" + str(round(divi, 2)) + "%)"
-                        counter = counter + 1
-                    counter = 0
-                    for vals in list(x['positions']['tastyworks']['call']):
-                        if vals == str(calls_min):
-                            divi = (float(vals) - price)*100/price
-                            x['positions']['tastyworks']['call'][counter] = vals + " (" + str(round(divi, 2)) + "%)"
-                        counter = counter + 1
-                    counter = 0
-                    for vals in list(x['positions']['robinhood']['call']):
-                        if vals == str(calls_min):
-                            divi = (float(vals) - price)*100/price
-                            x['positions']['robinhood']['call'][counter] = vals + " (" + str(round(divi, 2)) + "%)"
-                        counter = counter + 1
-                    counter = 0
+                for val in list(x['positions']['robinhood']['call']):
+                    dct = {val: []}
+                    lst = dct[val]
+                    lst.append('robinhood')
+                    lst.append(x['positions']['robinhood']['exp'][counter])
+                    lst.append(x['positions']['robinhood']['coll'][counter])
+                    lst.append(x['positions']['robinhood']['prem'][counter])
+                    perc = (float(val) - price) * 100 / price
+                    lst.append(str(round(perc, 2)))
+                    counter = counter + 1
+                    app = list(x['ordered']['call'])
+                    app.append(json.loads(json.dumps(dct)))
+                    x['ordered']['call'] = app
+                counter = 0
+                for val in list(x['positions']['fidelity']['call']):
+                    dct = {val: []}
+                    lst = dct[val]
+                    lst.append('fidelity')
+                    lst.append(x['positions']['fidelity']['exp'][counter])
+                    lst.append(x['positions']['fidelity']['coll'][counter])
+                    lst.append(x['positions']['fidelity']['prem'][counter])
+                    perc = (float(val) - price) * 100 / price
+                    lst.append(str(round(perc, 2)))
+                    counter = counter + 1
+                    app = list(x['ordered']['call'])
+                    app.append(json.loads(json.dumps(dct)))
+                    x['ordered']['call'] = app
+                counter = 0
+                for val in list(x['positions']['tastyworks']['call']):
+                    dct = {val: []}
+                    lst = dct[val]
+                    lst.append('tastyworks')
+                    lst.append(x['positions']['tastyworks']['exp'][counter])
+                    lst.append(x['positions']['tastyworks']['coll'][counter])
+                    lst.append(x['positions']['tastyworks']['prem'][counter])
+                    perc = (float(val) - price) * 100 / price
+                    lst.append(str(round(perc, 2)))
+                    counter = counter + 1
+                    app = list(x['ordered']['call'])
+                    app.append(json.loads(json.dumps(dct)))
+                    x['ordered']['call'] = app
+                x['ordered']['call'] = sortVals(x['ordered']['call'])
+                counter = 0
+                for val in list(x['positions']['robinhood']['put']):
+                    dct = {val: []}
+                    lst = dct[val]
+                    lst.append('robinhood')
+                    lst.append(x['positions']['robinhood']['exp'][counter])
+                    lst.append(x['positions']['robinhood']['coll'][counter])
+                    lst.append(x['positions']['robinhood']['prem'][counter])
+                    perc = (price - float(val)) * 100 / price
+                    lst.append(str(round(perc, 2)))
+                    counter = counter + 1
+                    app = list(x['ordered']['put'])
+                    app.append(json.loads(json.dumps(dct)))
+                    x['ordered']['put'] = app
+                counter = 0
+                for val in list(x['positions']['fidelity']['put']):
+                    dct = {val: []}
+                    lst = dct[val]
+                    lst.append('fidelity')
+                    lst.append(x['positions']['fidelity']['exp'][counter])
+                    lst.append(x['positions']['fidelity']['coll'][counter])
+                    lst.append(x['positions']['fidelity']['prem'][counter])
+                    perc = (price - float(val)) * 100 / price
+                    lst.append(str(round(perc, 2)))
+                    counter = counter + 1
+                    app = list(x['ordered']['put'])
+                    app.append(json.loads(json.dumps(dct)))
+                    x['ordered']['put'] = app
+                counter = 0
+                for val in list(x['positions']['tastyworks']['put']):
+                    dct = {val: []}
+                    lst = dct[val]
+                    lst.append('tastyworks')
+                    lst.append(x['positions']['tastyworks']['exp'][counter])
+                    lst.append(x['positions']['tastyworks']['coll'][counter])
+                    lst.append(x['positions']['tastyworks']['prem'][counter])
+                    perc = (price - float(val)) * 100 / price
+                    lst.append(str(round(perc, 2)))
+                    counter = counter + 1
+                    app = list(x['ordered']['put'])
+                    app.append(json.loads(json.dumps(dct)))
+                    x['ordered']['put'] = app
+                x['ordered']['put'] = sortVals(x['ordered']['put'])
             except Exception:
+                print(traceback.format_exc())
                 pass
 
-            puts = list(x['positions']['fidelity']['put']) + list(x['positions']['tastyworks']['put']) + list(x['positions']['robinhood']['put'])
-            puts = list(map(float, puts))
-            try:
-                counter = 0
-                puts_max = max(puts)
-                if int(str(calls_min)[str(calls_min).index(".")+1:]) == 0:
-                    for vals in list(x['positions']['fidelity']['put']):
-                        if vals == str(int(puts_max)):
-                            divi = (price - float(vals)) * 100 / price
-                            x['positions']['fidelity']['put'][counter] = vals + " (" + str(round(divi, 2)) + "%)"
-                        counter = counter + 1
-                    counter = 0
-                    for vals in list(x['positions']['tastyworks']['put']):
-                        if vals == str(int(puts_max)):
-                            divi = (price - float(vals)) * 100 / price
-                            x['positions']['tastyworks']['put'][counter] = vals + " (" + str(round(divi, 2)) + "%)"
-                        counter = counter + 1
-                    counter = 0
-                    for vals in list(x['positions']['robinhood']['put']):
-                        if vals == str(int(puts_max)):
-                            divi = (price - float(vals)) * 100 / price
-                            x['positions']['robinhood']['put'][counter] = vals + " (" + str(round(divi, 2)) + "%)"
-                        counter = counter + 1
-                    counter = 0
-                else:
-                    for vals in list(x['positions']['fidelity']['put']):
-                        if vals == str(puts_max):
-                            divi = (price - float(vals)) * 100 / price
-                            x['positions']['fidelity']['put'][counter] = vals + " (" + str(round(divi, 2)) + "%)"
-                        counter = counter + 1
-                    counter = 0
-                    for vals in list(x['positions']['tastyworks']['put']):
-                        if vals == str(puts_max):
-                            divi = (price - float(vals)) * 100 / price
-                            x['positions']['tastyworks']['put'][counter] = vals + " (" + str(round(divi, 2)) + "%)"
-                        counter = counter + 1
-                    counter = 0
-                    for vals in list(x['positions']['robinhood']['put']):
-                        if vals == str(puts_max):
-                            divi = (price - float(vals)) * 100 / price
-                            x['positions']['robinhood']['put'][counter] = vals + " (" + str(round(divi, 2)) + "%)"
-                        counter = counter + 1
-                    counter = 0
-            except Exception:
-                pass
             wrt = wrt + str(x) + ","
 
     with open('./data/monitoring.json', 'w') as file:
@@ -201,6 +340,20 @@ def returnMonitoring():
         file.close()
     with open('./data/monitoring.json', 'r') as data_file:
         return data_file.read()
+
+def sortVals(vals):
+    try:
+        lst = []
+        dict_vals = {}
+        for x in vals:
+            dict_vals.update(dict(x))
+        dict_vals = collections.OrderedDict(sorted(dict_vals.items()))
+        for i in dict_vals:
+            lst.append(json.loads(json.dumps({i: dict_vals[i]})))
+        return lst
+    except Exception:
+        print(traceback.format_exc())
+        return vals
 
 @app.route('/data/monitoring/delete/<ticker>')
 def returnMonitoringDel(ticker):
@@ -218,8 +371,8 @@ def returnMonitoringDel(ticker):
         file.close()
     return ""
 
-@app.route('/data/monitoring/add/<account>/<ticker>/<width>/<call>/<put>')
-def returnMonitoringAdd(account, ticker, width, call, put):
+@app.route('/data/monitoring/add/<account>/<ticker>/<width>/<exp>/<call>/<put>/<prem>')
+def returnMonitoringAdd(account, ticker, width, exp, call, put, prem):
     wrt = "["
     with open('./data/monitoring.json', 'r') as data_file:
         data = json.loads(data_file.read())
@@ -230,21 +383,40 @@ def returnMonitoringAdd(account, ticker, width, call, put):
                 pylst.append(call)
                 pylst2 = list(x['positions'][account]['put'])
                 pylst2.append(put)
+                pylst3 = list(x['positions'][account]['exp'])
+                t = dt.datetime.strptime(str(exp), '%Y-%m-%d')
+                pylst3.append(str(t.strftime('%d-%b')))
+                pylst4 = list(x['positions'][account]['coll'])
+                pylst4.append(width)
+                pylst5 = list(x['positions'][account]['prem'])
+                pylst5.append(prem)
                 x['positions'][account]['call'] = pylst
                 x['positions'][account]['put'] = pylst2
-                x['total'] = x['total'] + int(width)
+                x['positions'][account]['exp'] = pylst3
+                x['positions'][account]['coll'] = pylst4
+                x['positions'][account]['prem'] = pylst5
                 counter = 1
             wrt = wrt + str(x) + ","
 
         if counter < 1:
-            val = '{"ticker":"' + ticker + '", "price": 100, "total": 0, "positions": {"fidelity": {"call": [], "put": []}, "robinhood": {"call": [], "put": []}, "tastyworks": {"call": [], "put": []}}}'
+            val = '{"ticker":"' + ticker + '", "price": 100, "total": 0, "positions": {"fidelity": {"call": [], "put": [], "exp":[], "coll":[], "prem": []}, "robinhood": {"call": [], "put": [], "exp":[], "coll":[], "prem": []}, "tastyworks": {"call": [], "put": [], "exp":[], "coll":[], "prem": []}}}'
             jval = json.loads(val)
             pylst = list(jval['positions'][account]['call'])
             pylst.append(call)
             pylst2 = list(jval['positions'][account]['put'])
             pylst2.append(put)
+            pylst3 = list(jval['positions'][account]['exp'])
+            t = dt.datetime.strptime(str(exp), '%Y-%m-%d')
+            pylst3.append(str(t.strftime('%d-%b')))
+            pylst4 = list(jval['positions'][account]['coll'])
+            pylst4.append(width)
+            pylst5 = list(jval['positions'][account]['prem'])
+            pylst5.append(prem)
             jval['positions'][account]['call'] = pylst
             jval['positions'][account]['put'] = pylst2
+            jval['positions'][account]['exp'] = pylst3
+            jval['positions'][account]['coll'] = pylst4
+            jval['positions'][account]['prem'] = pylst5
             jval['total'] = int(width)
             wrt = wrt + str(jval) + ","
 
@@ -253,22 +425,36 @@ def returnMonitoringAdd(account, ticker, width, call, put):
         file.close()
     return ""
 
-@app.route('/data/monitoring/delete/<ticker>/<account>/<type>/<strike>')
-def returnMonitoringDelStrike(account, ticker, type, strike):
+@app.route('/data/monitoring/delete/<ticker>/<account>/<type>/<strike>/<cost>/<contracts>')
+def returnMonitoringDelStrike(ticker, account, type, strike, cost, contracts):
     wrt = "["
+    removerVals = []
     with open('./data/monitoring.json', 'r') as data_file:
         data = json.loads(data_file.read())
         for x in data:
             if x['ticker'] == ticker:
                 pylst = list(x['positions'][account][type])
-                pylst.remove(strike)
-                x['positions'][account][type] = pylst
-                x['total'] = x['total'] - 500
+                i = pylst.index(strike)
+                call = list(x['positions'][account]['call'])
+                removerVals.append(call.pop(i))
+                x['positions'][account]['call'] = call
+                put = list(x['positions'][account]['put'])
+                removerVals.append(put.pop(i))
+                x['positions'][account]['put'] = put
+                exp = list(x['positions'][account]['exp'])
+                removerVals.append(exp.pop(i))
+                x['positions'][account]['exp'] = exp
+                coll = list(x['positions'][account]['coll'])
+                removerVals.append(coll.pop(i))
+                x['positions'][account]['coll'] = coll
+                prem = list(x['positions'][account]['prem'])
+                removerVals.append(prem.pop(i))
+                x['positions'][account]['prem'] = prem
             wrt = wrt + str(x) + ","
-
     with open('./data/monitoring.json', 'w') as file:
         file.write(wrt[:-1].replace("'", "\"") + "]")
         file.close()
+    removeFromProgress(removerVals, ticker, account, cost, contracts)
     return ""
 
 @app.route('/filters/<tickerlist>/<filter>')
@@ -288,6 +474,201 @@ def csvData(type):
     filename = './data/' + type + '.csv'
     return pd.read_csv(filename).head(10000).to_csv()
 
+@app.route('/data/progress/current')
+def getProgressData():
+    with open('./data/progress.json', 'r') as data_file:
+        data = json.loads(data_file.read())
+        ret = "["
+        for y in data:
+            year = y[-2:]
+            for d in data[y]:
+                date = str(d).replace("-", "")
+                for t in data[y][d]:
+                    ticker = t
+                    for id in data[y][d][t]:
+                        counter = 0
+                        lst = []
+                        for x in list(data[y][d][t][id]):
+                            if counter==2 or counter==3:
+                                strike = float(data[y][d][t][id][counter])
+                                try:
+                                    if len(str(strike).split(".")[0]) == 1:
+                                        lst.append(int(float((options(str(ticker+year+date+"C0000"+str(int(strike*1000))))))*100))
+                                    elif len(str(strike).split(".")[0]) == 2:
+                                        lst.append(int(float((options(str(ticker+year+date+"C000"+str(int(strike*1000))))))*100))
+                                    elif len(str(strike).split(".")[0]) == 3:
+                                        lst.append(int(float((options(str(ticker+year+date+"C00"+str(int(strike*1000))))))*100))
+                                    elif len(str(strike).split(".")[0]) == 4:
+                                        lst.append(int(float((options(str(ticker+year+date+"C0"+str(int(strike*1000))))))*100))
+                                except Exception:
+                                    lst.append("0")
+                                    #print(traceback.format_exc())
+                                    pass
+                                counter = counter + 1
+                            elif counter == 4 or counter == 5:
+                                strike = float(data[y][d][t][id][counter])
+                                try:
+                                    if len(str(strike).split(".")[0]) == 1:
+                                        lst.append(int(float((options(
+                                            str(ticker + year + date + "P0000" + str(int(strike * 1000)))))) * 100))
+                                    elif len(str(strike).split(".")[0]) == 2:
+                                        lst.append(int(float((options(
+                                            str(ticker + year + date + "P000" + str(int(strike * 1000)))))) * 100))
+                                    elif len(str(strike).split(".")[0]) == 3:
+                                        lst.append(int(float((options(
+                                            str(ticker + year + date + "P00" + str(int(strike * 1000)))))) * 100))
+                                    elif len(str(strike).split(".")[0]) == 4:
+                                        lst.append(int(float((options(
+                                            str(ticker + year + date + "P0" + str(int(strike * 1000)))))) * 100))
+                                except Exception:
+                                    lst.append("0")
+                                    #print(traceback.format_exc())
+                                    pass
+                                counter = counter + 1
+                            elif counter == 6:
+                                lst = [ele*float(data[y][d][t][id][counter]) for ele in lst]
+                                break
+                            else:
+                                counter = counter + 1
+                        cur = int((float(lst[1]) - float(lst[0])) + (float(lst[2]) - float(lst[3])))
+                        pnl = int(int(data[y][d][t][id][1]) - cur)
+                        perc = (int(data[y][d][t][id][1]) - cur)*100/int(data[y][d][t][id][1])
+                        ret = ret + "['"+ data[y][d][t][id][0]+"','"+t+"','"+str(data[y][d][t][id][3] + "-" + data[y][d][t][id][4])+"','"+str(y+"-"+d)+"','"+data[y][d][t][id][1]+"','"+str(cur)+"','"+str(pnl)+"','"+ str(round(perc, 2)) + "'],"
+
+        data2 = json.loads(str(ret[:-1]+"]").replace("'", "\""))
+        ur = {}
+        for vals in data2:
+            if str(vals[3])[:-3] in ur:
+                ur[str(vals[3])[:-3]] = int(ur[str(vals[3])[:-3]]) + int(vals[6])
+            else:
+                ur[str(vals[3])[:-3]] = int(vals[6])
+        with open('./data/gains.json', 'r') as data_file2:
+            data3 = json.loads(data_file2.read())
+            for vals in ur:
+                isFound = False
+                counter = 0
+                for d in data3:
+                    for date in data3[counter]:
+                        if str(date) == str(vals):
+                            data3[counter][date]['unrealized'] = ur[vals]
+                            isFound = True
+                    counter = counter + 1
+                if isFound==False:
+                    data3.append({str(vals): {'realized':0, 'unrealized':ur[vals]}})
+            with open('./data/gains.json', 'w') as file2:
+                file2.write(str(data3).replace("'", "\""))
+                file2.close()
+
+        return str(ret[:-1]+"]").replace("'", "\"")
+
+@app.route('/data/progress/gains')
+def getProgressGains():
+    with open('./data/gains.json', 'r') as data_file:
+        data = list(json.loads(data_file.read()))
+        j1 = json.loads(json.dumps(data[-2:][0]))
+        j2 = json.loads(json.dumps(data[-2:][1]))
+        ret = "[['realized', 'unrealized'],['"
+        m1 = ""
+        m2 = ""
+        for x in j1:
+            m1 = x
+            ret = ret + str(j1[x]['realized']) + "','"
+            ret = ret + str(j1[x]['unrealized']) + "'],['"
+        for x in j2:
+            m2 = x
+            ret = ret + str(j2[x]['realized']) + "','"
+            ret = ret + str(j2[x]['unrealized']) + "'],['"
+        ret = ret + m1 + "','" + m2 + "']]"
+        return ret.replace("'", "\"")
+
+@app.route('/data/progress/add/<account>/<ticker>/<contracts>/<collateral>/<exp>/<call>/<put>/<prem>')
+def updateProgressData(account, ticker, contracts, collateral, exp, call, put, prem):
+    year = str(exp).split('-')[0]
+    month = str(exp).split('-')[1]
+    day = str(exp).split('-')[2]
+    date = month + "-" + day
+    longcall = str(0)
+    longput = str(0)
+
+    if int(put)==0 and int(collateral)==0:
+        longcall = str(0)
+    elif int(put)==0 and int(collateral)!=0:
+        longcall = str(float(call) + float(collateral) / 100)
+    elif int(call)==0 and int(collateral)!=0:
+        longput = str(float(put) - float(collateral) / 100)
+    else:
+        longcall = str(float(call) + float(collateral) / 100)
+        longput = str(float(put) - float(collateral) / 100)
+
+    id = year + month + day + str(ticker).upper() + str(prem)
+    data = {}
+    with open('./data/progress.json', 'r') as data_file:
+        data = json.loads(data_file.read())
+        isNoYear = True
+        for x in data:
+            if x == year:
+                isNoYear = False
+                if data[x].get(date):
+                    for y in data[x]:
+                        if y == date:
+                            if data[x][y].get(ticker):
+                                val = "['"+str(account)+"','" + str(
+                                    int(prem) * int(contracts)) + "','" + longcall + "','" + str(
+                                    call) + "','" + str(put) + "','" + longput + "','"+str(contracts)+"']"
+                                data[year][date][ticker][id] = json.loads(val.replace("'", "\""))
+                            else:
+                                val = "{'" + id + "':['"+str(account)+"','" + str(
+                                    int(prem) * int(contracts)) + "','" + longcall + "','" + str(
+                                    call) + "','" + str(put) + "','" + longput + "','"+str(contracts)+"']}"
+                                data[year][date][ticker] = json.loads(val.replace("'", "\""))
+                else:
+                    val = "{'" + ticker + "':{'" + id + "':['"+str(account)+"','" + str(
+                        int(prem) * int(contracts)) + "','" + longcall + "','" + str(
+                        call) + "','" + str(put) + "','" + longput + "','"+str(contracts)+"']}}"
+                    data[year][date] = json.loads(val.replace("'", "\""))
+        if isNoYear:
+            val = "{'"+month+"-"+day+"':{'"+ticker+"':{'"+id+"':['"+str(account)+"','"+str(int(prem)*int(contracts))+"','"+longcall+"','"+str(call)+"','"+str(put)+"','"+longput+ "','"+str(contracts)+"']}}}"
+            data[year] = json.loads(val.replace("'", "\""))
+    with open('./data/progress.json', 'w') as file:
+        file.write(str(data).replace("'", "\""))
+        file.close()
+    return ""
+
+def removeFromProgress(removerVals, ticker, account, cost, contracts):
+    data = {}
+    ret = "["
+    year = ""
+    with open('./data/progress.json', 'r') as data_file:
+        data = json.loads(data_file.read())
+        t = dt.datetime.strptime(str(removerVals[2]), '%d-%b')
+        for y in data:
+            try:
+                id = str(y) + str(t.strftime('%m%d')) + ticker.upper() + str(removerVals[4])
+                del data[str(y)][str(t.strftime('%m-%d'))][str(ticker)][id]
+                year = str(y)
+                if len(str(data[year][str(t.strftime('%m-%d'))][str(ticker)])) < 4:
+                    del data[year][str(t.strftime('%m-%d'))][str(ticker)]
+                    if len(str(data[year][str(t.strftime('%m-%d'))])) < 4:
+                        del data[year][str(t.strftime('%m-%d'))]
+            except:
+                pass
+        pnl = int(removerVals[4]) - int(int(cost)*int(contracts))
+        with open('./data/gains.json', 'r') as data_file2:
+            data2 = json.loads(data_file2.read())
+            for x in data2:
+                try:
+                    x[year+"-"+str(t.strftime('%m'))]
+                    x[year+"-"+str(t.strftime('%m'))]['realized'] = int(x[year+"-"+str(t.strftime('%m'))]['realized']) + pnl
+                except:
+                    pass
+                ret = ret + str(x) + ','
+        with open('./data/gains.json', 'w') as file2:
+            file2.write(str(ret[:-1]+"]").replace("'", "\""))
+            file2.close()
+    with open('./data/progress.json', 'w') as file:
+        file.write(str(data).replace("'", "\""))
+        file.close()
+    return ""
 
 def parse(html):
     soup = BeautifulSoup(html, 'html.parser')
@@ -299,3 +680,15 @@ def parse(html):
 
     df = pd.DataFrame(dict)
     return df
+
+def options(tickers):
+    resp = cm.getHtml("quote", tickers)
+    price = 0.0
+    if resp[0] == 200:
+        try:
+            df = parse(resp[1])
+            price = float(df.iloc[0]['value'].replace(',', ''))
+        except Exception:
+            #print(traceback.format_exc())
+            pass
+    return str(price)
