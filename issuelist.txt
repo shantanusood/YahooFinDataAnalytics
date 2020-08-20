@@ -1,0 +1,24 @@
+Major Issue list:
+ > When a trade has exactly same expiry, ticker and buy price, the ID is duplicated and gets overwritten in progress.json
+ > Duplicate strikes are not visible on the monitor table (issue with sortVals function in python)
+
+Minor Issue list:
+ > Add trade box account should be a drop down
+ > Ticker table on monitor screen should not be allowed to close if there still are active trades in that ticker
+ > When last trade for a month is closed the gains json doesnt update the unrealized value for that month to 0
+ > Use a dynamic grid like ag-grid for percent pnl data display
+
+Styling issues:
+ > Have both pages (by strike, by pnl) as dropdown of monitor on top navigation
+ > The total collateral by expiry on top of monitor page should be styled better
+ > Fix position issue for percent pnl div table
+
+Get it ready for users:
+ > Provide error messages on add and delete trade boxes
+ > Allow users to edit the name of accounts, and by default should be account1, account2, account3
+ > Be able to leave account values empty on historic performace add functionality
+ > Dont allow more than one entry per day on historic performance add functionality
+ > Allow user to edit data on historic performance chart
+ > Show color chart for which account belongs to which color
+ > Allow sorting on the percent onl grid
+ > USer feedback on click of add or close button on the trade add and close pop ups, like say 
