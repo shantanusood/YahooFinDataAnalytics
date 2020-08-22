@@ -98,7 +98,7 @@ skywriter==0.0.7
 sn3218==1.2.7
 soupsieve==1.8
 spidev==3.2
-ssh-import-id==5.7
+#ssh-import-id==5.7
 thonny==3.2.0
 touchphat==0.0.1
 twython==3.7.0
