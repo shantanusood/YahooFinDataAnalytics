@@ -24,7 +24,6 @@ ExplorerHAT==0.4.2
 Flask==1.0.2
 fourletterphat==0.1.0
 gpiozero==1.5.1
-gunicorn==20.0.4
 html5lib==1.0.1
 idna==2.6
 inflection==0.3.1
@@ -66,7 +65,7 @@ Pillow==5.4.1
 psutil==5.5.1
 pyasn1==0.4.8
 pycrypto==2.6.1
-pygame==1.9.4
+pygame==1.9.4.post1
 Pygments==2.3.1
 PyGObject==3.30.4
 pyinotify==0.9.6
@@ -75,6 +74,7 @@ pylint==2.2.2
 pyOpenSSL==19.0.0
 pyparsing==2.4.6
 pyserial==3.4
+python-apt==1.8.4
 python-dateutil==2.8.1
 pytz==2019.3
 pyxdg==0.25
@@ -97,8 +97,8 @@ six==1.12.0
 skywriter==0.0.7
 sn3218==1.2.7
 soupsieve==1.8
-spidev==3.2
-#ssh-import-id==5.7
+spidev==3.3
+ssh-import-id==5.7
 thonny==3.2.0
 touchphat==0.0.1
 twython==3.7.0
