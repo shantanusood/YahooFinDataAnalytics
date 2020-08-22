@@ -24,6 +24,7 @@ ExplorerHAT==0.4.2
 Flask==1.0.2
 fourletterphat==0.1.0
 gpiozero==1.5.1
+gunicorn==41.4.0
 html5lib==1.0.1
 idna==2.6
 inflection==0.3.1
