@@ -3,6 +3,9 @@
 * Complete universe of all Yahoo financial tickers available @ /data/ in the txt/csv files
 * Usage can be found either in the html files: script.html or predict.html or within the script.py or predict.py
 
+### This app is live at below url:
+* http://shantanusood.pythonanywhere.com/
+
 ### Quick Start
 * Steps:
 
