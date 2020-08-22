@@ -45,6 +45,24 @@ def quide():
 </body>
 </html>
 """
+@app.route('/data/<username>/accounts')
+def readAccounts(username):
+    with open('./data/' + username + '/accounts.json', 'r') as data_file:
+        return data_file.read()
+
+@app.route('/data/<username>/accounts/<account1>/<account2>/<account3>')
+def updateAccounts(username, account1, account2, account3):
+    data = {}
+    with open('./data/' + username + '/accounts.json', 'r') as data_file:
+        data = json.loads(data_file.read())
+        data['fidelity'] = account1
+        data['robinhood'] = account2
+        data['tastyworks'] = account3
+        print(data)
+    with open('./data/' + username + '/accounts.json', 'w') as data_file2:
+        data_file2.write(str(data).replace("'", "\""))
+        return "['Successfully wrote to accounts!']".replace("'", "\"")
+
 @app.route('/data/<username>/daily')
 def dailyProgress(username):
     with open('./data/'+username+'/daily.json', 'r') as data_file:
