@@ -46,8 +46,13 @@ def quide():
 </html>
 """
 @app.route('/data/<username>/accounts')
-def readAccounts(username):
+def readRawData(username):
     with open('./data/' + username + '/accounts.json', 'r') as data_file:
+        return data_file.read()
+
+@app.route('/data/<username>/monitoring/raw')
+def readAccounts(username):
+    with open('./data/' + username + '/monitoring.json', 'r') as data_file:
         return data_file.read()
 
 @app.route('/data/<username>/accounts/<account1>/<account2>/<account3>')
