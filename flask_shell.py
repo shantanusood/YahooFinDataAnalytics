@@ -55,6 +55,14 @@ def readAccounts(username):
     with open('./data/' + username + '/monitoring.json', 'r') as data_file:
         return data_file.read()
 
+@app.route('/data/<username>/getit')
+def getit(username):
+    st = list(username)
+    st_num = ""
+    for x in st:
+        st_num = st_num + str(int(str(ord(x)-96)[-1:])*2)[-1:]
+    return str("{'this':'"+str(int(str(st_num)[0])*3)[-1:] + str(st_num)[1:5] + str(int(str(st_num)[5])*3)[-1:]+"'}").replace("'", "\"")
+
 @app.route('/data/<username>/accounts/<account1>/<account2>/<account3>')
 def updateAccounts(username, account1, account2, account3):
     data = {}
