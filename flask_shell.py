@@ -63,6 +63,69 @@ def getit(username):
         st_num = st_num + str(int(str(ord(x)-96)[-1:])*2)[-1:]
     return str("{'this':'"+str(int(str(st_num)[0])*3)[-1:] + str(st_num)[1:5] + str(int(str(st_num)[5])*3)[-1:]+"'}").replace("'", "\"")
 
+@app.route('/data/<username>/rental/addquotes')
+def send_rent_quotes(username):
+    data = {}
+    history = []
+    with open('./data/' + username + '/payhist.json', 'r') as data_file:
+        data = json.loads(data_file.read())
+        history = data['history']
+        val = "{'due_date': '" + str(dt.datetime.strptime(str(dt.date.today()), '%Y-%m-%d').date())[
+                                 :-2] + "01" + "', 'paid_date': 'NA', 'rent': '" + str(
+            data['recurring']) + "', 'utilities': '0', 'late': '0', 'additional': '0', 'total': '" + str(
+            data['recurring']) + "', 'status': 'N'}"
+        jval = json.loads(val.replace("'", "\""))
+        history.insert(0, jval)
+        data['history'] = history
+    with open('./data/' + username + '/payhist.json', 'w') as data_file2:
+        data_file2.write(str(data).replace("'", "\""))
+    return "['Successfully wrote to accounts!']".replace("'", "\"")
+
+@app.route('/data/<username>/rental/editquotes/<delete_or_edit>/<due_date>/<paid_date>/<rent>/<utilities>/<late>/<additional>/<total>/<status>')
+def edit_rent_quotes(username, delete_or_edit, due_date, paid_date, rent, utilities, late, additional, total, status):
+    data = {}
+    history = []
+    index = 0
+    with open('./data/' + username + '/payhist.json', 'r') as data_file:
+        data = json.loads(data_file.read())
+        history = data['history']
+
+        for hist in history:
+            if(hist['due_date']==due_date and delete_or_edit=='edit'):
+                history.pop(index)
+                val = "{'due_date': '" + due_date + "', 'paid_date': '"+paid_date+"', 'rent': '" + rent + "', 'utilities': '"+utilities+"', 'late': '"+\
+                      late+"', 'additional': '"+additional+"', 'total': '" + str(int(rent) + int(utilities) + int(late) + int(additional)) + "', 'status': '"+status+"'}"
+                jval = json.loads(val.replace("'", "\""))
+                history.append(jval)
+                break
+            elif(hist['due_date']==due_date and delete_or_edit=='delete'):
+                history.pop(index)
+                break
+            index = index + 1
+        data['history'] = history
+    with open('./data/' + username + '/payhist.json', 'w') as data_file2:
+        data_file2.write(str(data).replace("'", "\""))
+        return "['Successfully wrote to accounts!']".replace("'", "\"")
+
+@app.route('/data/<username>/rental/history')
+def payment_history(username):
+    data = {}
+    history = []
+    with open('./data/' + username + '/payhist.json', 'r') as data_file:
+        data = json.loads(data_file.read())
+        return data
+
+@app.route('/data/<username>/rental/outstanding')
+def outstanding(username):
+    data = {}
+    total_out = 0
+    with open('./data/' + username + '/payhist.json', 'r') as data_file:
+        data = json.loads(data_file.read())
+        for hist in data['history']:
+            if hist['status'] == 'N':
+                total_out = total_out + int(hist['total'])
+        return str(total_out)
+
 @app.route('/data/<username>/accounts/<account1>/<account2>/<account3>')
 def updateAccounts(username, account1, account2, account3):
     data = {}
