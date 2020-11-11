@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request, redirect, url_for, render_template
 import time
 import datetime as dt
 import script as s
@@ -6,7 +6,8 @@ import json
 import pandas as pd
 from data import tickers_list as t
 from src import filter as f
-import os
+from os import listdir
+from os.path import isfile, join
 from flask_cors import CORS
 
 from bs4 import BeautifulSoup
@@ -125,6 +126,35 @@ def outstanding(username):
             if hist['status'] == 'N':
                 total_out = total_out + int(hist['total'])
         return str(total_out)
+
+@app.route("/properties/add", methods=["POST"])
+def addNewProperty():
+    with open('./properties/'+request.json['name']+'.json', 'w') as data_file:
+        val = "{'name': '"+request.json['name']+"', 'address': '"+request.json['address']+"', 'workorders': []}"
+        jval = json.loads(val.replace("'", "\""))
+        data_file.write(str(jval).replace("'", "\""))
+        return "['Successfully created new property']".replace("'", "\"")
+
+@app.route("/properties/get")
+def getAllProperties():
+    onlyfiles = [f for f in listdir("./properties/") if isfile(join("./properties/", f))]
+    return str([str(x)[:-5] for x in onlyfiles]).replace("'", "\"")
+
+@app.route("/properties/<properties>/get")
+def getProperty(properties):
+    with open('./properties/' + properties + '.json', 'r') as data_file:
+        return str(json.loads(data_file.read())).replace("'", "\"")
+
+@app.route("/properties/<properties>/update", methods=['GET', 'POST'])
+def updateProperty(properties):
+    with open('./properties/' + properties + '.json', 'r') as data_file:
+        data = json.loads(data_file.read())
+        data['address'] = request.json['address']
+        data['image'] = request.json['image']
+        data['desc'] = request.json['desc']
+    with open('./properties/' + properties + '.json', 'w') as data_file2:
+        data_file2.write(str(data).replace("'", "\""))
+        return "['Successfully wrote to accounts!']".replace("'", "\"")
 
 @app.route('/data/<username>/accounts/<account1>/<account2>/<account3>')
 def updateAccounts(username, account1, account2, account3):
