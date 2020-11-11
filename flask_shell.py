@@ -127,6 +127,29 @@ def outstanding(username):
                 total_out = total_out + int(hist['total'])
         return str(total_out)
 
+@app.route('/data/<username>/rental/extend/<period>')
+def extention(username, period):
+    data = {}
+    total_out = 0
+    with open('./data/' + username + '/payhist.json', 'r') as data_file:
+        data = json.loads(data_file.read())
+        data['request'] = period
+    with open('./data/' + username + '/payhist.json', 'w') as data_file2:
+        data_file2.write(str(data).replace("'", "\""))
+        return data
+
+@app.route('/data/<username>/rental/extend/approve/<period>')
+def extentionApprove(username, period):
+    data = {}
+    total_out = 0
+    with open('./data/' + username + '/payhist.json', 'r') as data_file:
+        data = json.loads(data_file.read())
+        data['request'] = "false"
+        data['expiry'] = period
+    with open('./data/' + username + '/payhist.json', 'w') as data_file2:
+        data_file2.write(str(data).replace("'", "\""))
+        return data
+
 @app.route("/properties/add", methods=["POST"])
 def addNewProperty():
     with open('./properties/'+request.json['name']+'.json', 'w') as data_file:
