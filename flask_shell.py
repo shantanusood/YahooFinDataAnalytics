@@ -168,6 +168,31 @@ def getProperty(properties):
     with open('./properties/' + properties + '.json', 'r') as data_file:
         return str(json.loads(data_file.read())).replace("'", "\"")
 
+@app.route("/properties/<properties>/workorder", methods=['GET', 'POST'])
+def createWorkOrder(properties):
+    data = {}
+    workorder = []
+    with open('./properties/'+properties+'.json', 'r') as data_file:
+        data = json.loads(data_file.read())
+        workorder = data['workorders']
+        workorder.insert(0, request.json)
+        data['workorders'] = workorder
+    with open('./properties/' + properties + '.json', 'w') as data_file2:
+        data_file2.write(str(data).replace("'", "\""))
+        return str(data).replace("'", "\"")
+
+@app.route("/properties/inprogress")
+def getAllInprogress(properties):
+    print()
+
+@app.route("/properties/<properties>/workorder/delete", methods=['GET', 'POST'])
+def getDelete():
+    print()
+
+@app.route("/properties/<properties>/workorder/completed", methods=['GET', 'POST'])
+def getMarkCompleted(properties):
+    print()
+
 @app.route("/properties/<properties>/update", methods=['GET', 'POST'])
 def updateProperty(properties):
     with open('./properties/' + properties + '.json', 'r') as data_file:
