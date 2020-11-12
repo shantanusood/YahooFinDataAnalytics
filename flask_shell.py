@@ -182,16 +182,60 @@ def createWorkOrder(properties):
         return str(data).replace("'", "\"")
 
 @app.route("/properties/inprogress")
-def getAllInprogress(properties):
-    print()
+def getAllInprogress():
+    data = {}
+    final_data = []
+    onlyfiles = [f for f in listdir("./properties/") if isfile(join("./properties/", f))]
+    for file in onlyfiles:
+        with open('./properties/' + file, 'r') as data_file:
+            data = json.loads(data_file.read())
+            for x in data['workorders']:
+                if(x['status'] == 'In progress'):
+                    final_data.append(x)
+    return str(final_data).replace("'", "\"")
 
-@app.route("/properties/<properties>/workorder/delete", methods=['GET', 'POST'])
+@app.route("/properties/workorder/delete", methods=['GET', 'POST'])
 def getDelete():
-    print()
+    data = {}
+    final_data = []
+    onlyfiles = [f for f in listdir("./properties/") if isfile(join("./properties/", f))]
+    for file in onlyfiles:
+        with open('./properties/' + file, 'r') as data_file:
+            data = json.loads(data_file.read())
+            lst_data = data['workorders']
+            index = 0
+            for x in lst_data:
+                if (x['address'] == request.json['address'] and x['submitdate'] == request.json['time']):
+                    lst_data.pop(index)
+                    data['workorders'] = lst_data
+                    break
+                index = index + 1
+            with open('./properties/' + file, 'w') as data_file2:
+                data_file2.write(str(data).replace("'", "\""))
+    return str(['Successfully deleted']).replace("'", "\"")
 
-@app.route("/properties/<properties>/workorder/completed", methods=['GET', 'POST'])
-def getMarkCompleted(properties):
-    print()
+@app.route("/properties/workorder/completed", methods=['GET', 'POST'])
+def getMarkCompleted():
+    data = {}
+    final_data = []
+    onlyfiles = [f for f in listdir("./properties/") if isfile(join("./properties/", f))]
+    for file in onlyfiles:
+        with open('./properties/' + file, 'r') as data_file:
+            data = json.loads(data_file.read())
+            lst_data = data['workorders']
+            index = 0
+            for x in lst_data:
+                if (x['address'] == request.json['address'] and x['submitdate'] == request.json['time']):
+                    jval = json.loads(str(lst_data[index]).replace("'", "\""))
+                    jval['status'] = 'Completed'
+                    lst_data.pop(index)
+                    lst_data.insert(index, jval)
+                    data['workorders'] = lst_data
+                    break
+                index = index + 1
+            with open('./properties/' + file, 'w') as data_file2:
+                data_file2.write(str(data).replace("'", "\""))
+    return str(['Successfully changed to completed']).replace("'", "\"")
 
 @app.route("/properties/<properties>/update", methods=['GET', 'POST'])
 def updateProperty(properties):
