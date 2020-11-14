@@ -237,6 +237,65 @@ def getMarkCompleted():
                 data_file2.write(str(data).replace("'", "\""))
     return str(['Successfully changed to completed']).replace("'", "\"")
 
+@app.route("/properties/workorder/inprogress", methods=['GET', 'POST'])
+def getMarkProgress():
+    data = {}
+    final_data = []
+    onlyfiles = [f for f in listdir("./properties/") if isfile(join("./properties/", f))]
+    for file in onlyfiles:
+        with open('./properties/' + file, 'r') as data_file:
+            data = json.loads(data_file.read())
+            lst_data = data['workorders']
+            index = 0
+            for x in lst_data:
+                print(request.json)
+                if (x['address'] == request.json['address'] and x['submitdate'] == request.json['time']):
+                    jval = json.loads(str(lst_data[index]).replace("'", "\""))
+                    jval['status'] = 'In progress'
+                    lst_data.pop(index)
+                    lst_data.insert(index, jval)
+                    data['workorders'] = lst_data
+                    break
+                index = index + 1
+            with open('./properties/' + file, 'w') as data_file2:
+                data_file2.write(str(data).replace("'", "\""))
+    return str(['Successfully changed to in progress']).replace("'", "\"")
+
+@app.route("/data/bug/get")
+def getBugFeature():
+    with open('./data/bug_feature.json', 'r') as data_file:
+        return str(json.loads(data_file.read())).replace("'", "\"")
+
+@app.route("/data/bug/add/<type>", methods=['GET', 'POST'])
+def addBugFeature(type):
+    data = {}
+    addthis = []
+    with open('./data/bug_feature.json', 'r') as data_file:
+        data = json.loads(data_file.read())
+        addthis = data[type]
+        addthis.insert(0, request.json)
+        data[type] = addthis
+    with open('./data/bug_feature.json', 'w') as data_file2:
+        data_file2.write(str(data).replace("'", "\""))
+        return data
+
+@app.route("/data/bug/delete/<type>", methods=['GET', 'POST'])
+def deleteBugFeature(type):
+    data = {}
+    addthis = []
+    with open('./data/bug_feature.json', 'r') as data_file:
+        data = json.loads(data_file.read())
+        addthis = data[type]
+        index = 0
+        for x in addthis:
+            if x==request.json:
+                addthis.pop(index)
+            index = index + 1
+        data[type] = addthis
+    with open('./data/bug_feature.json', 'w') as data_file2:
+        data_file2.write(str(data).replace("'", "\""))
+        return data
+
 @app.route("/properties/<properties>/update", methods=['GET', 'POST'])
 def updateProperty(properties):
     with open('./properties/' + properties + '.json', 'r') as data_file:
