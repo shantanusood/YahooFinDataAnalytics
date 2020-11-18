@@ -6,10 +6,10 @@ import json
 import pandas as pd
 from data import tickers_list as t
 from src import filter as f
-from os import listdir
+from os import listdir, makedirs
 from os.path import isfile, join
 from flask_cors import CORS
-
+import os
 from bs4 import BeautifulSoup
 from obj import yahoo_obj as y
 from src.helpers import commons as cm
@@ -266,6 +266,42 @@ def getBugFeature():
     with open('./data/bug_feature.json', 'r') as data_file:
         return str(json.loads(data_file.read())).replace("'", "\"")
 
+@app.route("/data/roles/get")
+def getRoles():
+    with open('./data/roles.json', 'r') as data_file:
+        return str(json.loads(data_file.read())).replace("'", "\"")
+
+@app.route("/data/newuser", methods=['GET', 'POST'])
+def createAccount():
+    data = []
+    with open('./data/roles.json', 'r') as data_file:
+        data = json.loads(data_file.read())
+        data.append(request.json)
+    newpath = r'./data/'+request.json['userid']
+    if not os.path.exists(newpath):
+        os.makedirs(newpath)
+    with open('./data/roles.json', 'w') as data_file2:
+        data_file2.write(str(data).replace("'", "\""))
+    accstr = "{'fidelity': 'account1', 'robinhood': 'account2', 'tastyworks': 'account3'}"
+    payhist = "{ 'propetyname': '', 'address': '', 'recurring': '', 'status': 'Active', 'expiry': '', 'durations': [], 'request': 'false', 'history': []}"
+    daily = "[{'date': ['"+ str(dt.datetime.strptime(str(dt.date.today()), '%Y-%m-%d').date())+"']},{'fidelity': [1000]},{'robinhood': [0]},{'tastyworks': [0]},{'retirement': [110]},{'total': [100]}]"
+    gains = "[{'"+ str(dt.datetime.strptime(str(dt.date.today()), '%Y-%m-%d').date())+"': {'realized': 500,'unrealized': 0,'expected': 0}}]"
+    monitoring = "[{'ticker': 'spy','price': '59.42','total': 0,'positions': {'fidelity': {'call': ['63'],'put': ['0'],'exp': ['18-Sep'],'coll': ['0'],'prem': ['42']},'robinhood': {'call': [],'put': [],'exp': [],'coll': [],'prem': []},'tastyworks': {'call': [],'put': [],'exp': [],'coll': [],'prem': []}},'ordered': {'call': [{'63': ['fidelity','18-Sep','0','42','6.02']}],'put': [{'0': ['fidelity','18-Sep','0','42','100.0']}]}}]"
+    progress = "{'2020': {'11-20': {'spy': {'20200918SLV32': ['fidelity','32','0','34','0','0','1']}}}}"
+    with open('./data/' + request.json['userid']  + '/accounts.json', 'w') as data_file3:
+        data_file3.write(str(accstr).replace("'", "\""))
+    with open('./data/' + request.json['userid']  + '/daily.json', 'w') as data_file4:
+        data_file4.write(str(daily).replace("'", "\""))
+    with open('./data/' + request.json['userid']  + '/gains.json', 'w') as data_file5:
+        data_file5.write(str(gains).replace("'", "\""))
+    with open('./data/' + request.json['userid']  + '/monitoring.json', 'w') as data_file6:
+        data_file6.write(str(monitoring).replace("'", "\""))
+    with open('./data/' + request.json['userid']  + '/payhist.json', 'w') as data_file7:
+        data_file7.write(str(payhist).replace("'", "\""))
+    with open('./data/' + request.json['userid']  + '/progress.json', 'w') as data_file8:
+        data_file8.write(str(progress).replace("'", "\""))
+    return str(['Successfully added to roles']).replace("'", "\"")
+
 @app.route("/data/bug/add/<type>", methods=['GET', 'POST'])
 def addBugFeature(type):
     data = {}
@@ -306,6 +342,17 @@ def updateProperty(properties):
     with open('./properties/' + properties + '.json', 'w') as data_file2:
         data_file2.write(str(data).replace("'", "\""))
         return "['Successfully wrote to accounts!']".replace("'", "\"")
+
+@app.route('/data/<username>/<email>/<phone>')
+def updateContact(username, email, phone):
+    data = {}
+    with open('./data/' + username + '/payhist.json', 'r') as data_file:
+        data = json.loads(data_file.read())
+        data['email'] = email
+        data['phone'] = phone
+    with open('./data/' + username + '/payhist.json', 'w') as data_file2:
+        data_file2.write(str(data).replace("'", "\""))
+        return str(data).replace("'", "\"")
 
 @app.route('/data/<username>/accounts/<account1>/<account2>/<account3>')
 def updateAccounts(username, account1, account2, account3):
