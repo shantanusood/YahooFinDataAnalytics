@@ -302,6 +302,24 @@ def createAccount():
         data_file8.write(str(progress).replace("'", "\""))
     return str(['Successfully added to roles']).replace("'", "\"")
 
+@app.route("/data/deleteuser/<username>")
+def deleteUser(username):
+    data = []
+    index = 0
+    with open('./data/roles.json', 'r') as data_file:
+        data = json.loads(data_file.read())
+        for dt in data:
+            if username == dt['userid']:
+                data.pop(index)
+            index = index + 1
+    with open('./data/roles.json', 'w') as data_file2:
+        data_file2.write(str(data).replace("'", "\""))
+    dir = r'./data/'+username
+    for files in os.listdir(dir):
+        os.remove(os.path.join(dir, files))
+    os.rmdir(dir)
+    return str(['Successfully delete user']).replace("'", "\"")
+
 @app.route("/data/bug/add/<type>", methods=['GET', 'POST'])
 def addBugFeature(type):
     data = {}
