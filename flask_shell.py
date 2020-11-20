@@ -271,6 +271,21 @@ def getRoles():
     with open('./data/roles.json', 'r') as data_file:
         return str(json.loads(data_file.read())).replace("'", "\"")
 
+@app.route("/data/roles/updateqa/<username>", methods=['GET', 'POST'])
+def updateQA(username):
+    data = []
+    index = 0
+    with open('./data/roles.json', 'r') as data_file:
+        data = json.loads(data_file.read())
+        for dt in data:
+            if dt['userid'] == username:
+                data[index]['question'] = request.json['question']
+                data[index]['answer'] = request.json['answer']
+            index = index + 1
+    with open('./data/roles.json', 'w') as data_file2:
+        data_file2.write(str(data).replace("'", "\""))
+        return str(data).replace("'", "\"")
+
 @app.route("/data/newuser", methods=['GET', 'POST'])
 def createAccount():
     data = []
