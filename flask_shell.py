@@ -365,13 +365,44 @@ def deleteBugFeature(type):
         data_file2.write(str(data).replace("'", "\""))
         return data
 
+@app.route("/data/<username>/updatetenant", methods=['GET', 'POST'])
+def updateTenant(username):
+    data = {}
+    prop = {}
+    with open('./data/' + username + '/payhist.json', 'r') as data_file:
+        data = json.loads(data_file.read())
+        data['propetyname'] = request.json['propetyname']
+        with open('./properties/' + data['propetyname'].trim() + '.json', 'r') as data_file:
+            prop = json.loads(data_file.read())
+            data['address'] = prop['address']
+        data['recurring'] = request.json['recurring']
+        data['durations'] = request.json['durations'].split(",")
+        data['status'] = request.json['status']
+        data['email'] = request.json['email']
+        data['phone'] = request.json['phone']
+        data['expiry'] = request.json['expiry']
+    with open('./data/' + username + '/payhist.json', 'w') as data_file2:
+        data_file2.write(str(data).replace("'", "\""))
+        return str(data).replace("'", "\"")
+
 @app.route("/properties/<properties>/update", methods=['GET', 'POST'])
 def updateProperty(properties):
+    data = {}
     with open('./properties/' + properties + '.json', 'r') as data_file:
         data = json.loads(data_file.read())
         data['address'] = request.json['address']
         data['image'] = request.json['image']
         data['desc'] = request.json['desc']
+        data['circuitbreaker'] = request.json['circuitbreaker']
+        data['watermain'] = request.json['watermain']
+        data['alarm'] = request.json['alarm']
+        data['fire'] = request.json['fire']
+        data['centralheat'] = request.json['centralheat']
+        data['heatage'] = request.json['heatage']
+        data['pet'] = request.json['pet']
+        data['police'] = request.json['police']
+        data['hospital'] = request.json['hospital']
+        data['dmv'] = request.json['dmv']
     with open('./properties/' + properties + '.json', 'w') as data_file2:
         data_file2.write(str(data).replace("'", "\""))
         return "['Successfully wrote to accounts!']".replace("'", "\"")
