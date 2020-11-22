@@ -372,7 +372,7 @@ def updateTenant(username):
     with open('./data/' + username + '/payhist.json', 'r') as data_file:
         data = json.loads(data_file.read())
         data['propetyname'] = request.json['propetyname']
-        with open('./properties/' + data['propetyname'].trim() + '.json', 'r') as data_file:
+        with open('./properties/' + data['propetyname'] + '.json', 'r') as data_file:
             prop = json.loads(data_file.read())
             data['address'] = prop['address']
         data['recurring'] = request.json['recurring']
