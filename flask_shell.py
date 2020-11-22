@@ -376,6 +376,7 @@ def updateTenant(username):
             prop = json.loads(data_file.read())
             data['address'] = prop['address']
         data['recurring'] = request.json['recurring']
+        data['deposit'] = request.json['deposit']
         data['durations'] = request.json['durations'].split(",")
         data['status'] = request.json['status']
         data['email'] = request.json['email']
