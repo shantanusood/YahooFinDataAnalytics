@@ -827,7 +827,43 @@ def returnMonitoringAdd(username, account, ticker, width, exp, call, put, prem):
         file.write(wrt[:-1].replace("'", "\"") + "]")
         file.close()
     print(str("['Value:  "+account + ' - ' + ticker + ' - ' + width + ' - ' + exp + ' - ' + call + ' - ' + put + ' - ' + prem + " added successfully!']").replace("'", "\""))
-    return str("['Value:  "+account + ' - ' + ticker + ' - ' + width + ' - ' + exp + ' - ' + call + ' - ' + put + ' - ' + prem + " added successfully!']").replace("'", "\"")
+    return str("['Value:  " + ticker + ' - ' + exp + ' - ' + " added!']").replace("'", "\"")
+
+@app.route('/data/<username>/monitoring/delete/getcontracts/<ticker>/<account>/<type>/<strike>')
+def getNumberOfContracts(username, ticker, account, type, strike):
+    removerVals = []
+    with open('./data/'+username+'/monitoring.json', 'r') as data_file:
+        data = json.loads(data_file.read())
+        for x in data:
+            if x['ticker'] == ticker:
+                pylst = list(x['positions'][account][type])
+                i = pylst.index(strike)
+                call = list(x['positions'][account]['call'])
+                removerVals.append(call.pop(i))
+                x['positions'][account]['call'] = call
+                put = list(x['positions'][account]['put'])
+                removerVals.append(put.pop(i))
+                x['positions'][account]['put'] = put
+                exp = list(x['positions'][account]['exp'])
+                removerVals.append(exp.pop(i))
+                x['positions'][account]['exp'] = exp
+                coll = list(x['positions'][account]['coll'])
+                removerVals.append(coll.pop(i))
+                x['positions'][account]['coll'] = coll
+                prem = list(x['positions'][account]['prem'])
+                removerVals.append(prem.pop(i))
+                x['positions'][account]['prem'] = prem
+    contractsavailable = 0
+    with open('./data/'+username+'/progress.json', 'r') as data_file:
+        data = json.loads(data_file.read())
+        t = dt.datetime.strptime(str(removerVals[2]), '%d-%b')
+        for y in data:
+            try:
+                id = str(y) + str(t.strftime('%m%d')) + ticker.upper() + str(removerVals[4])
+                contractsavailable = int(data[str(y)][str(t.strftime('%m-%d'))][str(ticker)][id][6])
+            except:
+                pass
+    return str("{'contracts':'"+str(contractsavailable)+"'}").replace("'", "\"")
 
 @app.route('/data/<username>/monitoring/delete/<ticker>/<account>/<type>/<strike>/<cost>/<contracts>')
 def returnMonitoringDelStrike(username, ticker, account, type, strike, cost, contracts):
@@ -855,10 +891,50 @@ def returnMonitoringDelStrike(username, ticker, account, type, strike, cost, con
                 removerVals.append(prem.pop(i))
                 x['positions'][account]['prem'] = prem
             wrt = wrt + str(x) + ","
+    contractsavailable = 0
+    year = ""
+    id = ""
+    with open('./data/'+username+'/progress.json', 'r') as data_file:
+        data = json.loads(data_file.read())
+        t = dt.datetime.strptime(str(removerVals[2]), '%d-%b')
+        for y in data:
+            try:
+                id = str(y) + str(t.strftime('%m%d')) + ticker.upper() + str(removerVals[4])
+                contractsavailable = int(data[str(y)][str(t.strftime('%m-%d'))][str(ticker)][id][6])
+                year = y
+            except:
+                pass
+        if int(contracts) == contractsavailable:
+            with open('./data/'+username+'/monitoring.json', 'w') as file:
+                file.write(wrt[:-1].replace("'", "\"") + "]")
+                file.close()
+            removeFromProgress(username, removerVals, ticker, account, cost, contracts)
+        else:
+            updateContractsPartial(username, ticker, account, type, strike, cost, contractsavailable, contracts, year, id, str(t.strftime('%m%d')))
+    return ""
+
+def updateContractsPartial(username, ticker, account, type, strike, cost, contractsavailable, contracts, year, id, datetime):
+    wrt = "["
+    removerVals = []
+    with open('./data/' + username + '/monitoring.json', 'r') as data_file:
+        data = json.loads(data_file.read())
+        for x in data:
+            if x['ticker'] == ticker:
+                pylst = list(x['positions'][account][type])
+                i = pylst.index(strike)
+                coll = list(x['positions'][account]['coll'])
+                x['positions'][account]['coll'][i] = str(int(round(int(coll[i])/contractsavailable))*int(contracts))
+            wrt = wrt + str(x) + ","
     with open('./data/'+username+'/monitoring.json', 'w') as file:
         file.write(wrt[:-1].replace("'", "\"") + "]")
         file.close()
-    removeFromProgress(username, removerVals, ticker, account, cost, contracts)
+    with open('./data/' + username + '/progress.json', 'r') as data_file:
+        data = json.loads(data_file.read())
+        dt = datetime[:2] + "-" + datetime[2:]
+        data[year][dt][ticker][id][6] = str(int(contractsavailable) - int(contracts))
+    with open('./data/' + username + '/progress.json', 'w') as file:
+        file.write(str(data).replace("'", "\""))
+        file.close()
     return ""
 
 @app.route('/filters/<tickerlist>/<filter>')
