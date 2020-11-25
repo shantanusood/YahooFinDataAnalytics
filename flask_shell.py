@@ -300,7 +300,7 @@ def createAccount():
     accstr = "{'fidelity': 'account1', 'robinhood': 'account2', 'tastyworks': 'account3'}"
     payhist = "{ 'propetyname': '', 'address': '', 'recurring': '', 'status': 'Active', 'expiry': '', 'durations': [], 'request': 'false', 'history': []}"
     daily = "[{'date': ['"+ str(dt.datetime.strptime(str(dt.date.today()), '%Y-%m-%d').date())+"']},{'fidelity': [1000]},{'robinhood': [0]},{'tastyworks': [0]},{'retirement': [110]},{'total': [100]}]"
-    gains = "[{'"+ str(dt.datetime.strptime(str(dt.date.today()), '%Y-%m-%d').date())+"': {'realized': 500,'unrealized': 0,'expected': 0}}]"
+    gains = "[{'"+ str(dt.datetime.strptime(str(dt.date.today()), '%Y-%m-%d').date().strftime("%Y-%m"))+"': {'realized': 0,'unrealized': 0,'expected': 0}}]"
     monitoring = "[{'ticker': 'spy','price': '59.42','total': 0,'positions': {'fidelity': {'call': ['63'],'put': ['0'],'exp': ['18-Sep'],'coll': ['0'],'prem': ['42']},'robinhood': {'call': [],'put': [],'exp': [],'coll': [],'prem': []},'tastyworks': {'call': [],'put': [],'exp': [],'coll': [],'prem': []}},'ordered': {'call': [{'63': ['fidelity','18-Sep','0','42','6.02']}],'put': [{'0': ['fidelity','18-Sep','0','42','100.0']}]}}]"
     progress = "{'2020': {'11-20': {'spy': {'20200918SLV32': ['fidelity','32','0','34','0','0','1']}}}}"
     with open('./data/' + request.json['userid']  + '/accounts.json', 'w') as data_file3:
@@ -541,23 +541,6 @@ def dailyProgressDeleteRecent(username):
         file.write(str(data).replace("'", "\""))
         file.close()
     return "DONE"
-
-@app.route('/data/<username>/progress/close')
-def closeExpired(username):
-    counter = 0
-    with open('./data/'+username+'/progress.json', 'r') as data_file:
-        data = json.loads(data_file.read())
-        for y in data:
-            for d in data[y]:
-                for t in data[y][d]:
-                    for id in data[y][d][t]:
-                        nowDate = dt.datetime.strptime(str(dt.date.today()), '%Y-%m-%d').date()
-                        tradeDate = dt.datetime.strptime(str(y)+'-'+str(d), '%Y-%m-%d').date()
-                        if tradeDate<nowDate:
-                            counter = counter + 1
-                            returnMonitoringDelStrike(t, list(data[y][d][t][id])[0], 'call', list(data[y][d][t][id])[3], 0, list(data[y][d][t][id])[6])
-    print("Closed "+str(counter)+" trades!")
-    return str("['Closed "+str(counter)+" trades! Please refresh!!']").replace("'", "\"")
 
 @app.route('/data/<username>/daily/<index>/<type>/<filter>')
 def filterHistData(username, index, type, filter):
@@ -929,6 +912,7 @@ def getNumberOfContracts(username, ticker, account, type, strike):
 def returnMonitoringDelStrike(username, ticker, account, type, strike, cost, contracts):
     wrt = "["
     removerVals = []
+    premium = 0
     with open('./data/'+username+'/monitoring.json', 'r') as data_file:
         data = json.loads(data_file.read())
         for x in data:
@@ -948,7 +932,8 @@ def returnMonitoringDelStrike(username, ticker, account, type, strike, cost, con
                 removerVals.append(coll.pop(i))
                 x['positions'][account]['coll'] = coll
                 prem = list(x['positions'][account]['prem'])
-                removerVals.append(prem.pop(i))
+                premium = prem.pop(i)
+                removerVals.append(premium)
                 x['positions'][account]['prem'] = prem
             wrt = wrt + str(x) + ","
     contractsavailable = 0
@@ -964,16 +949,16 @@ def returnMonitoringDelStrike(username, ticker, account, type, strike, cost, con
                 year = y
             except:
                 pass
-        if int(contracts) == contractsavailable:
+        if int(contracts) == int(contractsavailable):
             with open('./data/'+username+'/monitoring.json', 'w') as file:
                 file.write(wrt[:-1].replace("'", "\"") + "]")
                 file.close()
-            removeFromProgress(username, removerVals, ticker, account, cost, contracts)
+            removeFromProgress(username, removerVals, ticker, account, cost, contracts, premium)
         else:
-            updateContractsPartial(username, ticker, account, type, strike, cost, contractsavailable, contracts, year, id, str(t.strftime('%m%d')))
+            updateContractsPartial(username, ticker, account, type, strike, cost, contractsavailable, contracts, year, id, str(t.strftime('%m%d')), premium)
     return ""
 
-def updateContractsPartial(username, ticker, account, type, strike, cost, contractsavailable, contracts, year, id, datetime):
+def updateContractsPartial(username, ticker, account, type, strike, cost, contractsavailable, contracts, year, id, datetime, premium):
     wrt = "["
     removerVals = []
     with open('./data/' + username + '/monitoring.json', 'r') as data_file:
@@ -983,7 +968,8 @@ def updateContractsPartial(username, ticker, account, type, strike, cost, contra
                 pylst = list(x['positions'][account][type])
                 i = pylst.index(strike)
                 coll = list(x['positions'][account]['coll'])
-                x['positions'][account]['coll'][i] = str(int(round(int(coll[i])/contractsavailable))*int(contracts))
+                x['positions'][account]['coll'][i] = str(round(int(coll[i])/int(contractsavailable))*int(int(contractsavailable) - int(contracts)))
+                #x['positions'][account]['coll'][i] = str(int(round(int(coll[i])/contractsavailable))*int(contracts))
             wrt = wrt + str(x) + ","
     with open('./data/'+username+'/monitoring.json', 'w') as file:
         file.write(wrt[:-1].replace("'", "\"") + "]")
@@ -995,6 +981,7 @@ def updateContractsPartial(username, ticker, account, type, strike, cost, contra
     with open('./data/' + username + '/progress.json', 'w') as file:
         file.write(str(data).replace("'", "\""))
         file.close()
+    addSubGains(username, year + "-" + datetime[:2], str(int(int(premium) - int(cost)) * int(contracts)), "-" + str(int(premium) * int(contracts)))
     return ""
 
 @app.route('/filters/<tickerlist>/<filter>')
@@ -1014,7 +1001,204 @@ def csvData(type):
     filename = './data/' + type + '.csv'
     return pd.read_csv(filename).head(10000).to_csv()
 
-@app.route('/data/<username>/progress/current')
+@app.route('/data/<username>/progress/gains')
+def getProgressGains(username):
+    with open('./data/'+username+'/gains.json', 'r') as data_file:
+        data = list(json.loads(data_file.read()))
+        j1 = json.loads(json.dumps(data[-2:][0]))
+        j2 = json.loads(json.dumps(data[-2:][1]))
+        #ret = "[['realized', 'unrealized', 'expected'],['"
+        ret = "[['realized', 'expected'],['"
+        m1 = ""
+        m2 = ""
+        for x in j1:
+            m1 = x
+            ret = ret + str(j1[x]['realized']) + "','"
+            #ret = ret + str(j1[x]['unrealized']) + "','"
+            ret = ret + str(j1[x]['expected']) + "'],['"
+        for x in j2:
+            m2 = x
+            ret = ret + str(j2[x]['realized']) + "','"
+            #ret = ret + str(j2[x]['unrealized']) + "','"
+            ret = ret + str(j2[x]['expected']) + "'],['"
+        ret = ret + m1 + "','" + m2 + "']]"
+        return ret.replace("'", "\"")
+
+@app.route('/data/<username>/progress/add/<account>/<ticker>/<contracts>/<collateral>/<exp>/<call>/<put>/<prem>')
+def updateProgressData(username, account, ticker, contracts, collateral, exp, call, put, prem):
+    year = str(exp).split('-')[0]
+    month = str(exp).split('-')[1]
+    day = str(exp).split('-')[2]
+    date = month + "-" + day
+    longcall = str(0)
+    longput = str(0)
+
+    if int(put)==0 and int(collateral)==0:
+        longcall = str(0)
+    elif int(put)==0 and int(collateral)!=0:
+        longcall = str(float(call) + float(collateral) / 100)
+    elif int(call)==0 and int(collateral)!=0:
+        longput = str(float(put) - float(collateral) / 100)
+    else:
+        longcall = str(float(call) + float(collateral) / 100)
+        longput = str(float(put) - float(collateral) / 100)
+
+    id = year + month + day + str(ticker).upper() + str(prem)
+    data = {}
+    with open('./data/'+username+'/progress.json', 'r') as data_file:
+        data = json.loads(data_file.read())
+        isNoYear = True
+        for x in data:
+            if x == year:
+                isNoYear = False
+                if data[x].get(date):
+                    for y in data[x]:
+                        if y == date:
+                            if data[x][y].get(ticker):
+                                val = "['"+str(account)+"','" + str(
+                                    int(prem) * int(contracts)) + "','" + longcall + "','" + str(
+                                    call) + "','" + str(put) + "','" + longput + "','"+str(contracts)+"']"
+                                data[year][date][ticker][id] = json.loads(val.replace("'", "\""))
+                            else:
+                                val = "{'" + id + "':['"+str(account)+"','" + str(
+                                    int(prem) * int(contracts)) + "','" + longcall + "','" + str(
+                                    call) + "','" + str(put) + "','" + longput + "','"+str(contracts)+"']}"
+                                data[year][date][ticker] = json.loads(val.replace("'", "\""))
+                else:
+                    val = "{'" + ticker + "':{'" + id + "':['"+str(account)+"','" + str(
+                        int(prem) * int(contracts)) + "','" + longcall + "','" + str(
+                        call) + "','" + str(put) + "','" + longput + "','"+str(contracts)+"']}}"
+                    data[year][date] = json.loads(val.replace("'", "\""))
+        if isNoYear:
+            val = "{'"+month+"-"+day+"':{'"+ticker+"':{'"+id+"':['"+str(account)+"','"+str(int(prem)*int(contracts))+"','"+longcall+"','"+str(call)+"','"+str(put)+"','"+longput+ "','"+str(contracts)+"']}}}"
+            data[year] = json.loads(val.replace("'", "\""))
+    with open('./data/'+username+'/progress.json', 'w') as file:
+        file.write(str(data).replace("'", "\""))
+        file.close()
+    data2 = []
+    dt_counter = 0
+    with open('./data/' + username + '/gains.json', 'r') as data_file2:
+        data2 = json.loads(data_file2.read())
+        for vals in data2:
+            for x in vals.keys():
+                if str(x) == str(dt.datetime.strptime(str(exp), '%Y-%m-%d').strftime('%Y-%m')):
+                    addSubGains(username, x, 0, str(int(prem)*int(contracts)))
+                    dt_counter = 1
+                break
+        if dt_counter==0:
+            gains = "{'" + str(dt.datetime.strptime(str(exp), '%Y-%m-%d').date().strftime("%Y-%m")) + "': {'realized': 0,'unrealized': 0,'expected': "+str(int(prem)*int(contracts))+"}}"
+            data2.append(json.loads(gains.replace("'", "\"")))
+            with open('./data/'+username+'/gains.json', 'w') as file2:
+                file2.write(str(data2).replace("'", "\""))
+                file2.close()
+    print(str(
+        "['Value:  " + account + ' - ' + ticker + ' - ' + exp + ' - ' + call + ' - ' + put + ' - ' + prem + " added successfully!']").replace(
+        "'", "\""))
+    return str(
+        "['Value for:  " + account + ' - ' + ticker + " added successfully!']").replace(
+        "'", "\"")
+
+
+@app.route('/data/<username>/gains/monthly')
+def getGainsDataForProgeress(username):
+    ret = []
+    month = []
+    realized = []
+    with open('./data/'+username+'/gains.json', 'r') as data_file:
+        data = json.loads(data_file.read())
+        for x in data:
+            for y in x.keys():
+                month.append(y)
+                realized.append(x[y]['realized'])
+                break
+        ret.append(month)
+        ret.append(realized)
+        return str(ret).replace("'", "\"")
+
+def removeFromProgress(username, removerVals, ticker, account, cost, contracts, premium):
+    data = {}
+    ret = "["
+    year = ""
+    with open('./data/'+username+'/progress.json', 'r') as data_file:
+        data = json.loads(data_file.read())
+        t = dt.datetime.strptime(str(removerVals[2]), '%d-%b')
+        for y in data:
+            try:
+                id = str(y) + str(t.strftime('%m%d')) + ticker.upper() + str(removerVals[4])
+                del data[str(y)][str(t.strftime('%m-%d'))][str(ticker)][id]
+                year = str(y)
+                if len(str(data[year][str(t.strftime('%m-%d'))][str(ticker)])) < 4:
+                    del data[year][str(t.strftime('%m-%d'))][str(ticker)]
+                    if len(str(data[year][str(t.strftime('%m-%d'))])) < 4:
+                        del data[year][str(t.strftime('%m-%d'))]
+            except:
+                pass
+        addSubGains(username, year + "-" + str(t.strftime('%m')), str(int(int(premium) - int(cost))*int(contracts)), "-"+str(int(premium)*int(contracts)))
+    with open('./data/'+username+'/progress.json', 'w') as file:
+        file.write(str(data).replace("'", "\""))
+        file.close()
+    return ""
+
+def addSubGains(username, yearmonth, realizedcost, expectedcost):
+    data = []
+    index = 0
+    with open('./data/' + username + '/gains.json', 'r') as data_file2:
+        data = json.loads(data_file2.read())
+        for x in data:
+            for k in x.keys():
+                if k == yearmonth:
+                    data[index][yearmonth]['realized'] = int(x[yearmonth]['realized']) + int(realizedcost)
+                    data[index][yearmonth]['expected'] = int(x[yearmonth]['expected']) + int(expectedcost)
+            index = index + 1
+    with open('./data/'+username+'/gains.json', 'w') as file2:
+        file2.write(str(data).replace("'", "\""))
+        file2.close()
+    return str(data).replace("'", "\"")
+
+def parse(html):
+    soup = BeautifulSoup(html, 'html.parser')
+    dict = {'value':soup.select(y.current_value())[0].text}
+    l = soup.select(y.quote_table())
+    data = [j.text for j in l]
+    for i in range(0, len(data), 2):
+        dict[data[i]] = data[i+1:i+2]
+
+    df = pd.DataFrame(dict)
+    return df
+
+def options(tickers):
+    resp = cm.getHtml("quote", tickers)
+    price = 0.0
+    if resp[0] == 200:
+        try:
+            df = parse(resp[1])
+            price = float(df.iloc[0]['value'].replace(',', ''))
+        except Exception:
+            #print(traceback.format_exc())
+            pass
+    return str(price)
+
+
+#Not being used now
+#@app.route('/data/<username>/progress/close')
+def closeExpired(username):
+    counter = 0
+    with open('./data/'+username+'/progress.json', 'r') as data_file:
+        data = json.loads(data_file.read())
+        for y in data:
+            for d in data[y]:
+                for t in data[y][d]:
+                    for id in data[y][d][t]:
+                        nowDate = dt.datetime.strptime(str(dt.date.today()), '%Y-%m-%d').date()
+                        tradeDate = dt.datetime.strptime(str(y)+'-'+str(d), '%Y-%m-%d').date()
+                        if tradeDate<nowDate:
+                            counter = counter + 1
+                            returnMonitoringDelStrike(t, list(data[y][d][t][id])[0], 'call', list(data[y][d][t][id])[3], 0, list(data[y][d][t][id])[6])
+    print("Closed "+str(counter)+" trades!")
+    return str("['Closed "+str(counter)+" trades! Please refresh!!']").replace("'", "\"")
+
+#Not being used now
+#@app.route('/data/<username>/progress/current')
 def getProgressData(username):
     with open('./data/'+username+'/progress.json', 'r') as data_file:
         data = json.loads(data_file.read())
@@ -1102,144 +1286,5 @@ def getProgressData(username):
             with open('./data/'+username+'/gains.json', 'w') as file2:
                 file2.write(str(data3).replace("'", "\""))
                 file2.close()
-
         return str(ret[:-1]+"]").replace("'", "\"")
 
-@app.route('/data/<username>/progress/gains')
-def getProgressGains(username):
-    with open('./data/'+username+'/gains.json', 'r') as data_file:
-        data = list(json.loads(data_file.read()))
-        j1 = json.loads(json.dumps(data[-2:][0]))
-        j2 = json.loads(json.dumps(data[-2:][1]))
-        ret = "[['realized', 'unrealized', 'expected'],['"
-        m1 = ""
-        m2 = ""
-        for x in j1:
-            m1 = x
-            ret = ret + str(j1[x]['realized']) + "','"
-            ret = ret + str(j1[x]['unrealized']) + "','"
-            ret = ret + str(j1[x]['expected']) + "'],['"
-        for x in j2:
-            m2 = x
-            ret = ret + str(j2[x]['realized']) + "','"
-            ret = ret + str(j2[x]['unrealized']) + "','"
-            ret = ret + str(j2[x]['expected']) + "'],['"
-        ret = ret + m1 + "','" + m2 + "']]"
-        return ret.replace("'", "\"")
-
-@app.route('/data/<username>/progress/add/<account>/<ticker>/<contracts>/<collateral>/<exp>/<call>/<put>/<prem>')
-def updateProgressData(username, account, ticker, contracts, collateral, exp, call, put, prem):
-    year = str(exp).split('-')[0]
-    month = str(exp).split('-')[1]
-    day = str(exp).split('-')[2]
-    date = month + "-" + day
-    longcall = str(0)
-    longput = str(0)
-
-    if int(put)==0 and int(collateral)==0:
-        longcall = str(0)
-    elif int(put)==0 and int(collateral)!=0:
-        longcall = str(float(call) + float(collateral) / 100)
-    elif int(call)==0 and int(collateral)!=0:
-        longput = str(float(put) - float(collateral) / 100)
-    else:
-        longcall = str(float(call) + float(collateral) / 100)
-        longput = str(float(put) - float(collateral) / 100)
-
-    id = year + month + day + str(ticker).upper() + str(prem)
-    data = {}
-    with open('./data/'+username+'/progress.json', 'r') as data_file:
-        data = json.loads(data_file.read())
-        isNoYear = True
-        for x in data:
-            if x == year:
-                isNoYear = False
-                if data[x].get(date):
-                    for y in data[x]:
-                        if y == date:
-                            if data[x][y].get(ticker):
-                                val = "['"+str(account)+"','" + str(
-                                    int(prem) * int(contracts)) + "','" + longcall + "','" + str(
-                                    call) + "','" + str(put) + "','" + longput + "','"+str(contracts)+"']"
-                                data[year][date][ticker][id] = json.loads(val.replace("'", "\""))
-                            else:
-                                val = "{'" + id + "':['"+str(account)+"','" + str(
-                                    int(prem) * int(contracts)) + "','" + longcall + "','" + str(
-                                    call) + "','" + str(put) + "','" + longput + "','"+str(contracts)+"']}"
-                                data[year][date][ticker] = json.loads(val.replace("'", "\""))
-                else:
-                    val = "{'" + ticker + "':{'" + id + "':['"+str(account)+"','" + str(
-                        int(prem) * int(contracts)) + "','" + longcall + "','" + str(
-                        call) + "','" + str(put) + "','" + longput + "','"+str(contracts)+"']}}"
-                    data[year][date] = json.loads(val.replace("'", "\""))
-        if isNoYear:
-            val = "{'"+month+"-"+day+"':{'"+ticker+"':{'"+id+"':['"+str(account)+"','"+str(int(prem)*int(contracts))+"','"+longcall+"','"+str(call)+"','"+str(put)+"','"+longput+ "','"+str(contracts)+"']}}}"
-            data[year] = json.loads(val.replace("'", "\""))
-    with open('./data/'+username+'/progress.json', 'w') as file:
-        file.write(str(data).replace("'", "\""))
-        file.close()
-    print(str(
-        "['Value:  " + account + ' - ' + ticker + ' - ' + exp + ' - ' + call + ' - ' + put + ' - ' + prem + " added successfully!']").replace(
-        "'", "\""))
-    return str(
-        "['Value for:  " + account + ' - ' + ticker + " added successfully!']").replace(
-        "'", "\"")
-
-def removeFromProgress(username, removerVals, ticker, account, cost, contracts):
-    data = {}
-    ret = "["
-    year = ""
-    with open('./data/'+username+'/progress.json', 'r') as data_file:
-        data = json.loads(data_file.read())
-        t = dt.datetime.strptime(str(removerVals[2]), '%d-%b')
-        for y in data:
-            try:
-                id = str(y) + str(t.strftime('%m%d')) + ticker.upper() + str(removerVals[4])
-                del data[str(y)][str(t.strftime('%m-%d'))][str(ticker)][id]
-                year = str(y)
-                if len(str(data[year][str(t.strftime('%m-%d'))][str(ticker)])) < 4:
-                    del data[year][str(t.strftime('%m-%d'))][str(ticker)]
-                    if len(str(data[year][str(t.strftime('%m-%d'))])) < 4:
-                        del data[year][str(t.strftime('%m-%d'))]
-            except:
-                pass
-        pnl = int(removerVals[4]) - int(int(cost)*int(contracts))
-        with open('./data/'+username+'/gains.json', 'r') as data_file2:
-            data2 = json.loads(data_file2.read())
-            for x in data2:
-                try:
-                    x[year+"-"+str(t.strftime('%m'))]
-                    x[year+"-"+str(t.strftime('%m'))]['realized'] = int(x[year+"-"+str(t.strftime('%m'))]['realized']) + pnl
-                except:
-                    pass
-                ret = ret + str(x) + ','
-        with open('./data/'+username+'/gains.json', 'w') as file2:
-            file2.write(str(ret[:-1]+"]").replace("'", "\""))
-            file2.close()
-    with open('./data/'+username+'/progress.json', 'w') as file:
-        file.write(str(data).replace("'", "\""))
-        file.close()
-    return ""
-
-def parse(html):
-    soup = BeautifulSoup(html, 'html.parser')
-    dict = {'value':soup.select(y.current_value())[0].text}
-    l = soup.select(y.quote_table())
-    data = [j.text for j in l]
-    for i in range(0, len(data), 2):
-        dict[data[i]] = data[i+1:i+2]
-
-    df = pd.DataFrame(dict)
-    return df
-
-def options(tickers):
-    resp = cm.getHtml("quote", tickers)
-    price = 0.0
-    if resp[0] == 200:
-        try:
-            df = parse(resp[1])
-            price = float(df.iloc[0]['value'].replace(',', ''))
-        except Exception:
-            #print(traceback.format_exc())
-            pass
-    return str(price)
