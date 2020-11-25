@@ -446,39 +446,99 @@ def dailyProgressModify(username, fidelity, robinhood, tastyworks, retirement, f
         data_lst = list(data)
         date = list(data_lst[0]['date'])
         t = dt.datetime.strptime(str(dt.date.today()), '%Y-%m-%d').date()
-        date.append(str(t.strftime('%m/%d/%Y')))
-        data_lst[0]['date'] = date
-        fid = list(data_lst[1]['fidelity'])
-        fid.append(int(fidelity))
-        data_lst[1]['fidelity'] = fid
-        rob = list(data_lst[2]['robinhood'])
-        data_lst[2]['robinhood'] = rob
-        rob.append(int(robinhood))
-        tasty = list(data_lst[3]['tastyworks'])
-        tasty.append(int(tastyworks))
-        data_lst[3]['tastyworks'] = tasty
-        ret = list(data_lst[4]['retirement'])
-        ret.append(int(retirement))
-        data_lst[4]['retirement'] = ret
-        total = list(data_lst[5]['total'])
-        total.append(int(fidelity)+int(robinhood)+int(tastyworks))
-        data_lst[5]['total'] = total
+        if str(t.strftime('%m/%d/%Y')) != data_lst[0]['date'][-1]:
+            date.append(str(t.strftime('%m/%d/%Y')))
+            data_lst[0]['date'] = date
+            fid = list(data_lst[1]['fidelity'])
+            fid.append(int(fidelity))
+            data_lst[1]['fidelity'] = fid
+            rob = list(data_lst[2]['robinhood'])
+            data_lst[2]['robinhood'] = rob
+            rob.append(int(robinhood))
+            tasty = list(data_lst[3]['tastyworks'])
+            tasty.append(int(tastyworks))
+            data_lst[3]['tastyworks'] = tasty
+            ret = list(data_lst[4]['retirement'])
+            ret.append(int(retirement))
+            data_lst[4]['retirement'] = ret
+            total = list(data_lst[5]['total'])
+            total.append(int(fidelity)+int(robinhood)+int(tastyworks))
+            data_lst[5]['total'] = total
 
-        if int(fidelityc) != 0:
-            data_lst[1]['fidelity'] = [x+int(fidelityc) for x in fid]
-        if int(robinhoodc) != 0:
-            data_lst[2]['robinhood'] = [x+int(robinhoodc) for x in rob]
-        if int(tastyworksc) != 0:
-            data_lst[3]['tastyworks'] = [x+int(tastyworksc) for x in tasty]
-        if int(retirementc) != 0:
-            data_lst[4]['retirement'] = [x+int(retirementc) for x in ret]
-        if int(fidelityc) != 0 or int(robinhoodc) != 0 or int(tastyworksc) != 0:
-            incr = int(fidelityc) + int(robinhoodc) + int(tastyworksc)
-            data_lst[5]['total'] = total = [x + incr for x in total]
+            if int(fidelityc) != 0:
+                data_lst[1]['fidelity'] = [x+int(fidelityc) for x in fid]
+            if int(robinhoodc) != 0:
+                data_lst[2]['robinhood'] = [x+int(robinhoodc) for x in rob]
+            if int(tastyworksc) != 0:
+                data_lst[3]['tastyworks'] = [x+int(tastyworksc) for x in tasty]
+            if int(retirementc) != 0:
+                data_lst[4]['retirement'] = [x+int(retirementc) for x in ret]
+            if int(fidelityc) != 0 or int(robinhoodc) != 0 or int(tastyworksc) != 0:
+                incr = int(fidelityc) + int(robinhoodc) + int(tastyworksc)
+                data_lst[5]['total'] = total = [x + incr for x in total]
 
+            with open('./data/'+username+'/daily.json', 'w') as file:
+                file.write(str(data_lst).replace("'", "\""))
+                file.close()
+            return "['SUCCESS']".replace("'", "\"")
+        else:
+            return "['Duplicate edit instead']".replace("'", "\"")
+
+@app.route('/data/<username>/daily/get')
+def getDailyProgressRecent(username):
+    wrt = "["
+    data_lst = []
+    with open('./data/'+username+'/daily.json', 'r') as data_file:
+        data = json.loads(data_file.read())
+        data_lst = list(data)
+        date_list = data_lst[0]['date'][-2:]
+        fidelity_list = data_lst[1]['fidelity'][-2:]
+        robinhood_list = data_lst[2]['robinhood'][-2:]
+        tastyworks_list = data_lst[3]['tastyworks'][-2:]
+        retirement_list = data_lst[4]['retirement'][-2:]
+        ret = "[['"+date_list[0]+"','"+str(fidelity_list[0])+"','"+str(robinhood_list[0])+"','"+str(tastyworks_list[0])+"','"+str(retirement_list[0])+"'],['"+date_list[1]+"','"+str(fidelity_list[1])+"','"+str(robinhood_list[1])+"','"+str(tastyworks_list[1])+"','"+str(retirement_list[1])+"']]"
+    return ret.replace("'", "\"")
+
+@app.route('/data/<username>/updatedaily/<fidelity>/<robinhood>/<tastyworks>/<retirement>/<fidelityc>/<robinhoodc>/<tastyworksc>/<retirementc>')
+def dailyProgressUpdateRecent(username, fidelity, robinhood, tastyworks, retirement, fidelityc, robinhoodc, tastyworksc, retirementc):
+    wrt = "["
+    data_lst = []
+    with open('./data/'+username+'/daily.json', 'r') as data_file:
+        data = json.loads(data_file.read())
+        data_lst = list(data)
+        data_lst[1]['fidelity'][-1] = int(fidelityc)
+        data_lst[2]['robinhood'][-1] = int(robinhoodc)
+        data_lst[3]['tastyworks'][-1] = int(tastyworksc)
+        data_lst[4]['retirement'][-1] = int(retirementc)
+        data_lst[5]['total'][-1] = int(int(fidelityc) + int(robinhoodc) + int(tastyworksc))
+        data_lst[1]['fidelity'][-2] = int(fidelity)
+        data_lst[2]['robinhood'][-2] = int(robinhood)
+        data_lst[3]['tastyworks'][-2] = int(tastyworks)
+        data_lst[4]['retirement'][-2] = int(retirement)
+        data_lst[5]['total'][-2] = int(int(fidelity) + int(robinhood) + int(tastyworks))
+        data = data_lst
     with open('./data/'+username+'/daily.json', 'w') as file:
-        print(data_lst)
-        file.write(str(data_lst).replace("'", "\""))
+        file.write(str(data).replace("'", "\""))
+        file.close()
+    return "DONE"
+
+@app.route('/data/<username>/deletedaily', methods=["GET", "POST"])
+def dailyProgressDeleteRecent(username):
+    wrt = "["
+    data_lst = []
+    with open('./data/'+username+'/daily.json', 'r') as data_file:
+        data = json.loads(data_file.read())
+        data_lst = list(data)
+        i = data_lst[0]['date'].index(request.json['date'])
+        data_lst[0]['date'].pop(i)
+        data_lst[1]['fidelity'].pop(i)
+        data_lst[2]['robinhood'].pop(i)
+        data_lst[3]['tastyworks'].pop(i)
+        data_lst[4]['retirement'].pop(i)
+        data_lst[5]['total'].pop(i)
+        data = data_lst
+    with open('./data/'+username+'/daily.json', 'w') as file:
+        file.write(str(data).replace("'", "\""))
         file.close()
     return "DONE"
 
