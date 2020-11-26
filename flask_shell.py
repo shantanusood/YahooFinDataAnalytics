@@ -16,6 +16,7 @@ from src.helpers import commons as cm
 from data import tickers_list as tl
 import traceback
 import collections
+import requests as r
 
 app = Flask(__name__)
 CORS(app)
@@ -303,6 +304,7 @@ def createAccount():
     gains = "[{'"+ str(dt.datetime.strptime(str(dt.date.today()), '%Y-%m-%d').date().strftime("%Y-%m"))+"': {'realized': 0,'unrealized': 0,'expected': 0}}]"
     monitoring = "[{'ticker': 'spy','price': '59.42','total': 0,'positions': {'fidelity': {'call': ['63'],'put': ['0'],'exp': ['18-Sep'],'coll': ['0'],'prem': ['42']},'robinhood': {'call': [],'put': [],'exp': [],'coll': [],'prem': []},'tastyworks': {'call': [],'put': [],'exp': [],'coll': [],'prem': []}},'ordered': {'call': [{'63': ['fidelity','18-Sep','0','42','6.02']}],'put': [{'0': ['fidelity','18-Sep','0','42','100.0']}]}}]"
     progress = "{'2020': {'11-20': {'spy': {'20200918SLV32': ['fidelity','32','0','34','0','0','1']}}}}"
+    stocks = "[]"
     with open('./data/' + request.json['userid']  + '/accounts.json', 'w') as data_file3:
         data_file3.write(str(accstr).replace("'", "\""))
     with open('./data/' + request.json['userid']  + '/daily.json', 'w') as data_file4:
@@ -315,6 +317,8 @@ def createAccount():
         data_file7.write(str(payhist).replace("'", "\""))
     with open('./data/' + request.json['userid']  + '/progress.json', 'w') as data_file8:
         data_file8.write(str(progress).replace("'", "\""))
+    with open('./data/' + request.json['userid']  + '/stocks.json', 'w') as data_file9:
+        data_file9.write(str(stocks).replace("'", "\""))
     return str(['Successfully added to roles']).replace("'", "\"")
 
 @app.route("/data/deleteuser/<username>")
@@ -784,8 +788,22 @@ def returnMonitoring(username):
     with open('./data/'+username+'/monitoring.json', 'w') as file:
         file.write(wrt[:-1].replace("'", "\"") + "]")
         file.close()
+    with open('./data/'+username+'/monitoring_temp.json', 'w') as file:
+        file.write(wrt[:-1].replace("'", "\"") + "]")
+        file.close()
     with open('./data/'+username+'/monitoring.json', 'r') as data_file:
         return data_file.read()
+
+@app.route('/data/<username>/monitoring/temp')
+def returnTempMonitoring(username):
+    data = {}
+    with open('./data/'+username+'/monitoring.json', 'r') as data_file:
+        data = json.loads(data_file.read())
+    with open('./data/'+username+'/monitoring_temp.json', 'w') as data_file2:
+        data_file2.write(str(data).replace("'", "\""))
+        data_file2.close()
+    with open('./data/'+username+'/monitoring_temp.json', 'r') as data_file3:
+        return data_file3.read()
 
 def sortVals(vals):
     try:
@@ -1003,6 +1021,13 @@ def csvData(type):
 
 @app.route('/data/<username>/progress/gains')
 def getProgressGains(username):
+    ordering = []
+    with open('./data/'+username+'/gains.json', 'r') as data_file:
+        ordering = list(json.loads(data_file.read()))
+        ordering = sorted(ordering, key=lambda d: list(d.keys()))
+    with open('./data/'+username+'/gains.json', 'w') as data_file2:
+        data_file2.write(str(ordering).replace("'", "\""))
+        data_file2.close()
     with open('./data/'+username+'/gains.json', 'r') as data_file:
         data = list(json.loads(data_file.read()))
         j1 = json.loads(json.dumps(data[-2:][0]))
@@ -1115,6 +1140,119 @@ def getGainsDataForProgeress(username):
         ret.append(realized)
         return str(ret).replace("'", "\"")
 
+@app.route('/data/<username>/stocks/get')
+def getLongStock(username):
+    data = {}
+    with open('./data/' + username + '/stocks.json', 'r') as data_file:
+        data = json.loads(data_file.read())
+        index = 0
+        for x in data:
+            resp = cm.getHtml("quote", data[index]['ticker'])
+            if resp[0] == 200:
+                try:
+                    df = parse(resp[1])
+                    data[index]['current'] = df.iloc[0]['value']
+                except:
+                    pass
+            data[index]['pnl'] = str(round(float((float(data[index]['current']) - float(data[index]['price']))/float(data[index]['price']))*100, 2))
+            data[index]['div'] = getDiv(resp[1])
+            divList = divListNasdaq(data[index]['ticker'], data[index]['shares'])
+            if len(str(data[index]['date'])) == 0 and len(str(data[index]['pershare'])) == 0 and len(str(data[index]['total'])) == 0:
+                data[index]['date'] = divList[0]
+                data[index]['pershare'] = divList[1]
+                data[index]['total'] = divList[2]
+            elif str(data[index]['date']) != str(divList[0]):
+                populateDividendRealized(username, data[index]['total'])
+                data[index]['date'] = divList[0]
+                data[index]['pershare'] = divList[1]
+                data[index]['total'] = divList[2]
+                #populate dividend into realized gains for current month
+            index = index + 1
+    with open('./data/'+username+'/stocks.json', 'w') as data_file2:
+        data_file2.write(str(data).replace("'", "\""))
+        data_file2.close()
+    with open('./data/'+username+'/stocks_temp.json', 'w') as data_file3:
+        data_file3.write(str(data).replace("'", "\""))
+        data_file3.close()
+    return str(data).replace("'", "\"")
+
+def populateDividendRealized(username, realized):
+    data2 = {}
+    with open('./data/' + username + '/gains.json', 'r') as data_file2:
+        data2 = json.loads(data_file2.read())
+        dt_counter = 0
+        check = 0
+        for vals in data2:
+            for x in vals.keys():
+                if str(x) == str(dt.datetime.strptime(str(dt.date.today()), '%Y-%m-%d').strftime('%Y-%m')):
+                    data2[dt_counter][x]['realized'] = str(round(float(data2[dt_counter][x]['realized']) + float(realized)))
+                    check = 1
+                    break
+            dt_counter = dt_counter + 1
+        if check == 0:
+            gains = "{'" + str(dt.datetime.strptime(str(dt.date.today()), '%Y-%m-%d').date().strftime("%Y-%m")) + "': {'realized': "+str(round(float(realized)))+",'unrealized': 0,'expected': 0}}"
+            data2.append(json.loads(gains.replace("'", "\"")))
+            with open('./data/' + username + '/gains.json', 'w') as file2:
+                file2.write(str(data2).replace("'", "\""))
+                file2.close()
+    with open('./data/'+username+'/gains.json', 'w') as file2:
+        file2.write(str(data2).replace("'", "\""))
+        file2.close()
+
+def divListNasdaq(stock, shares):
+    req = r.get("https://finance.yahoo.com/quote/"+stock+"/history?filter=div&frequency=1d&includeAdjustedClose=true").text
+    soup = BeautifulSoup(req, 'html.parser')
+    l1 = soup.select(y.yahoo_dividend_table_first())
+    l4 = soup.select(y.yahoo_dividend_table_fourth())
+    return [str(l4[0].text.split(" ")[0] + " " + l4[0].text.split(" ")[1])[:-1], str(l1[1].text).split(" ")[0], str(round(float(str(l1[1].text).split(" ")[0])*float(shares), 2))]
+
+@app.route('/data/<username>/stocks/get/temp')
+def getLongStockTemp(username):
+    data = {}
+    with open('./data/'+username+'/stocks.json', 'r') as data_file:
+        data = json.loads(data_file.read())
+    with open('./data/'+username+'/stocks_temp.json', 'w') as data_file2:
+        data_file2.write(str(data).replace("'", "\""))
+        data_file2.close()
+    return str(data).replace("'", "\"")
+
+@app.route('/data/<username>/stocks/<stock>/<price>/<account>/<shares>')
+def addLongStock(username, stock, price, account, shares):
+    data = []
+    counter = 0
+    index = 0
+    with open('./data/' + username + '/stocks.json', 'r') as data_file:
+        data = json.loads(data_file.read())
+        for x in data:
+            if str(x['ticker']) == str(stock) and str(x['account']) == str(account):
+                data[index]['price'] = str((float(data[index]['price'])*float(data[index]['shares']) + float(price)*float(shares))/(int(shares) + int(data[index]['shares'])))
+                data[index]['shares'] = str(int(data[index]['shares']) + int(shares))
+                counter = 1
+                break
+            index = index + 1
+        if counter ==0:
+            gains = "{'ticker': '"+stock+"', 'price':'"+price+"', 'account':'"+account+"', 'pnl': '','shares': '"+shares+"','current': '','div': '','date': '','pershare': '','total': ''}"
+            data.append(json.loads(gains.replace("'", "\"")))
+    with open('./data/'+username+'/stocks.json', 'w') as file2:
+        file2.write(str(data).replace("'", "\""))
+        file2.close()
+    return str(data).replace("'", "\"")
+
+@app.route('/data/<username>/delstocks/<stock>')
+def delLongStock(username, stock):
+    data = []
+    with open('./data/' + username + '/stocks.json', 'r') as data_file:
+        data = json.loads(data_file.read())
+        index = 0
+        for x in data:
+            if x['ticker'] == stock:
+                data.pop(index)
+            index = index + 1
+    with open('./data/'+username+'/stocks.json', 'w') as file2:
+        file2.write(str(data).replace("'", "\""))
+        file2.close()
+    return str(data).replace("'", "\"")
+
 def removeFromProgress(username, removerVals, ticker, account, cost, contracts, premium):
     data = {}
     ret = "["
@@ -1165,6 +1303,16 @@ def parse(html):
 
     df = pd.DataFrame(dict)
     return df
+
+def getDiv(html):
+    soup = BeautifulSoup(html, 'html.parser')
+    l = soup.select(y.quote_table_right_vals())
+    index = 0
+    for vals in l:
+        if "Yield" in vals.text:
+            return l[index + 1].text
+        index = index + 1
+    return "NA"
 
 def options(tickers):
     resp = cm.getHtml("quote", tickers)

@@ -11,6 +11,15 @@ def current_value():
 def quote_table():
     return "div[data-test='right-summary-table'] > table > tbody > tr > td"
 
+def quote_table_right_vals():
+    return "div[data-test='right-summary-table'] > table > tbody > tr > td"
+
+def yahoo_dividend_table_first():
+    return "table[data-test='historical-prices'] > tbody > tr:nth-child(1) > td"
+
+def yahoo_dividend_table_fourth():
+    return "table[data-test='historical-prices'] > tbody > tr:nth-child(4) > td"
+
 def performance_trailing_label():
     return "section[data-yaft-module$='Performance'] >div:nth-child(2) > div > div >span:nth-child(1)"
 
