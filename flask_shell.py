@@ -272,6 +272,21 @@ def getRoles():
     with open('./data/roles.json', 'r') as data_file:
         return str(json.loads(data_file.read())).replace("'", "\"")
 
+@app.route("/data/roles/change/<username>/<newrole>")
+def changeRole(username, newrole):
+    data = {}
+    with open('./data/roles.json', 'r') as data_file:
+        data = json.loads(data_file.read())
+        index = 0
+        for x in data:
+            if x['userid'] == username:
+                data[index]['role'] = newrole
+                break
+            index = index + 1
+    with open('./data/roles.json', 'w') as data_file2:
+        data_file2.write(str(data).replace("'", "\""))
+    return str(data).replace("'", "\"")
+
 @app.route("/data/roles/updateqa/<username>", methods=['GET', 'POST'])
 def updateQA(username):
     data = []
@@ -282,6 +297,20 @@ def updateQA(username):
             if dt['userid'] == username:
                 data[index]['question'] = request.json['question']
                 data[index]['answer'] = request.json['answer']
+            index = index + 1
+    with open('./data/roles.json', 'w') as data_file2:
+        data_file2.write(str(data).replace("'", "\""))
+        return str(data).replace("'", "\"")
+
+@app.route("/data/roles/changestatus/<username>/<status>")
+def changeUserStatus(username, status):
+    data = []
+    index = 0
+    with open('./data/roles.json', 'r') as data_file:
+        data = json.loads(data_file.read())
+        for dt in data:
+            if dt['userid'] == username:
+                data[index]['status'] = status
             index = index + 1
     with open('./data/roles.json', 'w') as data_file2:
         data_file2.write(str(data).replace("'", "\""))
@@ -300,8 +329,8 @@ def createAccount():
         data_file2.write(str(data).replace("'", "\""))
     accstr = "{'fidelity': 'account1', 'robinhood': 'account2', 'tastyworks': 'account3'}"
     payhist = "{ 'propetyname': '', 'address': '', 'recurring': '', 'status': 'Active', 'expiry': '', 'durations': [], 'request': 'false', 'history': []}"
-    daily = "[{'date': ['"+ str(dt.datetime.strptime(str(dt.date.today()), '%Y-%m-%d').date())+"']},{'fidelity': [1000]},{'robinhood': [0]},{'tastyworks': [0]},{'retirement': [110]},{'total': [100]}]"
-    gains = "[{'"+ str(dt.datetime.strptime(str(dt.date.today()), '%Y-%m-%d').date().strftime("%Y-%m"))+"': {'realized': 0,'unrealized': 0,'expected': 0}}]"
+    daily = "[{'date': ['"+ str(dt.datetime.strptime(str(dt.date.today()), '%Y-%m-%d').date())+"', '"+str(dt.datetime.today() - dt.timedelta(days=1)).split(" ")[0]+"']},{'fidelity': [0, 0]},{'robinhood': [0, 0]},{'tastyworks': [0, 0]},{'retirement': [0, 0]},{'total': [0, 0]}]"
+    gains = "[{'"+ str(dt.datetime.strptime(str(dt.date.today()), '%Y-%m-%d').date().strftime("%Y-%m"))+"': {'realized': 0,'unrealized': 0,'expected': 0}},{'"+ str((dt.date.today().replace(day=1) - dt.timedelta(days=1)).strftime("%Y-%m"))+"': {'realized': 0,'unrealized': 0,'expected': 0}}]"
     monitoring = "[{'ticker': 'spy','price': '59.42','total': 0,'positions': {'fidelity': {'call': ['63'],'put': ['0'],'exp': ['18-Sep'],'coll': ['0'],'prem': ['42']},'robinhood': {'call': [],'put': [],'exp': [],'coll': [],'prem': []},'tastyworks': {'call': [],'put': [],'exp': [],'coll': [],'prem': []}},'ordered': {'call': [{'63': ['fidelity','18-Sep','0','42','6.02']}],'put': [{'0': ['fidelity','18-Sep','0','42','100.0']}]}}]"
     progress = "{'2020': {'11-20': {'spy': {'20200918SLV32': ['fidelity','32','0','34','0','0','1']}}}}"
     stocks = "[]"
@@ -368,6 +397,36 @@ def deleteBugFeature(type):
     with open('./data/bug_feature.json', 'w') as data_file2:
         data_file2.write(str(data).replace("'", "\""))
         return data
+
+@app.route("/data/notifications/add", methods=['GET', 'POST'])
+def captureNotification():
+    data = []
+    with open('./data/notifications.json', 'r') as data_file:
+        data = json.loads(data_file.read())
+        data.append(request.json['data'])
+    with open('./data/notifications.json', 'w') as data_file2:
+        data_file2.write(str(data).replace("'", "\""))
+    return str(data).replace("'", "\"")
+
+@app.route("/data/notifications/get")
+def getNotification():
+    data = []
+    with open('./data/notifications.json', 'r') as data_file:
+        data = json.loads(data_file.read())
+    return str(data).replace("'", "\"")
+
+@app.route("/data/notifications/delete", methods=['GET', 'POST'])
+def delNotification():
+    data = []
+    with open('./data/notifications.json', 'r') as data_file:
+        data = json.loads(data_file.read())
+        index = 0
+        for x in data:
+            if x == request.json['data']:
+                data.pop(index)
+    with open('./data/notifications.json', 'w') as data_file2:
+        data_file2.write(str(data).replace("'", "\""))
+    return str(data).replace("'", "\"")
 
 @app.route("/data/<username>/updatetenant", methods=['GET', 'POST'])
 def updateTenant(username):
