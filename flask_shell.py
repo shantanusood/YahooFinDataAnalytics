@@ -428,6 +428,23 @@ def delNotification():
         data_file2.write(str(data).replace("'", "\""))
     return str(data).replace("'", "\"")
 
+@app.route("/data/subscriber/add", methods=['GET', 'POST'])
+def addToSubscriber():
+    data = []
+    data2 = []
+    with open('./data/subscribers.json', 'r') as data_file:
+        data = json.loads(data_file.read())
+        data.append(request.json)
+    with open('./data/subscribers.json', 'w') as data_file2:
+        data_file2.write(str(data).replace("'", "\""))
+    with open('./data/notifications.json', 'r') as data_file2:
+        data2 = json.loads(data_file2.read())
+        strx = "User "+ request.json['username'] + " with paypal " + request.json['paypal'] + " clicked on subscribe at " + request.json['datetime']
+        data2.append(strx)
+    with open('./data/notifications.json', 'w') as data_file2:
+        data_file2.write(str(data2).replace("'", "\""))
+    return ""
+
 @app.route("/data/<username>/updatetenant", methods=['GET', 'POST'])
 def updateTenant(username):
     data = {}
