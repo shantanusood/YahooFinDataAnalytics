@@ -488,7 +488,7 @@ def updateProperty(properties):
         data_file2.write(str(data).replace("'", "\""))
         return "['Successfully wrote to accounts!']".replace("'", "\"")
 
-@app.route('/data/<username>/<email>/<phone>')
+@app.route('/data/<username>/updatedmycontact/<email>/<phone>')
 def updateContact(username, email, phone):
     data = {}
     with open('./data/' + username + '/payhist.json', 'r') as data_file:
@@ -555,8 +555,8 @@ def dailyProgressModify(username, fidelity, robinhood, tastyworks, retirement, f
                 data_lst[4]['retirement'] = [x+int(retirementc) for x in ret]
             if int(fidelityc) != 0 or int(robinhoodc) != 0 or int(tastyworksc) != 0:
                 incr = int(fidelityc) + int(robinhoodc) + int(tastyworksc)
-                data_lst[5]['total'] = total = [x + incr for x in total]
-
+                total = [x + incr for x in total]
+                data_lst[5]['total'] = total
             with open('./data/'+username+'/daily.json', 'w') as file:
                 file.write(str(data_lst).replace("'", "\""))
                 file.close()
@@ -1219,31 +1219,40 @@ def getGainsDataForProgeress(username):
 @app.route('/data/<username>/stocks/get')
 def getLongStock(username):
     data = {}
+    temp_data = {}
+    with open('./data/'+username+'/stocks_temp.json', 'r') as data_file3:
+        temp_data = json.loads(data_file3.read())
     with open('./data/' + username + '/stocks.json', 'r') as data_file:
         data = json.loads(data_file.read())
         index = 0
         for x in data:
-            resp = cm.getHtml("quote", data[index]['ticker'])
-            if resp[0] == 200:
-                try:
-                    df = parse(resp[1])
-                    data[index]['current'] = df.iloc[0]['value']
-                except:
-                    pass
-            data[index]['pnl'] = str(round(float((float(data[index]['current']) - float(data[index]['price']))/float(data[index]['price']))*100, 2))
-            data[index]['div'] = getDiv(resp[1])
-            divList = divListNasdaq(data[index]['ticker'], data[index]['shares'])
-            if len(str(data[index]['date'])) == 0 and len(str(data[index]['pershare'])) == 0 and len(str(data[index]['total'])) == 0:
-                data[index]['date'] = divList[0]
-                data[index]['pershare'] = divList[1]
-                data[index]['total'] = divList[2]
-            elif str(data[index]['date']) != str(divList[0]):
-                populateDividendRealized(username, data[index]['total'])
-                data[index]['date'] = divList[0]
-                data[index]['pershare'] = divList[1]
-                data[index]['total'] = divList[2]
-                #populate dividend into realized gains for current month
-            index = index + 1
+            try:
+                shares_before = temp_data[index]['shares']
+                resp = cm.getHtml("quote", data[index]['ticker'])
+                if resp[0] == 200:
+                    try:
+                        df = parse(resp[1])
+                        data[index]['current'] = df.iloc[0]['value']
+                    except:
+                        pass
+                data[index]['pnl'] = str(round(float((float(data[index]['current']) - float(data[index]['price']))/float(data[index]['price']))*100, 2))
+                data[index]['div'] = getDiv(resp[1])
+                divList = divListNasdaq(data[index]['ticker'], data[index]['shares'])
+                if int(shares_before) != int(data[index]['shares']):
+                    data[index]['total'] = str(round(float(data[index]['pershare'])*int(data[index]['shares']), 2))
+                if len(str(data[index]['date'])) == 0 and len(str(data[index]['pershare'])) == 0 and len(str(data[index]['total'])) == 0:
+                    data[index]['date'] = divList[0]
+                    data[index]['pershare'] = divList[1]
+                    data[index]['total'] = divList[2]
+                elif str(data[index]['date']) != str(divList[0]):
+                    populateDividendRealized(username, data[index]['total'])
+                    data[index]['date'] = divList[0]
+                    data[index]['pershare'] = divList[1]
+                    data[index]['total'] = divList[2]
+                    #populate dividend into realized gains for current month
+                index = index + 1
+            except:
+                pass
     with open('./data/'+username+'/stocks.json', 'w') as data_file2:
         data_file2.write(str(data).replace("'", "\""))
         data_file2.close()
@@ -1261,9 +1270,12 @@ def populateDividendRealized(username, realized):
         for vals in data2:
             for x in vals.keys():
                 if str(x) == str(dt.datetime.strptime(str(dt.date.today()), '%Y-%m-%d').strftime('%Y-%m')):
-                    data2[dt_counter][x]['realized'] = str(round(float(data2[dt_counter][x]['realized']) + float(realized)))
-                    check = 1
-                    break
+                    try:
+                        check = 1
+                        data2[dt_counter][x]['realized'] = str(round(float(data2[dt_counter][x]['realized']) + float(realized)))
+                        break
+                    except:
+                        pass
             dt_counter = dt_counter + 1
         if check == 0:
             gains = "{'" + str(dt.datetime.strptime(str(dt.date.today()), '%Y-%m-%d').date().strftime("%Y-%m")) + "': {'realized': "+str(round(float(realized)))+",'unrealized': 0,'expected': 0}}"
@@ -1276,11 +1288,14 @@ def populateDividendRealized(username, realized):
         file2.close()
 
 def divListNasdaq(stock, shares):
-    req = r.get("https://finance.yahoo.com/quote/"+stock+"/history?filter=div&frequency=1d&includeAdjustedClose=true").text
-    soup = BeautifulSoup(req, 'html.parser')
-    l1 = soup.select(y.yahoo_dividend_table_first())
-    l4 = soup.select(y.yahoo_dividend_table_fourth())
-    return [str(l4[0].text.split(" ")[0] + " " + l4[0].text.split(" ")[1])[:-1], str(l1[1].text).split(" ")[0], str(round(float(str(l1[1].text).split(" ")[0])*float(shares), 2))]
+    try:
+        req = r.get("https://finance.yahoo.com/quote/"+stock+"/history?filter=div&frequency=1d&includeAdjustedClose=true").text
+        soup = BeautifulSoup(req, 'html.parser')
+        l1 = soup.select(y.yahoo_dividend_table_first())
+        l4 = soup.select(y.yahoo_dividend_table_fourth())
+        return [str(l4[0].text.split(" ")[0] + " " + l4[0].text.split(" ")[1])[:-1], str(l1[1].text).split(" ")[0], str(round(float(str(l1[1].text).split(" ")[0])*float(shares), 2))]
+    except:
+        return ["Err", "Err", "0"]
 
 @app.route('/data/<username>/stocks/get/temp')
 def getLongStockTemp(username):
@@ -1314,15 +1329,17 @@ def addLongStock(username, stock, price, account, shares):
         file2.close()
     return str(data).replace("'", "\"")
 
-@app.route('/data/<username>/delstocks/<stock>')
-def delLongStock(username, stock):
+@app.route('/data/<username>/delstocks/<stock>/<account>/<shares>')
+def delLongStock(username, stock, account, shares):
     data = []
     with open('./data/' + username + '/stocks.json', 'r') as data_file:
         data = json.loads(data_file.read())
         index = 0
         for x in data:
-            if x['ticker'] == stock:
+            if x['ticker'] == stock and int(shares) >= int(x['shares']) and x['account'] == account:
                 data.pop(index)
+            elif x['ticker'] == stock and int(shares) < int(x['shares']) and x['account'] == account:
+                data[index]['shares'] = str(int(data[index]['shares']) - int(shares))
             index = index + 1
     with open('./data/'+username+'/stocks.json', 'w') as file2:
         file2.write(str(data).replace("'", "\""))
