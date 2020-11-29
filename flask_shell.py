@@ -913,12 +913,28 @@ def returnMonitoringDel(username, ticker):
 
 @app.route('/data/<username>/monitoring/add/<account>/<ticker>/<width>/<exp>/<call>/<put>/<prem>')
 def returnMonitoringAdd(username, account, ticker, width, exp, call, put, prem):
+    prem = str(int(float(prem)))
     wrt = "["
     with open('./data/'+username+'/monitoring.json', 'r') as data_file:
         data = json.loads(data_file.read())
         counter = 0
         for x in data:
             if x['ticker'] == ticker:
+                for f in x['positions']['fidelity']['prem']:
+                    if str(f) == str(prem):
+                        expiry = str(dt.datetime.strptime(str(exp), '%Y-%m-%d').strftime('%d-%b'))
+                        if expiry in x['positions']['fidelity']['exp']:
+                            prem = str(int(prem) + 1)
+                for f in x['positions']['robinhood']['prem']:
+                    if str(f) == str(prem):
+                        expiry = str(dt.datetime.strptime(str(exp), '%Y-%m-%d').strftime('%d-%b'))
+                        if expiry in x['positions']['robinhood']['exp']:
+                            prem = str(int(prem) + 1)
+                for f in x['positions']['tastyworks']['prem']:
+                    if str(f) == str(prem):
+                        expiry = str(dt.datetime.strptime(str(exp), '%Y-%m-%d').strftime('%d-%b'))
+                        if expiry in x['positions']['tastyworks']['exp']:
+                            prem = str(int(prem) + 1)
                 pylst = list(x['positions'][account]['call'])
                 pylst.append(call)
                 pylst2 = list(x['positions'][account]['put'])
@@ -1127,6 +1143,18 @@ def getProgressGains(username):
 
 @app.route('/data/<username>/progress/add/<account>/<ticker>/<contracts>/<collateral>/<exp>/<call>/<put>/<prem>')
 def updateProgressData(username, account, ticker, contracts, collateral, exp, call, put, prem):
+    prem = str(int(float(prem)))
+    with open('./data/'+username+'/monitoring.json', 'r') as data_file:
+        data = json.loads(data_file.read())
+        for x in data:
+            if x['ticker'] == ticker:
+                sz = []
+                sz = x['positions'][account]['exp']
+                sz_count = len(sz)
+                for i in range(sz_count):
+                    if x['positions'][account]['call'][i] == str(call) and x['positions'][account]['put'][i] == str(put) and x['positions'][account]['exp'][i] == str(dt.datetime.strptime(str(exp), '%Y-%m-%d').strftime('%d-%b')) and x['positions'][account]['coll'][i] == str(collateral):
+                        prem = str(x['positions'][account]['prem'][i])
+
     year = str(exp).split('-')[0]
     month = str(exp).split('-')[1]
     day = str(exp).split('-')[2]
