@@ -332,7 +332,7 @@ def createAccount():
     daily = "[{'date': ['"+ str(dt.datetime.strptime(str(dt.date.today()), '%Y-%m-%d').date())+"', '"+str(dt.datetime.today() - dt.timedelta(days=1)).split(" ")[0]+"']},{'fidelity': [0, 0]},{'robinhood': [0, 0]},{'tastyworks': [0, 0]},{'retirement': [0, 0]},{'total': [0, 0]}]"
     gains = "[{'"+ str(dt.datetime.strptime(str(dt.date.today()), '%Y-%m-%d').date().strftime("%Y-%m"))+"': {'realized': 0,'unrealized': 0,'expected': 0}},{'"+ str((dt.date.today().replace(day=1) - dt.timedelta(days=1)).strftime("%Y-%m"))+"': {'realized': 0,'unrealized': 0,'expected': 0}}]"
     monitoring = "[{'ticker': 'spy','price': '59.42','total': 0,'positions': {'fidelity': {'call': ['63'],'put': ['0'],'exp': ['18-Sep'],'coll': ['0'],'prem': ['42']},'robinhood': {'call': [],'put': [],'exp': [],'coll': [],'prem': []},'tastyworks': {'call': [],'put': [],'exp': [],'coll': [],'prem': []}},'ordered': {'call': [{'63': ['fidelity','18-Sep','0','42','6.02']}],'put': [{'0': ['fidelity','18-Sep','0','42','100.0']}]}}]"
-    progress = "{'2020': {'11-20': {'spy': {'20200918SLV32': ['fidelity','32','0','34','0','0','1']}}}}"
+    progress = "{}"
     stocks = "[]"
     with open('./data/' + request.json['userid']  + '/accounts.json', 'w') as data_file3:
         data_file3.write(str(accstr).replace("'", "\""))
