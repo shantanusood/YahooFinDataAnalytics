@@ -579,18 +579,25 @@ def getDailyProgressRecent(username):
         ret = "[['"+date_list[0]+"','"+str(fidelity_list[0])+"','"+str(robinhood_list[0])+"','"+str(tastyworks_list[0])+"','"+str(retirement_list[0])+"'],['"+date_list[1]+"','"+str(fidelity_list[1])+"','"+str(robinhood_list[1])+"','"+str(tastyworks_list[1])+"','"+str(retirement_list[1])+"']]"
     return ret.replace("'", "\"")
 
-@app.route('/data/<username>/updatedaily/<fidelity>/<robinhood>/<tastyworks>/<retirement>/<fidelityc>/<robinhoodc>/<tastyworksc>/<retirementc>')
-def dailyProgressUpdateRecent(username, fidelity, robinhood, tastyworks, retirement, fidelityc, robinhoodc, tastyworksc, retirementc):
+@app.route('/data/<username>/updatedaily/<date>/<fidelity>/<robinhood>/<tastyworks>/<retirement>/<datec>/<fidelityc>/<robinhoodc>/<tastyworksc>/<retirementc>')
+def dailyProgressUpdateRecent(username, date, fidelity, robinhood, tastyworks, retirement, datec, fidelityc, robinhoodc, tastyworksc, retirementc):
     wrt = "["
     data_lst = []
+    date = str(dt.datetime.strptime(str(date), '%Y-%m-%d').date().strftime("%m/%d/%Y"))
+    datec = str(dt.datetime.strptime(str(datec), '%Y-%m-%d').date().strftime("%m/%d/%Y"))
+    print(date)
+    #"06/29/2020"
+    print(datec)
     with open('./data/'+username+'/daily.json', 'r') as data_file:
         data = json.loads(data_file.read())
         data_lst = list(data)
+        data_lst[0]['date'][-1] = datec
         data_lst[1]['fidelity'][-1] = int(fidelityc)
         data_lst[2]['robinhood'][-1] = int(robinhoodc)
         data_lst[3]['tastyworks'][-1] = int(tastyworksc)
         data_lst[4]['retirement'][-1] = int(retirementc)
         data_lst[5]['total'][-1] = int(int(fidelityc) + int(robinhoodc) + int(tastyworksc))
+        data_lst[0]['date'][-2] = date
         data_lst[1]['fidelity'][-2] = int(fidelity)
         data_lst[2]['robinhood'][-2] = int(robinhood)
         data_lst[3]['tastyworks'][-2] = int(tastyworks)
@@ -985,6 +992,7 @@ def returnMonitoringAdd(username, account, ticker, width, exp, call, put, prem):
 @app.route('/data/<username>/monitoring/delete/getcontracts/<ticker>/<account>/<type>/<strike>')
 def getNumberOfContracts(username, ticker, account, type, strike):
     removerVals = []
+    premium = ""
     with open('./data/'+username+'/monitoring.json', 'r') as data_file:
         data = json.loads(data_file.read())
         for x in data:
@@ -1004,7 +1012,8 @@ def getNumberOfContracts(username, ticker, account, type, strike):
                 removerVals.append(coll.pop(i))
                 x['positions'][account]['coll'] = coll
                 prem = list(x['positions'][account]['prem'])
-                removerVals.append(prem.pop(i))
+                premium = prem.pop(i)
+                removerVals.append(premium)
                 x['positions'][account]['prem'] = prem
     contractsavailable = 0
     with open('./data/'+username+'/progress.json', 'r') as data_file:
@@ -1016,7 +1025,7 @@ def getNumberOfContracts(username, ticker, account, type, strike):
                 contractsavailable = int(data[str(y)][str(t.strftime('%m-%d'))][str(ticker)][id][6])
             except:
                 pass
-    return str("{'contracts':'"+str(contractsavailable)+"'}").replace("'", "\"")
+    return str("{'contracts':'"+str(contractsavailable)+"', 'premium':'"+premium+"'}").replace("'", "\"")
 
 @app.route('/data/<username>/monitoring/delete/<ticker>/<account>/<type>/<strike>/<cost>/<contracts>')
 def returnMonitoringDelStrike(username, ticker, account, type, strike, cost, contracts):
@@ -1052,13 +1061,17 @@ def returnMonitoringDelStrike(username, ticker, account, type, strike, cost, con
     with open('./data/'+username+'/progress.json', 'r') as data_file:
         data = json.loads(data_file.read())
         t = dt.datetime.strptime(str(removerVals[2]), '%d-%b')
+        found = False
         for y in data:
             try:
                 id = str(y) + str(t.strftime('%m%d')) + ticker.upper() + str(removerVals[4])
                 contractsavailable = int(data[str(y)][str(t.strftime('%m-%d'))][str(ticker)][id][6])
                 year = y
+                found = True
             except:
                 pass
+            if found:
+                break
         if int(contracts) == int(contractsavailable):
             with open('./data/'+username+'/monitoring.json', 'w') as file:
                 file.write(wrt[:-1].replace("'", "\"") + "]")
@@ -1114,6 +1127,8 @@ def csvData(type):
 @app.route('/data/<username>/progress/gains')
 def getProgressGains(username):
     ordering = []
+    j1 = {}
+    j2 = {}
     with open('./data/'+username+'/gains.json', 'r') as data_file:
         ordering = list(json.loads(data_file.read()))
         ordering = sorted(ordering, key=lambda d: list(d.keys()))
@@ -1122,9 +1137,19 @@ def getProgressGains(username):
         data_file2.close()
     with open('./data/'+username+'/gains.json', 'r') as data_file:
         data = list(json.loads(data_file.read()))
-        j1 = json.loads(json.dumps(data[-2:][0]))
-        j2 = json.loads(json.dumps(data[-2:][1]))
-        #ret = "[['realized', 'unrealized', 'expected'],['"
+        found_j1 = False
+        found_j2 = False
+        for x in data:
+            if str(dt.datetime.strptime(str(dt.date.today()), '%Y-%m-%d').date().strftime('%Y-%m')) in x.keys():
+                j1 = json.loads(str(x).replace("'", "\""))
+                found_j1 = True
+            elif str((dt.date.today().replace(day=1) - dt.timedelta(days=-32)).strftime("%Y-%m")) in x.keys():
+                j2 = json.loads(str(x).replace("'", "\""))
+                found_j2 = True
+        if not found_j1:
+            j1 = json.loads(json.dumps(data[-2:][0]))
+        if not found_j2:
+            j2 = json.loads(json.dumps(data[-2:][1]))
         ret = "[['realized', 'expected'],['"
         m1 = ""
         m2 = ""
@@ -1344,7 +1369,7 @@ def addLongStock(username, stock, price, account, shares):
         data = json.loads(data_file.read())
         for x in data:
             if str(x['ticker']) == str(stock) and str(x['account']) == str(account):
-                data[index]['price'] = str((float(data[index]['price'])*float(data[index]['shares']) + float(price)*float(shares))/(int(shares) + int(data[index]['shares'])))
+                data[index]['price'] = str(round((float(data[index]['price'])*float(data[index]['shares']) + float(price)*float(shares))/(int(shares) + int(data[index]['shares'])), 2))
                 data[index]['shares'] = str(int(data[index]['shares']) + int(shares))
                 counter = 1
                 break
