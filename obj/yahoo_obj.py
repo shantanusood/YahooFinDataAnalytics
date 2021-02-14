@@ -73,3 +73,9 @@ def holdings_bond():
 
 def risk(row):
     return "section[data-yaft-module$='Performance'] > div > div > div:nth-child("+row+") > div > span"
+
+def calendarTable():
+    return "div[id='cal-res-table'] > div > table > tbody > tr > td"
+
+def options_table(type):
+    return "table[class^='{0}'][class$='list-options'] > tbody > tr> td".format(type)

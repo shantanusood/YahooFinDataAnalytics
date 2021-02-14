@@ -1,6 +1,7 @@
 from flask import Flask, request, redirect, url_for, render_template
 import time
 import datetime as dt
+from datetime import timedelta
 import script as s
 import json
 import pandas as pd
@@ -13,6 +14,7 @@ import os
 from bs4 import BeautifulSoup
 from obj import yahoo_obj as y
 from src.helpers import commons as cm
+from src.helpers import calendar as cl
 from data import tickers_list as tl
 import traceback
 import collections
@@ -1082,6 +1084,7 @@ def returnMonitoringDelStrike(username, ticker, account, type, strike, cost, con
     return ""
 
 def updateContractsPartial(username, ticker, account, type, strike, cost, contractsavailable, contracts, year, id, datetime, premium):
+    time.sleep(1)
     wrt = "["
     removerVals = []
     with open('./data/' + username + '/monitoring.json', 'r') as data_file:
@@ -1168,6 +1171,7 @@ def getProgressGains(username):
 
 @app.route('/data/<username>/progress/add/<account>/<ticker>/<contracts>/<collateral>/<exp>/<call>/<put>/<prem>')
 def updateProgressData(username, account, ticker, contracts, collateral, exp, call, put, prem):
+    time.sleep(1)
     prem = str(int(float(prem)))
     with open('./data/'+username+'/monitoring.json', 'r') as data_file:
         data = json.loads(data_file.read())
@@ -1397,6 +1401,177 @@ def delLongStock(username, stock, account, shares):
     with open('./data/'+username+'/stocks.json', 'w') as file2:
         file2.write(str(data).replace("'", "\""))
         file2.close()
+    return str(data).replace("'", "\"")
+
+@app.route('/data/<username>/notification/get')
+def getTradeNotifications(username):
+    data = {}
+    if os.path.isfile('./data/' + username + '/notification.json'):
+        with open('./data/' + username + '/notification.json', "r") as data_file:
+            data = json.loads(data_file.read())
+    else:
+        with open('./data/' + username + '/notification.json', "w") as data_file2:
+            data_file2.write("[]")
+            data_file2.close()
+        with open('./data/' + username + '/notification.json', "r") as data_file:
+            data = json.loads(data_file.read())
+    return str(data).replace("'", "\"")
+
+@app.route('/data/<username>/notification/update')
+def updateTradeNotifications(username):
+    data = []
+    modified = []
+    with open('./data/' + username + '/notification.json', "r") as data_file:
+        data = json.loads(data_file.read())
+    with open('./data/' + username + '/notification.json', "w") as data_file2:
+        count = 0
+        for x in data:
+            x['status'] = "read"
+            modified.append(x)
+            count = count + 1
+        data_file2.write(str(modified).replace("'", "\""))
+        data_file2.close()
+    return str(modified).replace("'", "\"")
+
+@app.route('/data/<username>/notification/add', methods=["GET", "POST"])
+def addTradeNotifications(username):
+    data = []
+    with open('./data/' + username + '/notification.json', "r") as data_file:
+        data = json.loads(data_file.read())
+    with open('./data/' + username + '/notification.json', "w") as data_file2:
+        data.insert(0, request.json)
+        data_file2.write(str(data).replace("'", "\""))
+        data_file2.close()
+    return str(data).replace("'", "\"")
+
+@app.route('/data/<username>/notification/del')
+def delTradeNotifications(username):
+    data = {}
+    with open('./data/' + username + '/notification.json', "w") as data_file:
+        data_file.write(request.json)
+        data_file2.close()
+    with open('./data/' + username + '/notification.json', "r") as data_file:
+        data = json.loads(data_file.read())
+    return str(data).replace("'", "\"")
+
+@app.route('/data/<username>/networth/get')
+def getNetWorth(username):
+    data = []
+    if os.path.isfile('./data/' + username + '/networth.json'):
+        with open('./data/' + username + '/networth.json', "r") as data_file:
+            data = json.loads(data_file.read())
+    else:
+        with open('./data/' + username + '/networth.json', "w") as data_file2:
+            fid = ""
+            rob = ""
+            tasty = ""
+            ret = ""
+            fidelity = ""
+            robinhood = ""
+            tastyworks = ""
+            date = str(dt.datetime.strptime(str(dt.date.today()), '%Y-%m-%d').date().strftime('%m/%d/%Y'))
+            with open('./data/' + username + '/accounts.json', 'r') as data_file:
+                data2 = json.loads(data_file.read())
+                fidelity = str(data2['fidelity'])
+                robinhood = str(data2['robinhood'])
+                tastyworks = str(data2['tastyworks'])
+            with open('./data/' + username + '/daily.json', 'r') as data_file:
+                data2 = json.loads(data_file.read())
+                data_lst = list(data2)
+                data_lst[0]['date'] = date
+                fid = str(data_lst[1]['fidelity'][-1])
+                rob = str(data_lst[2]['robinhood'][-1])
+                tasty = str(data_lst[3]['tastyworks'][-1])
+                ret = str(data_lst[4]['retirement'][-1])
+            net = str(int(fid) + int(rob) + int(tasty) + int(ret))
+            _str = "[{'date':'" + date + "','net': " + net + ", 'pos':{ 'real': {}, 'cash':{}, 'retirement':{'default':" + ret + "}, 'investments':{'" + fidelity + "':" + fid + ",'" + robinhood + "':" + rob + ",'" + tastyworks + "':" + tasty + "}, 'other':{}}, 'neg':{ 'real': {}, 'credit':{}, 'other':{}}}]"
+            data_file2.write(str(_str).replace("'", "\""))
+            data_file2.close()
+        with open('./data/' + username + '/networth.json', "r") as data_file:
+            data = json.loads(data_file.read())
+    return str(data).replace("'", "\"")
+
+@app.route('/data/<username>/networth/add', methods=["GET", "POST"])
+def addToNetWorth(username):
+    data = []
+    cur_date = ""
+    with open('./data/' + username + '/networth.json', "r") as data_file:
+        data = json.loads(data_file.read())
+
+    if request.json['date'] == data[-1]['date']:
+        return "['error': 'Current date data already present update it instead']".replace("'", "\"")
+    else:
+        with open('./data/' + username + '/networth.json', "w") as data_file:
+            data.insert(0 ,request.json)
+            data_file.write(str(data).replace("'", "\""))
+        return str(data).replace("'", "\"")
+
+@app.route('/data/<username>/networth/update', methods=["GET", "POST"])
+def updateNetWorth(username):
+    data = []
+    cur_date = ""
+    with open('./data/' + username + '/networth.json', "r") as data_file:
+        data = json.loads(data_file.read())
+    with open('./data/' + username + '/networth.json', "w") as data_file:
+        data.pop(0)
+        data.insert(0 ,request.json)
+        data_file.write(str(data).replace("'", "\""))
+    return str(data).replace("'", "\"")
+
+@app.route('/data/<username>/networth/del')
+def delNetWorth(username):
+    data = []
+    cur_date = ""
+    with open('./data/' + username + '/networth.json', "r") as data_file:
+        data = json.loads(data_file.read())
+    with open('./data/' + username + '/networth.json', "w") as data_file:
+        data.pop(0)
+        data_file.write(str(data).replace("'", "\""))
+    return str(data).replace("'", "\"")
+
+@app.route('/data/calendar/<date>/<vol>/<open_i>')
+def populateCalendar(date, vol, open_i):
+    today = dt.datetime.strptime(date, '%Y-%m-%d')
+    offset_list = ["0", "100", "200", "300"]
+    idx = (today.weekday() + 1) % 7
+    sun = today - dt.timedelta(idx)
+    sat = sun - dt.timedelta(-6)
+    data_list = []
+    data_list_time = []
+    for x in offset_list:
+        calendar = cl.calendar(str(sun).split(" ")[0], str(sat).split(" ")[0], str(today).split(" ")[0], x)
+        l = calendar.return_cal_table()
+        data_time = [j.text for j in l][2::6]
+        data = [j.text for j in l][0::6]
+        if len(data) == 0:
+            break
+        for tick, et in zip(data, data_time):
+            data_list_time.append([tick, et])
+        data_list.extend(data)
+    ret = []
+    ticker_list = []
+    for ticker in data_list:
+        time.sleep(0.5)
+        soup = BeautifulSoup(cm.getHtml("options", ticker)[1], 'html.parser')
+        candidate = list(cm.isGoodCandidate(ticker, soup.select(y.options_table("call")), soup.select(y.options_table("put")), int(vol), int(open_i)))
+        for x in data_list_time:
+            if x[0] == ticker:
+                candidate.append(x[1])
+        if candidate[0]:
+            ticker_list.append(candidate[1:])
+    data = {}
+    with open('./data/earnings.json', 'r') as data_file:
+        data = json.loads(data_file.read())
+        data[str(today).split(" ")[0]] = ticker_list
+    with open('./data/earnings.json', 'w') as data_file2:
+        data_file2.write(str(data).replace("'", "\""))
+    return str(data).replace("'", "\"")
+
+@app.route('/data/calendar/get')
+def getCalendar():
+    data = {}
+    with open('./data/earnings.json', 'r') as data_file:
+        data = json.loads(data_file.read())
     return str(data).replace("'", "\"")
 
 def removeFromProgress(username, removerVals, ticker, account, cost, contracts, premium):

@@ -28,4 +28,22 @@ def linkList(type, ticker):
         return "https://finance.yahoo.com/quote/{0}/holdings?p={0}".format(ticker)
     elif type == "risk":
         return "https://finance.yahoo.com/quote/{0}/risk?p={0}".format(ticker)
+    elif type == "options":
+        return "https://finance.yahoo.com/quote/{0}/options?p={0}".format(ticker)
 
+def calendar(start_date, end_date, target_date, offset):
+    return "https://finance.yahoo.com/calendar/earnings?from={0}&to={1}&day={2}&offset={3}&size=100".format(start_date, end_date, target_date, offset)
+
+def isGoodCandidate(ticker, call, put, vol, open):
+    call_vol = ["0" if j.text == "-" else j.text for j in call][8::11]
+    call_oi = ["0" if j.text == "-" else j.text for j in call][9::11]
+    call_vol = [int(i.replace(",", "")) for i in call_vol]
+    call_oi = [int(i.replace(",", "")) for i in call_oi]
+    put_vol = ["0" if j.text == "-" else j.text for j in put][8::11]
+    put_oi = ["0" if j.text == "-" else j.text for j in put][9::11]
+    put_vol = [int(i.replace(",", "")) for i in put_vol]
+    put_oi = [int(i.replace(",", "")) for i in put_oi]
+    if sum(call_vol) > vol and sum(call_oi) > open and sum(put_vol) > vol and sum(put_oi) > open:
+        return (True, ticker, sum(call_vol), sum(call_oi), sum(put_vol), sum(put_oi))
+    else:
+        return (False, 0, 0)
