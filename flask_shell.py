@@ -1404,7 +1404,7 @@ def delLongStock(username, stock, account, shares):
     return str(data).replace("'", "\"")
 
 @app.route('/data/<username>/notification/get')
-def getTradeNotifications(username):
+def getRawTradeNotifications(username):
     data = {}
     if os.path.isfile('./data/' + username + '/notification.json'):
         with open('./data/' + username + '/notification.json', "r") as data_file:
@@ -1417,21 +1417,35 @@ def getTradeNotifications(username):
             data = json.loads(data_file.read())
     return str(data).replace("'", "\"")
 
+@app.route('/data/<username>/notification/get/<date>/<ticker>')
+def getTradeNotifications(username, date, ticker):
+    data = {}
+    if os.path.isfile('./data/' + username + '/notification.json'):
+        with open('./data/' + username + '/notification.json', "r") as data_file:
+            data = notificationDataFilter(json.loads(data_file.read()), date, ticker)
+    else:
+        with open('./data/' + username + '/notification.json', "w") as data_file2:
+            data_file2.write("[]")
+            data_file2.close()
+        with open('./data/' + username + '/notification.json', "r") as data_file:
+            data = json.loads(data_file.read())
+    return str(data).replace("'", "\"")
+
 @app.route('/data/<username>/notification/update')
 def updateTradeNotifications(username):
     data = []
-    modified = []
     with open('./data/' + username + '/notification.json', "r") as data_file:
         data = json.loads(data_file.read())
     with open('./data/' + username + '/notification.json', "w") as data_file2:
         count = 0
         for x in data:
-            x['status'] = "read"
-            modified.append(x)
+            if x['status'] == "read":
+                break
+            data[count]['status'] = "read"
             count = count + 1
-        data_file2.write(str(modified).replace("'", "\""))
+        data_file2.write(str(data).replace("'", "\""))
         data_file2.close()
-    return str(modified).replace("'", "\"")
+    return str(data).replace("'", "\"")
 
 @app.route('/data/<username>/notification/add', methods=["GET", "POST"])
 def addTradeNotifications(username):
@@ -1647,6 +1661,49 @@ def options(tickers):
             pass
     return str(price)
 
+def notificationDataFilter(data, date, ticker):
+    retData = []
+    retData_f = []
+    today = dt.datetime.today()
+    if str(date) == "ThisMonth":
+        for x in data:
+            date_val = dt.datetime.strptime(str(x['date']).split(" ")[0], '%m/%d/%Y')
+            if int(date_val.strftime("%m")) == int(today.month):
+                retData.append(x)
+            else:
+                break
+    elif str(date) == "PreviousMonth":
+        for x in data:
+            date_val = dt.datetime.strptime(str(x['date']).split(" ")[0], '%m/%d/%Y')
+            if int(date_val.strftime("%m")) == (int(today.month) - 1):
+                retData.append(x)
+    elif str(date) == "ThisWeek":
+        for x in data:
+            date_val = dt.datetime.strptime(str(x['date']).split(" ")[0], '%m/%d/%Y')
+            if int(date_val.strftime("%V")) == int(today.strftime("%V")):
+                retData.append(x)
+    elif str(date) == "PreviousWeek":
+        for x in data:
+            date_val = dt.datetime.strptime(str(x['date']).split(" ")[0], '%m/%d/%Y')
+            if int(date_val.strftime("%V")) == (int(today.strftime("%V")) - 1):
+                retData.append(x)
+    elif str(date) == "YeartoDate":
+        for x in data:
+            date_val = dt.datetime.strptime(str(x['date']).split(" ")[0], '%m/%d/%Y')
+            if int(date_val.strftime("%Y")) == int(today.year):
+                retData.append(x)
+    elif str(date) == "PreviousYear":
+        for x in data:
+            date_val = dt.datetime.strptime(str(x['date']).split(" ")[0], '%m/%d/%Y')
+            if int(date_val.strftime("%Y")) == (int(today.year) - 1):
+                retData.append(x)
+    if str(ticker) != "All":
+        for x in retData:
+            if x['ticker'] == str(ticker).lower():
+                retData_f.append(x)
+    else:
+        retData_f = retData
+    return retData_f
 
 #Not being used now
 #@app.route('/data/<username>/progress/close')
