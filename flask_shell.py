@@ -1588,6 +1588,36 @@ def getCalendar():
         data = json.loads(data_file.read())
     return str(data).replace("'", "\"")
 
+@app.route('/data/<username>/monitoring/rearrange/update', methods=["GET", "POST"])
+def rearrangeTickers(username):
+    data = []
+    final = []
+    with open('./data/' + username + '/monitoring.json', 'r') as data_file:
+        data = json.loads(data_file.read())
+        for v in request.json:
+            for x in data:
+                if x['ticker'] == str(v):
+                    final.append(x)
+    with open('./data/'+username+'/monitoring.json', 'w') as file:
+        file.write(str(final).replace("'", "\""))
+        file.close()
+    with open('./data/'+username+'/monitoring_temp.json', 'w') as file:
+        file.write(str(final).replace("'", "\""))
+        file.close()
+    return ""
+
+@app.route('/data/<username>/monitoring/rearrange/get')
+def getTickersPosition(username):
+    data = []
+    positions = {}
+    with open('./data/' + username + '/monitoring.json', 'r') as data_file:
+        data = json.loads(data_file.read())
+        count = 0
+        for x in data:
+            positions[str(count)] = x['ticker']
+            count = count + 1
+        return str(positions).replace("'", "\"")
+
 def removeFromProgress(username, removerVals, ticker, account, cost, contracts, premium):
     data = {}
     ret = "["
