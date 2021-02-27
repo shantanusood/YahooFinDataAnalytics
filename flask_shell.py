@@ -1,4 +1,5 @@
 from flask import Flask, request, redirect, url_for, render_template
+import re
 import time
 import datetime as dt
 from datetime import timedelta
@@ -1656,6 +1657,73 @@ def getTickersPosition(username):
             positions[str(count)] = x['ticker']
             count = count + 1
         return str(positions).replace("'", "\"")
+
+@app.route('/data/<username>/spread/get', methods=["GET", "POST"])
+def getPriceOfSpreads(username):
+    ret_val = "0"
+    incoming = request.json
+    ticker = re.sub(r'[^a-zA-Z0-9 ]',r'', incoming[7])
+    expmonth = dt.datetime.strptime(str(incoming[3]), '%d-%b').date().month
+    nowmonth = dt.datetime.today().month
+    nowyear = dt.datetime.today().year
+    year = str(nowyear)[2:]
+    if nowmonth > expmonth:
+        year = str(nowyear + 1)[2:]
+    date = dt.datetime.strptime(str(incoming[3]), '%d-%b').date().strftime('%m%d')
+    if incoming[2] == '0':
+        strike = float(incoming[4])
+        ret_val = callSide(strike, ticker, year, date)
+    elif incoming[4] == '0' or incoming[5] == '0':
+        if incoming[5] == '0':
+            strike_1 = float(incoming[4])
+            strike_2 = float(incoming[4]) + float(incoming[2])/(float(incoming[1])*100)
+            ret_val_1 = callSide(strike_1, ticker, year, date)
+            ret_val_2 = callSide(strike_2, ticker, year, date)
+            ret_val = float(ret_val_1) - float(ret_val_2)
+        elif incoming[4] == '0':
+            strike_1 = float(incoming[5])
+            strike_2 = float(incoming[5]) - float(incoming[2]) / (float(incoming[1])*100)
+            ret_val_1 = putSide(strike_1, ticker, year, date)
+            ret_val_2 = putSide(strike_2, ticker, year, date)
+            ret_val = float(ret_val_1) - float(ret_val_2)
+    else:
+        strike_1_c = float(incoming[4])
+        strike_2_c = float(incoming[4]) + float(incoming[2]) / (float(incoming[1]) * 100)
+        ret_val_1_c = callSide(strike_1_c, ticker, year, date)
+        ret_val_2_c = callSide(strike_2_c, ticker, year, date)
+        ret_val_c = float(ret_val_1_c) - float(ret_val_2_c)
+        strike_1_p = float(incoming[5])
+        strike_2_p = float(incoming[5]) - float(incoming[2]) / (float(incoming[1]) * 100)
+        ret_val_1_p = putSide(strike_1_p, ticker, year, date)
+        ret_val_2_p = putSide(strike_2_p, ticker, year, date)
+        ret_val_p = float(ret_val_1_p) - float(ret_val_2_p)
+        ret_val = ret_val_c + ret_val_p
+    current = str(float(incoming[6]) - float(ret_val)) + " (" + str(round((float(incoming[6]) - float(ret_val))*100/float(incoming[6]))) + "%)"
+    return str("{'value':'"+current+"'}").replace("'", "\"")
+
+def putSide(strike, ticker, year, date):
+    ret_val = ""
+    if len(str(strike).split(".")[0]) == 1:
+        ret_val = str(int(float((options(str(ticker + year + date + "P0000" + str(int(strike * 1000)))))) * 100))
+    elif len(str(strike).split(".")[0]) == 2:
+        ret_val = str(int(float((options(str(ticker + year + date + "P000" + str(int(strike * 1000)))))) * 100))
+    elif len(str(strike).split(".")[0]) == 3:
+        ret_val = str(int(float((options(str(ticker + year + date + "P00" + str(int(strike * 1000)))))) * 100))
+    elif len(str(strike).split(".")[0]) == 4:
+        ret_val = str(int(float((options(str(ticker + year + date + "P0" + str(int(strike * 1000)))))) * 100))
+    return ret_val
+
+def callSide(strike, ticker, year, date):
+    ret_val = ""
+    if len(str(strike).split(".")[0]) == 1:
+        ret_val = str(int(float((options(str(ticker + year + date + "C0000" + str(int(strike * 1000)))))) * 100))
+    elif len(str(strike).split(".")[0]) == 2:
+        ret_val = str(int(float((options(str(ticker + year + date + "C000" + str(int(strike * 1000)))))) * 100))
+    elif len(str(strike).split(".")[0]) == 3:
+        ret_val = str(int(float((options(str(ticker + year + date + "C00" + str(int(strike * 1000)))))) * 100))
+    elif len(str(strike).split(".")[0]) == 4:
+        ret_val = str(int(float((options(str(ticker + year + date + "C0" + str(int(strike * 1000)))))) * 100))
+    return ret_val
 
 def removeFromProgress(username, removerVals, ticker, account, cost, contracts, premium):
     data = {}
