@@ -991,6 +991,45 @@ def returnMonitoringAdd(username, account, ticker, width, exp, call, put, prem):
     print(str("['Value:  "+account + ' - ' + ticker + ' - ' + width + ' - ' + exp + ' - ' + call + ' - ' + put + ' - ' + prem + " added successfully!']").replace("'", "\""))
     return str("['Value:  " + ticker + ' - ' + exp + ' - ' + " added!']").replace("'", "\"")
 
+@app.route('/data/<username>/monitoring/delete/getclosedetails/<ticker>/<account>/<type>/<strike>')
+def getCloseTradeDetails(username, ticker, account, type, strike):
+    removerVals = []
+    premium = ""
+    with open('./data/'+username+'/monitoring.json', 'r') as data_file:
+        data = json.loads(data_file.read())
+        for x in data:
+            if x['ticker'] == ticker:
+                pylst = list(x['positions'][account][type])
+                i = pylst.index(strike)
+                call = list(x['positions'][account]['call'])
+                removerVals.append(call.pop(i))
+                x['positions'][account]['call'] = call
+                put = list(x['positions'][account]['put'])
+                removerVals.append(put.pop(i))
+                x['positions'][account]['put'] = put
+                exp = list(x['positions'][account]['exp'])
+                removerVals.append(exp.pop(i))
+                x['positions'][account]['exp'] = exp
+                coll = list(x['positions'][account]['coll'])
+                removerVals.append(coll.pop(i))
+                x['positions'][account]['coll'] = coll
+                prem = list(x['positions'][account]['prem'])
+                premium = prem.pop(i)
+                removerVals.append(premium)
+                x['positions'][account]['prem'] = prem
+    print(removerVals)
+    contractsavailable = 0
+    with open('./data/'+username+'/progress.json', 'r') as data_file:
+        data = json.loads(data_file.read())
+        t = dt.datetime.strptime(str(removerVals[2]), '%d-%b')
+        for y in data:
+            try:
+                id = str(y) + str(t.strftime('%m%d')) + ticker.upper() + str(removerVals[4])
+                contractsavailable = int(data[str(y)][str(t.strftime('%m-%d'))][str(ticker)][id][6])
+            except:
+                pass
+    return str("{'contracts':'"+str(contractsavailable)+"', 'premium':'"+premium+"', 'call':'"+removerVals[0]+"', 'put' : '"+removerVals[1]+"', 'expiry':'"+removerVals[2]+"', 'collateral':'"+removerVals[3]+"'}").replace("'", "\"")
+
 @app.route('/data/<username>/monitoring/delete/getcontracts/<ticker>/<account>/<type>/<strike>')
 def getNumberOfContracts(username, ticker, account, type, strike):
     removerVals = []
@@ -1417,12 +1456,12 @@ def getRawTradeNotifications(username):
             data = json.loads(data_file.read())
     return str(data).replace("'", "\"")
 
-@app.route('/data/<username>/notification/get/<date>/<ticker>')
-def getTradeNotifications(username, date, ticker):
+@app.route('/data/<username>/notification/get/<date>/<ticker>/<trade_type>/<pnl>')
+def getTradeNotifications(username, date, ticker, trade_type, pnl):
     data = {}
     if os.path.isfile('./data/' + username + '/notification.json'):
         with open('./data/' + username + '/notification.json', "r") as data_file:
-            data = notificationDataFilter(json.loads(data_file.read()), date, ticker)
+            data = notificationDataFilter(json.loads(data_file.read()), date, ticker, trade_type, pnl)
     else:
         with open('./data/' + username + '/notification.json', "w") as data_file2:
             data_file2.write("[]")
@@ -1691,9 +1730,11 @@ def options(tickers):
             pass
     return str(price)
 
-def notificationDataFilter(data, date, ticker):
+def notificationDataFilter(data, date, ticker, trade_type, pnl):
     retData = []
     retData_f = []
+    retData_t = []
+    retData_p = []
     today = dt.datetime.today()
     if str(date) == "ThisMonth":
         for x in data:
@@ -1733,7 +1774,33 @@ def notificationDataFilter(data, date, ticker):
                 retData_f.append(x)
     else:
         retData_f = retData
-    return retData_f
+    if str(trade_type) != "All":
+        for x in retData_f:
+            if str(x['type']).replace(" ", "").lower() == str(trade_type).replace(" ", "").lower():
+                retData_t.append(x)
+    else:
+        retData_t = retData_f
+    if str(pnl) != "All":
+        for x in retData_t:
+            try:
+                if len(str(x['cost']))>0:
+                    if str(pnl).lower() == "100g":
+                        if int(x['pnl'][:-1])>=100:
+                            retData_p.append(x)
+                    elif str(pnl).lower() == "100to0":
+                        if int(x['pnl'][:-1])<100 and int(x['pnl'][:-1])>=0:
+                            retData_p.append(x)
+                    elif str(pnl).lower() == "0to100":
+                        if int(x['pnl'][:-1])>-100 and int(x['pnl'][:-1])<0:
+                            retData_p.append(x)
+                    elif str(pnl).lower() == "100l":
+                        if int(x['pnl'][:-1])<-100:
+                            retData_p.append(x)
+            except:
+                pass
+    else:
+        retData_p = retData_t
+    return retData_p
 
 #Not being used now
 #@app.route('/data/<username>/progress/close')
