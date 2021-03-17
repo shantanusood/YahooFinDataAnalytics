@@ -5,6 +5,9 @@ def table_data():
     return "div[class='D(tbrg)'] > div[data-test='fin-row'] > div > div[data-test='fin-col']"
     #return "div[class='rw-expnded'][data-test='fin-row'] > div > div[class^='D']"
 
+def table_breakdown_header():
+    return "div[class='D(tbhg)'] > div > div"
+
 def current_value():
     return "div[class$='Mend(20px)'] > span:nth-child(1)"
 
