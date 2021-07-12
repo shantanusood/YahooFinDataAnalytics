@@ -62,7 +62,7 @@ picraft==1.0
 piglow==1.2.5
 pigpio==1.44
 Pillow==5.4.1
-psutil==5.5.1
+psutil==5.6.6
 pyasn1==0.4.8
 pycrypto==2.6.1
 Pygments==2.3.1
