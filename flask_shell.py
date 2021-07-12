@@ -739,7 +739,7 @@ def returnMonitoring(username):
                 pass
             if resp[0] == 200:
                 try:
-                    df = parse(resp[1])
+                    df = parse(resp[1], resp[2])
                     x['price'] = df.iloc[0]['value']
                     price = float(x['price'].replace(',', ''))
                 except Exception:
@@ -1328,12 +1328,12 @@ def getLongStock(username):
                 resp = cm.getHtml("quote", data[index]['ticker'])
                 if resp[0] == 200:
                     try:
-                        df = parse(resp[1])
+                        df = parse(resp[1], resp[2])
                         data[index]['current'] = df.iloc[0]['value']
                     except:
                         pass
                 data[index]['pnl'] = str(round(float((float(data[index]['current']) - float(data[index]['price']))/float(data[index]['price']))*100, 2))
-                data[index]['div'] = getDiv(resp[1])
+                data[index]['div'] = getDiv(resp[1], resp[2])
                 divList = divListNasdaq(data[index]['ticker'], data[index]['shares'])
                 if int(shares_before) != int(data[index]['shares']):
                     data[index]['total'] = str(round(float(data[index]['pershare'])*int(data[index]['shares']), 2))
@@ -1387,6 +1387,7 @@ def populateDividendRealized(username, realized):
 def divListNasdaq(stock, shares):
     try:
         req = r.get("https://finance.yahoo.com/quote/"+stock+"/history?filter=div&frequency=1d&includeAdjustedClose=true").text
+        print(req)
         soup = BeautifulSoup(req, 'html.parser')
         l1 = soup.select(y.yahoo_dividend_table_first())
         l4 = soup.select(y.yahoo_dividend_table_fourth())
@@ -1765,33 +1766,58 @@ def addSubGains(username, yearmonth, realizedcost, expectedcost):
         file2.close()
     return str(data).replace("'", "\"")
 
-def parse(html):
+def parse(html, type):
     soup = BeautifulSoup(html, 'html.parser')
-    dict = {'value':soup.select(y.current_value())[0].text}
-    l = soup.select(y.quote_table())
-    data = [j.text for j in l]
-    for i in range(0, len(data), 2):
-        dict[data[i]] = data[i+1:i+2]
+    if type == "yahoo":
+        dict = {'value':soup.select(y.current_value())[0].text}
+        l = soup.select(y.quote_table())
+        data = [j.text for j in l]
+        for i in range(0, len(data), 2):
+            dict[data[i]] = data[i + 1:i + 2]
+        df = pd.DataFrame(dict)
+        return df
+    elif type == "alt":
+        dict = {'value': soup.select(y.current_value_alt())[1].text}
+        l = soup.select(y.quote_table_alt())
+        del l[2::3]
+        data = [j.text for j in l]
+        for i in range(0, len(data), 2):
+            dict[data[i]] = data[i + 1:i + 2]
+        df = pd.DataFrame(dict)
+        return df
 
-    df = pd.DataFrame(dict)
-    return df
-
-def getDiv(html):
+def getDiv(html, type):
     soup = BeautifulSoup(html, 'html.parser')
-    l = soup.select(y.quote_table_right_vals())
-    index = 0
-    for vals in l:
-        if "Yield" in vals.text:
-            return l[index + 1].text
-        index = index + 1
-    return "NA"
+    if type == "yahoo":
+        l = soup.select(y.quote_table())
+        index = 0
+        for vals in l:
+            if "Yield" in vals.text:
+                return l[index + 1].text
+            index = index + 1
+        return "NA"
+    elif type == "alt":
+        l = soup.select(y.quote_table_alt())
+        index = 0
+        val_yield = ""
+        val_div = ""
+        for vals in l:
+            if "Yield" in vals.text:
+                val_yield = l[index + 1].text
+            elif "Dividend" in vals.text:
+                val_div = l[index + 1].text
+            if len(val_yield) > 1 and len(val_div) > 1:
+                return val_div + "(" + val_yield + ")"
+            index = index + 1
+        return "NA"
+
 
 def options(tickers):
     resp = cm.getHtml("quote", tickers)
     price = 0.0
     if resp[0] == 200:
         try:
-            df = parse(resp[1])
+            df = parse(resp[1], resp[2])
             price = float(df.iloc[0]['value'].replace(',', ''))
         except Exception:
             #print(traceback.format_exc())

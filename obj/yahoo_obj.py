@@ -11,11 +11,14 @@ def table_breakdown_header():
 def current_value():
     return "div[class$='Mend(20px)'] > span:nth-child(1)"
 
+def current_value_alt():
+    return "h3[class^='intraday__price'] > *"
+
 def quote_table():
     return "div[data-test='right-summary-table'] > table > tbody > tr > td"
 
-def quote_table_right_vals():
-    return "div[data-test='right-summary-table'] > table > tbody > tr > td"
+def quote_table_alt():
+    return "li[class='kv__item'] > *"
 
 def yahoo_dividend_table_first():
     return "table[data-test='historical-prices'] > tbody > tr:nth-child(1) > td"

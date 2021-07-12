@@ -9,7 +9,21 @@ def getFinancialLabels(soup):
 
 def getHtml(type, ticker):
     req = r.get(linkList(type, ticker))
-    return (req.status_code, req.text)
+    if req.status_code == 200:
+        return (req.status_code, req.text, "yahoo")
+    else:
+        req = r.get(linkList_alt(type, ticker))
+        return (req.status_code, req.text, "alt")
+
+def linkList_alt(type, ticker):
+    if type == 'quote':
+        if "^" in ticker:
+            return "https://www.marketwatch.com/investing/index/{0}".format(str(ticker).replace("^", ""))
+        else:
+            return "https://www.marketwatch.com/investing/stock/{0}".format(str(ticker))
+
+    else:
+        return linkList(type, ticker)
 
 def linkList(type, ticker):
     if type == 'financial':
