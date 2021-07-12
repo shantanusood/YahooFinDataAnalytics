@@ -20,6 +20,8 @@ from data import tickers_list as tl
 import traceback
 import collections
 import requests as r
+from src.mongo import Connect as con
+from bson.json_util import dumps
 
 app = Flask(__name__)
 CORS(app)
@@ -52,9 +54,8 @@ def quide():
 """
 @app.route('/data/<username>/accounts')
 def readRawData(username):
-    with open('./data/' + username + '/accounts.json', 'r') as data_file:
-        return data_file.read()
-
+    return str(json.loads(dumps(con.getCollection("Accounts").find({"_id": str(username)})))[0]['accounts']).replace("'", "\"")
+    
 @app.route('/data/<username>/monitoring/raw')
 def readAccounts(username):
     with open('./data/' + username + '/monitoring.json', 'r') as data_file:
