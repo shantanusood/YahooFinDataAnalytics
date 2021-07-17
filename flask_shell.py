@@ -289,1343 +289,198 @@ def filterHistData(username, index, type, filter):
     dct = {'date': newDateLst, type: newTypeLst, 'change': '$'+str(int(newTypeLst[-1])-int(newTypeLst[0])) + ' (' + str(round((int(newTypeLst[-1])-int(newTypeLst[0]))*100/int(newTypeLst[0]), 2))+'%)'}
     return json.loads(json.dumps(dct))
 
-
 ################################################################################
-###########################TRADE MANAGEMENT ENDS################################
+###################################RENTAL#######################################
 ################################################################################
-@app.route('/data/<filter>/<tickers>')
-def quote(filter, tickers):
-    ret = s.main(filter, tickers)
-    if isinstance(ret, pd.DataFrame):
-        return ret.to_json()
-    else:
-        ret_j = {}
-        for i in ret:
-            ret_j[i] = ret[i].to_json()
-            print(ret_j[i])
-        return ret_j
+@app.route('/data/<username>/rental/addquotes')
+def send_rent_quotes(username):
+    data = json.loads(dumps(con.getCollection("PayHist").find({"_id": username})))[0]['hist']
+    history = data['history']
+    val = "{'due_date': '" + str(dt.datetime.strptime(str(dt.date.today()), '%Y-%m-%d').date())[
+                             :-2] + "01" + "', 'paid_date': 'NA', 'rent': '" + str(
+        data['recurring']) + "', 'utilities': '0', 'late': '0', 'additional': '0', 'total': '" + str(
+        data['recurring']) + "', 'status': 'N'}"
+    jval = json.loads(val.replace("'", "\""))
+    history.insert(0, jval)
+    data['history'] = history
+    con.getCollection("PayHist").find_one_and_update({"_id": username}, {"$set": {"hist": data}})
+    return "['Successfully wrote to accounts!']".replace("'", "\"")
 
-@app.route('/data/<username>/expiration')
-def byExpirationDate(username):
-    with open('./data/'+username+'/monitoring.json', 'r') as data_file:
-        data = json.loads(data_file.read())
-        dct = {}
-        for x in data:
-            f_lst = list(x['positions']['fidelity']['exp'])
-            fc_lst = list(x['positions']['fidelity']['coll'])
-            counter = 0
-            for f in f_lst:
-                try:
-                    dct[f] = dct[f] + int(fc_lst[counter])
-                except:
-                    dct[f] = int(fc_lst[counter])
-                counter = counter + 1
-            r_lst = list(x['positions']['robinhood']['exp'])
-            rc_lst = list(x['positions']['robinhood']['coll'])
-            counter = 0
-            for r in r_lst:
-                try:
-                    dct[r] = dct[r] + int(rc_lst[counter])
-                except:
-                    dct[r] = int(rc_lst[counter])
-                counter = counter + 1
-            t_lst = list(x['positions']['tastyworks']['exp'])
-            tc_lst = list(x['positions']['tastyworks']['coll'])
-            counter = 0
-            for t in t_lst:
-                try:
-                    dct[t] = dct[t] + int(tc_lst[counter])
-                except:
-                    dct[t] = int(tc_lst[counter])
-                counter = counter + 1
-        return json.loads(json.dumps(dct))
-
-@app.route('/data/<username>/monitoring')
-def returnMonitoring(username):
-    #with open('./data/monitoring.json', 'r') as data_file:
-        #return str(json.loads(data_file.read())).replace("'", "\"")
-    wrt = "["
-    calls = []
-    puts = []
-    price = 0
-    with open('./data/'+username+'/monitoring.json', 'r') as data_file:
-        data = json.loads(data_file.read())
-        for x in data:
-            resp = cm.getHtml("quote", x['ticker'])
-            try:
-                collateral = list(x['positions']['fidelity']['coll']) + list(x['positions']['tastyworks']['coll']) + list(x['positions']['robinhood']['coll'])
-                collateral = list(map(int, collateral))
-                x['total'] = sum(collateral)
-            except:
-                print(traceback.format_exc())
-                pass
-            if resp[0] == 200:
-                try:
-                    df = parse(resp[1], resp[2])
-                    x['price'] = df.iloc[0]['value']
-                    price = float(x['price'].replace(',', ''))
-                except Exception:
-                    x['price'] = 0
-                    price = float(x['price'])
-                    print(traceback.format_exc())
-            counter = 0
-            for vals in list(x['positions']['fidelity']['call']):
-                if " " in vals:
-                    x['positions']['fidelity']['call'][counter] = vals[:vals.index(" ")]
-                counter = counter + 1
-            counter = 0
-            for vals in list(x['positions']['tastyworks']['call']):
-                if " " in vals:
-                    x['positions']['tastyworks']['call'][counter] = vals[:vals.index(" ")]
-                counter = counter + 1
-            counter = 0
-            for vals in list(x['positions']['robinhood']['call']):
-                if " " in vals:
-                    x['positions']['robinhood']['call'][counter] = vals[:vals.index(" ")]
-                counter = counter + 1
-            counter = 0
-            for vals in list(x['positions']['fidelity']['put']):
-                if " " in vals:
-                    x['positions']['fidelity']['put'][counter] = vals[:vals.index(" ")]
-                counter = counter + 1
-            counter = 0
-            for vals in list(x['positions']['tastyworks']['put']):
-                if " " in vals:
-                    x['positions']['tastyworks']['put'][counter] = vals[:vals.index(" ")]
-                counter = counter + 1
-            counter = 0
-            for vals in list(x['positions']['robinhood']['put']):
-                if " " in vals:
-                    x['positions']['robinhood']['put'][counter] = vals[:vals.index(" ")]
-                counter = counter + 1
-            counter = 0
-            x['ordered'] = json.loads('{"call": [], "put": []}')
-            try:
-                counter = 0
-                for val in list(x['positions']['robinhood']['call']):
-                    dct = {val: []}
-                    lst = dct[val]
-                    lst.append('robinhood')
-                    lst.append(x['positions']['robinhood']['exp'][counter])
-                    lst.append(x['positions']['robinhood']['coll'][counter])
-                    lst.append(x['positions']['robinhood']['prem'][counter])
-                    perc = (float(val) - price) * 100 / price
-                    lst.append(str(round(perc, 2)))
-                    counter = counter + 1
-                    app = list(x['ordered']['call'])
-                    app.append(json.loads(json.dumps(dct)))
-                    x['ordered']['call'] = app
-                counter = 0
-                for val in list(x['positions']['fidelity']['call']):
-                    dct = {val: []}
-                    lst = dct[val]
-                    lst.append('fidelity')
-                    lst.append(x['positions']['fidelity']['exp'][counter])
-                    lst.append(x['positions']['fidelity']['coll'][counter])
-                    lst.append(x['positions']['fidelity']['prem'][counter])
-                    perc = (float(val) - price) * 100 / price
-                    lst.append(str(round(perc, 2)))
-                    counter = counter + 1
-                    app = list(x['ordered']['call'])
-                    app.append(json.loads(json.dumps(dct)))
-                    x['ordered']['call'] = app
-                counter = 0
-                for val in list(x['positions']['tastyworks']['call']):
-                    dct = {val: []}
-                    lst = dct[val]
-                    lst.append('tastyworks')
-                    lst.append(x['positions']['tastyworks']['exp'][counter])
-                    lst.append(x['positions']['tastyworks']['coll'][counter])
-                    lst.append(x['positions']['tastyworks']['prem'][counter])
-                    perc = (float(val) - price) * 100 / price
-                    lst.append(str(round(perc, 2)))
-                    counter = counter + 1
-                    app = list(x['ordered']['call'])
-                    app.append(json.loads(json.dumps(dct)))
-                    x['ordered']['call'] = app
-                x['ordered']['call'] = sortVals(x['ordered']['call'])
-                counter = 0
-                for val in list(x['positions']['robinhood']['put']):
-                    dct = {val: []}
-                    lst = dct[val]
-                    lst.append('robinhood')
-                    lst.append(x['positions']['robinhood']['exp'][counter])
-                    lst.append(x['positions']['robinhood']['coll'][counter])
-                    lst.append(x['positions']['robinhood']['prem'][counter])
-                    perc = (price - float(val)) * 100 / price
-                    lst.append(str(round(perc, 2)))
-                    counter = counter + 1
-                    app = list(x['ordered']['put'])
-                    app.append(json.loads(json.dumps(dct)))
-                    x['ordered']['put'] = app
-                counter = 0
-                for val in list(x['positions']['fidelity']['put']):
-                    dct = {val: []}
-                    lst = dct[val]
-                    lst.append('fidelity')
-                    lst.append(x['positions']['fidelity']['exp'][counter])
-                    lst.append(x['positions']['fidelity']['coll'][counter])
-                    lst.append(x['positions']['fidelity']['prem'][counter])
-                    perc = (price - float(val)) * 100 / price
-                    lst.append(str(round(perc, 2)))
-                    counter = counter + 1
-                    app = list(x['ordered']['put'])
-                    app.append(json.loads(json.dumps(dct)))
-                    x['ordered']['put'] = app
-                counter = 0
-                for val in list(x['positions']['tastyworks']['put']):
-                    dct = {val: []}
-                    lst = dct[val]
-                    lst.append('tastyworks')
-                    lst.append(x['positions']['tastyworks']['exp'][counter])
-                    lst.append(x['positions']['tastyworks']['coll'][counter])
-                    lst.append(x['positions']['tastyworks']['prem'][counter])
-                    perc = (price - float(val)) * 100 / price
-                    lst.append(str(round(perc, 2)))
-                    counter = counter + 1
-                    app = list(x['ordered']['put'])
-                    app.append(json.loads(json.dumps(dct)))
-                    x['ordered']['put'] = app
-                x['ordered']['put'] = sortVals(x['ordered']['put'])
-            except Exception:
-                print(traceback.format_exc())
-                pass
-
-            wrt = wrt + str(x) + ","
-
-    with open('./data/'+username+'/monitoring.json', 'w') as file:
-        file.write(wrt[:-1].replace("'", "\"") + "]")
-        file.close()
-    with open('./data/'+username+'/monitoring_temp.json', 'w') as file:
-        file.write(wrt[:-1].replace("'", "\"") + "]")
-        file.close()
-    with open('./data/'+username+'/monitoring.json', 'r') as data_file:
-        return data_file.read()
-
-@app.route('/data/<username>/monitoring/temp')
-def returnTempMonitoring(username):
+@app.route('/data/<username>/rental/editquotes/<delete_or_edit>/<due_date>/<paid_date>/<rent>/<utilities>/<late>/<additional>/<total>/<status>')
+def edit_rent_quotes(username, delete_or_edit, due_date, paid_date, rent, utilities, late, additional, total, status):
     data = {}
-    with open('./data/'+username+'/monitoring.json', 'r') as data_file:
-        data = json.loads(data_file.read())
-    with open('./data/'+username+'/monitoring_temp.json', 'w') as data_file2:
-        data_file2.write(str(data).replace("'", "\""))
-        data_file2.close()
-    with open('./data/'+username+'/monitoring_temp.json', 'r') as data_file3:
-        return data_file3.read()
-
-def sortVals(vals):
-    try:
-        lst = []
-        dict_vals = {}
-        for x in vals:
-            dict_vals.update(dict(x))
-        dict_vals = collections.OrderedDict(sorted(dict_vals.items()))
-        for i in dict_vals:
-            lst.append(json.loads(json.dumps({i: dict_vals[i]})))
-        return lst
-    except Exception:
-        print(traceback.format_exc())
-        return vals
-
-@app.route('/data/<username>/monitoring/delete/<ticker>')
-def returnMonitoringDel(username, ticker):
-    lst = []
-    with open('./data/'+username+'/monitoring.json', 'r') as data_file:
-        data = json.loads(data_file.read())
-        lst = list(data)
-        counter = 0
-        for x in data:
-            if x['ticker'] == ticker:
-                lst.pop(counter)
-            counter = counter + 1
-    with open('./data/'+username+'/monitoring.json', 'w') as file:
-        file.write(str(lst).replace("'", "\""))
-        file.close()
-    return ""
-
-@app.route('/data/<username>/monitoring/add/<account>/<ticker>/<width>/<exp>/<call>/<put>/<prem>')
-def returnMonitoringAdd(username, account, ticker, width, exp, call, put, prem):
-    prem = str(int(float(prem)))
-    wrt = "["
-    with open('./data/'+username+'/monitoring.json', 'r') as data_file:
-        data = json.loads(data_file.read())
-        counter = 0
-        for x in data:
-            if x['ticker'] == ticker:
-                for f in x['positions']['fidelity']['prem']:
-                    if str(f) == str(prem):
-                        expiry = str(dt.datetime.strptime(str(exp), '%Y-%m-%d').strftime('%d-%b'))
-                        if expiry in x['positions']['fidelity']['exp']:
-                            prem = str(int(prem) + 1)
-                for f in x['positions']['robinhood']['prem']:
-                    if str(f) == str(prem):
-                        expiry = str(dt.datetime.strptime(str(exp), '%Y-%m-%d').strftime('%d-%b'))
-                        if expiry in x['positions']['robinhood']['exp']:
-                            prem = str(int(prem) + 1)
-                for f in x['positions']['tastyworks']['prem']:
-                    if str(f) == str(prem):
-                        expiry = str(dt.datetime.strptime(str(exp), '%Y-%m-%d').strftime('%d-%b'))
-                        if expiry in x['positions']['tastyworks']['exp']:
-                            prem = str(int(prem) + 1)
-                pylst = list(x['positions'][account]['call'])
-                pylst.append(call)
-                pylst2 = list(x['positions'][account]['put'])
-                pylst2.append(put)
-                pylst3 = list(x['positions'][account]['exp'])
-                t = dt.datetime.strptime(str(exp), '%Y-%m-%d')
-                pylst3.append(str(t.strftime('%d-%b')))
-                pylst4 = list(x['positions'][account]['coll'])
-                pylst4.append(width)
-                pylst5 = list(x['positions'][account]['prem'])
-                pylst5.append(prem)
-                x['positions'][account]['call'] = pylst
-                x['positions'][account]['put'] = pylst2
-                x['positions'][account]['exp'] = pylst3
-                x['positions'][account]['coll'] = pylst4
-                x['positions'][account]['prem'] = pylst5
-                counter = 1
-            wrt = wrt + str(x) + ","
-
-        if counter < 1:
-            val = '{"ticker":"' + ticker + '", "price": 100, "total": 0, "positions": {"fidelity": {"call": [], "put": [], "exp":[], "coll":[], "prem": []}, "robinhood": {"call": [], "put": [], "exp":[], "coll":[], "prem": []}, "tastyworks": {"call": [], "put": [], "exp":[], "coll":[], "prem": []}}}'
-            jval = json.loads(val)
-            pylst = list(jval['positions'][account]['call'])
-            pylst.append(call)
-            pylst2 = list(jval['positions'][account]['put'])
-            pylst2.append(put)
-            pylst3 = list(jval['positions'][account]['exp'])
-            t = dt.datetime.strptime(str(exp), '%Y-%m-%d')
-            pylst3.append(str(t.strftime('%d-%b')))
-            pylst4 = list(jval['positions'][account]['coll'])
-            pylst4.append(width)
-            pylst5 = list(jval['positions'][account]['prem'])
-            pylst5.append(prem)
-            jval['positions'][account]['call'] = pylst
-            jval['positions'][account]['put'] = pylst2
-            jval['positions'][account]['exp'] = pylst3
-            jval['positions'][account]['coll'] = pylst4
-            jval['positions'][account]['prem'] = pylst5
-            jval['total'] = int(width)
-            wrt = wrt + str(jval) + ","
-
-    with open('./data/'+username+'/monitoring.json', 'w') as file:
-        file.write(wrt[:-1].replace("'", "\"") + "]")
-        file.close()
-    print(str("['Value:  "+account + ' - ' + ticker + ' - ' + width + ' - ' + exp + ' - ' + call + ' - ' + put + ' - ' + prem + " added successfully!']").replace("'", "\""))
-    return str("['Value:  " + ticker + ' - ' + exp + ' - ' + " added!']").replace("'", "\"")
-
-@app.route('/data/<username>/monitoring/delete/getclosedetails/<ticker>/<account>/<type>/<strike>')
-def getCloseTradeDetails(username, ticker, account, type, strike):
-    removerVals = []
-    premium = ""
-    with open('./data/'+username+'/monitoring.json', 'r') as data_file:
-        data = json.loads(data_file.read())
-        for x in data:
-            if x['ticker'] == ticker:
-                pylst = list(x['positions'][account][type])
-                i = pylst.index(strike)
-                call = list(x['positions'][account]['call'])
-                removerVals.append(call.pop(i))
-                x['positions'][account]['call'] = call
-                put = list(x['positions'][account]['put'])
-                removerVals.append(put.pop(i))
-                x['positions'][account]['put'] = put
-                exp = list(x['positions'][account]['exp'])
-                removerVals.append(exp.pop(i))
-                x['positions'][account]['exp'] = exp
-                coll = list(x['positions'][account]['coll'])
-                removerVals.append(coll.pop(i))
-                x['positions'][account]['coll'] = coll
-                prem = list(x['positions'][account]['prem'])
-                premium = prem.pop(i)
-                removerVals.append(premium)
-                x['positions'][account]['prem'] = prem
-    print(removerVals)
-    contractsavailable = 0
-    with open('./data/'+username+'/progress.json', 'r') as data_file:
-        data = json.loads(data_file.read())
-        t = dt.datetime.strptime(str(removerVals[2]), '%d-%b')
-        for y in data:
-            try:
-                id = str(y) + str(t.strftime('%m%d')) + ticker.upper() + str(removerVals[4])
-                contractsavailable = int(data[str(y)][str(t.strftime('%m-%d'))][str(ticker)][id][6])
-            except:
-                pass
-    return str("{'contracts':'"+str(contractsavailable)+"', 'premium':'"+premium+"', 'call':'"+removerVals[0]+"', 'put' : '"+removerVals[1]+"', 'expiry':'"+removerVals[2]+"', 'collateral':'"+removerVals[3]+"'}").replace("'", "\"")
-
-@app.route('/data/<username>/monitoring/delete/getcontracts/<ticker>/<account>/<type>/<strike>')
-def getNumberOfContracts(username, ticker, account, type, strike):
-    removerVals = []
-    premium = ""
-    with open('./data/'+username+'/monitoring.json', 'r') as data_file:
-        data = json.loads(data_file.read())
-        for x in data:
-            if x['ticker'] == ticker:
-                pylst = list(x['positions'][account][type])
-                i = pylst.index(strike)
-                call = list(x['positions'][account]['call'])
-                removerVals.append(call.pop(i))
-                x['positions'][account]['call'] = call
-                put = list(x['positions'][account]['put'])
-                removerVals.append(put.pop(i))
-                x['positions'][account]['put'] = put
-                exp = list(x['positions'][account]['exp'])
-                removerVals.append(exp.pop(i))
-                x['positions'][account]['exp'] = exp
-                coll = list(x['positions'][account]['coll'])
-                removerVals.append(coll.pop(i))
-                x['positions'][account]['coll'] = coll
-                prem = list(x['positions'][account]['prem'])
-                premium = prem.pop(i)
-                removerVals.append(premium)
-                x['positions'][account]['prem'] = prem
-    contractsavailable = 0
-    with open('./data/'+username+'/progress.json', 'r') as data_file:
-        data = json.loads(data_file.read())
-        t = dt.datetime.strptime(str(removerVals[2]), '%d-%b')
-        for y in data:
-            try:
-                id = str(y) + str(t.strftime('%m%d')) + ticker.upper() + str(removerVals[4])
-                contractsavailable = int(data[str(y)][str(t.strftime('%m-%d'))][str(ticker)][id][6])
-            except:
-                pass
-    return str("{'contracts':'"+str(contractsavailable)+"', 'premium':'"+premium+"'}").replace("'", "\"")
-
-@app.route('/data/<username>/monitoring/delete/<ticker>/<account>/<type>/<strike>/<cost>/<contracts>')
-def returnMonitoringDelStrike(username, ticker, account, type, strike, cost, contracts):
-    wrt = "["
-    removerVals = []
-    premium = 0
-    with open('./data/'+username+'/monitoring.json', 'r') as data_file:
-        data = json.loads(data_file.read())
-        for x in data:
-            if x['ticker'] == ticker:
-                pylst = list(x['positions'][account][type])
-                i = pylst.index(strike)
-                call = list(x['positions'][account]['call'])
-                removerVals.append(call.pop(i))
-                x['positions'][account]['call'] = call
-                put = list(x['positions'][account]['put'])
-                removerVals.append(put.pop(i))
-                x['positions'][account]['put'] = put
-                exp = list(x['positions'][account]['exp'])
-                removerVals.append(exp.pop(i))
-                x['positions'][account]['exp'] = exp
-                coll = list(x['positions'][account]['coll'])
-                removerVals.append(coll.pop(i))
-                x['positions'][account]['coll'] = coll
-                prem = list(x['positions'][account]['prem'])
-                premium = prem.pop(i)
-                removerVals.append(premium)
-                x['positions'][account]['prem'] = prem
-            wrt = wrt + str(x) + ","
-    contractsavailable = 0
-    year = ""
-    id = ""
-    with open('./data/'+username+'/progress.json', 'r') as data_file:
-        data = json.loads(data_file.read())
-        t = dt.datetime.strptime(str(removerVals[2]), '%d-%b')
-        found = False
-        for y in data:
-            try:
-                id = str(y) + str(t.strftime('%m%d')) + ticker.upper() + str(removerVals[4])
-                contractsavailable = int(data[str(y)][str(t.strftime('%m-%d'))][str(ticker)][id][6])
-                year = y
-                found = True
-            except:
-                pass
-            if found:
-                break
-        if int(contracts) == int(contractsavailable):
-            with open('./data/'+username+'/monitoring.json', 'w') as file:
-                file.write(wrt[:-1].replace("'", "\"") + "]")
-                file.close()
-            removeFromProgress(username, removerVals, ticker, account, cost, contracts, premium)
-        else:
-            updateContractsPartial(username, ticker, account, type, strike, cost, contractsavailable, contracts, year, id, str(t.strftime('%m%d')), premium)
-    return ""
-
-def updateContractsPartial(username, ticker, account, type, strike, cost, contractsavailable, contracts, year, id, datetime, premium):
-    time.sleep(1)
-    wrt = "["
-    removerVals = []
-    with open('./data/' + username + '/monitoring.json', 'r') as data_file:
-        data = json.loads(data_file.read())
-        for x in data:
-            if x['ticker'] == ticker:
-                pylst = list(x['positions'][account][type])
-                i = pylst.index(strike)
-                coll = list(x['positions'][account]['coll'])
-                x['positions'][account]['coll'][i] = str(round(int(coll[i])/int(contractsavailable))*int(int(contractsavailable) - int(contracts)))
-                #x['positions'][account]['coll'][i] = str(int(round(int(coll[i])/contractsavailable))*int(contracts))
-            wrt = wrt + str(x) + ","
-    with open('./data/'+username+'/monitoring.json', 'w') as file:
-        file.write(wrt[:-1].replace("'", "\"") + "]")
-        file.close()
-    with open('./data/' + username + '/progress.json', 'r') as data_file:
-        data = json.loads(data_file.read())
-        dt = datetime[:2] + "-" + datetime[2:]
-        data[year][dt][ticker][id][6] = str(int(contractsavailable) - int(contracts))
-    with open('./data/' + username + '/progress.json', 'w') as file:
-        file.write(str(data).replace("'", "\""))
-        file.close()
-    addSubGains(username, year + "-" + datetime[:2], str(int(int(premium) - int(cost)) * int(contracts)), "-" + str(int(premium) * int(contracts)))
-    return ""
-
-@app.route('/filters/<tickerlist>/<filter>')
-def withStdInput(tickerlist, filter):
-    return json.dumps(f.filter(t.tickers(tickerlist), filter, getMetadata(tickerlist), "", ""))
-
-@app.route('/filters/<tickers>/<filter>/<third>')
-def withThirdInput(tickers, filter, third):
-    return json.dumps(f.filter(t.tickers(tickers), filter, getMetadata(tickers), third, ""))
-
-@app.route('/filters/<tickers>/<filter>/<third>/<fourth>')
-def withFourthInput(tickers, filter, third, fourth):
-    return json.dumps(f.filter(t.tickers(tickers), filter, getMetadata(tickers), third, fourth))
-
-@app.route('/csv/<type>')
-def csvData(type):
-    filename = './data/' + type + '.csv'
-    return pd.read_csv(filename).head(10000).to_csv()
-
-@app.route('/data/<username>/progress/gains')
-def getProgressGains(username):
-    ordering = []
-    j1 = {}
-    j2 = {}
-    with open('./data/'+username+'/gains.json', 'r') as data_file:
-        ordering = list(json.loads(data_file.read()))
-        ordering = sorted(ordering, key=lambda d: list(d.keys()))
-    with open('./data/'+username+'/gains.json', 'w') as data_file2:
-        data_file2.write(str(ordering).replace("'", "\""))
-        data_file2.close()
-    with open('./data/'+username+'/gains.json', 'r') as data_file:
-        data = list(json.loads(data_file.read()))
-        found_j1 = False
-        found_j2 = False
-        for x in data:
-            if str(dt.datetime.strptime(str(dt.date.today()), '%Y-%m-%d').date().strftime('%Y-%m')) in x.keys():
-                j1 = json.loads(str(x).replace("'", "\""))
-                found_j1 = True
-            elif str((dt.date.today().replace(day=1) - dt.timedelta(days=-32)).strftime("%Y-%m")) in x.keys():
-                j2 = json.loads(str(x).replace("'", "\""))
-                found_j2 = True
-        if not found_j1:
-            j1 = json.loads(json.dumps(data[-2:][0]))
-        if not found_j2:
-            j2 = json.loads(json.dumps(data[-2:][1]))
-        ret = "[['realized', 'expected'],['"
-        m1 = ""
-        m2 = ""
-        for x in j1:
-            m1 = x
-            ret = ret + str(j1[x]['realized']) + "','"
-            #ret = ret + str(j1[x]['unrealized']) + "','"
-            ret = ret + str(j1[x]['expected']) + "'],['"
-        for x in j2:
-            m2 = x
-            ret = ret + str(j2[x]['realized']) + "','"
-            #ret = ret + str(j2[x]['unrealized']) + "','"
-            ret = ret + str(j2[x]['expected']) + "'],['"
-        ret = ret + m1 + "','" + m2 + "']]"
-        return ret.replace("'", "\"")
-
-@app.route('/data/<username>/progress/add/<account>/<ticker>/<contracts>/<collateral>/<exp>/<call>/<put>/<prem>')
-def updateProgressData(username, account, ticker, contracts, collateral, exp, call, put, prem):
-    time.sleep(1)
-    prem = str(int(float(prem)))
-    with open('./data/'+username+'/monitoring.json', 'r') as data_file:
-        data = json.loads(data_file.read())
-        for x in data:
-            if x['ticker'] == ticker:
-                sz = []
-                sz = x['positions'][account]['exp']
-                sz_count = len(sz)
-                for i in range(sz_count):
-                    if x['positions'][account]['call'][i] == str(call) and x['positions'][account]['put'][i] == str(put) and x['positions'][account]['exp'][i] == str(dt.datetime.strptime(str(exp), '%Y-%m-%d').strftime('%d-%b')) and x['positions'][account]['coll'][i] == str(collateral):
-                        prem = str(x['positions'][account]['prem'][i])
-
-    year = str(exp).split('-')[0]
-    month = str(exp).split('-')[1]
-    day = str(exp).split('-')[2]
-    date = month + "-" + day
-    longcall = str(0)
-    longput = str(0)
-
-    if int(put)==0 and int(collateral)==0:
-        longcall = str(0)
-    elif int(put)==0 and int(collateral)!=0:
-        longcall = str(float(call) + float(collateral) / 100)
-    elif int(call)==0 and int(collateral)!=0:
-        longput = str(float(put) - float(collateral) / 100)
-    else:
-        longcall = str(float(call) + float(collateral) / 100)
-        longput = str(float(put) - float(collateral) / 100)
-
-    id = year + month + day + str(ticker).upper() + str(prem)
-    data = {}
-    with open('./data/'+username+'/progress.json', 'r') as data_file:
-        data = json.loads(data_file.read())
-        isNoYear = True
-        for x in data:
-            if x == year:
-                isNoYear = False
-                if data[x].get(date):
-                    for y in data[x]:
-                        if y == date:
-                            if data[x][y].get(ticker):
-                                val = "['"+str(account)+"','" + str(
-                                    int(prem) * int(contracts)) + "','" + longcall + "','" + str(
-                                    call) + "','" + str(put) + "','" + longput + "','"+str(contracts)+"']"
-                                data[year][date][ticker][id] = json.loads(val.replace("'", "\""))
-                            else:
-                                val = "{'" + id + "':['"+str(account)+"','" + str(
-                                    int(prem) * int(contracts)) + "','" + longcall + "','" + str(
-                                    call) + "','" + str(put) + "','" + longput + "','"+str(contracts)+"']}"
-                                data[year][date][ticker] = json.loads(val.replace("'", "\""))
-                else:
-                    val = "{'" + ticker + "':{'" + id + "':['"+str(account)+"','" + str(
-                        int(prem) * int(contracts)) + "','" + longcall + "','" + str(
-                        call) + "','" + str(put) + "','" + longput + "','"+str(contracts)+"']}}"
-                    data[year][date] = json.loads(val.replace("'", "\""))
-        if isNoYear:
-            val = "{'"+month+"-"+day+"':{'"+ticker+"':{'"+id+"':['"+str(account)+"','"+str(int(prem)*int(contracts))+"','"+longcall+"','"+str(call)+"','"+str(put)+"','"+longput+ "','"+str(contracts)+"']}}}"
-            data[year] = json.loads(val.replace("'", "\""))
-    with open('./data/'+username+'/progress.json', 'w') as file:
-        file.write(str(data).replace("'", "\""))
-        file.close()
-    data2 = []
-    dt_counter = 0
-    with open('./data/' + username + '/gains.json', 'r') as data_file2:
-        data2 = json.loads(data_file2.read())
-        for vals in data2:
-            for x in vals.keys():
-                if str(x) == str(dt.datetime.strptime(str(exp), '%Y-%m-%d').strftime('%Y-%m')):
-                    addSubGains(username, x, 0, str(int(prem)*int(contracts)))
-                    dt_counter = 1
-                break
-        if dt_counter==0:
-            gains = "{'" + str(dt.datetime.strptime(str(exp), '%Y-%m-%d').date().strftime("%Y-%m")) + "': {'realized': 0,'unrealized': 0,'expected': "+str(int(prem)*int(contracts))+"}}"
-            data2.append(json.loads(gains.replace("'", "\"")))
-            with open('./data/'+username+'/gains.json', 'w') as file2:
-                file2.write(str(data2).replace("'", "\""))
-                file2.close()
-    print(str(
-        "['Value:  " + account + ' - ' + ticker + ' - ' + exp + ' - ' + call + ' - ' + put + ' - ' + prem + " added successfully!']").replace(
-        "'", "\""))
-    return str(
-        "['Value for:  " + account + ' - ' + ticker + " added successfully!']").replace(
-        "'", "\"")
-
-
-@app.route('/data/<username>/gains/monthly')
-def getGainsDataForProgeress(username):
-    ret = []
-    month = []
-    realized = []
-    with open('./data/'+username+'/gains.json', 'r') as data_file:
-        data = json.loads(data_file.read())
-        for x in data:
-            for y in x.keys():
-                month.append(y)
-                realized.append(x[y]['realized'])
-                break
-        ret.append(month)
-        ret.append(realized)
-        return str(ret).replace("'", "\"")
-
-@app.route('/data/<username>/stocks/get')
-def getLongStock(username):
-    data = {}
-    temp_data = {}
-    with open('./data/'+username+'/stocks_temp.json', 'r') as data_file3:
-        temp_data = json.loads(data_file3.read())
-    with open('./data/' + username + '/stocks.json', 'r') as data_file:
-        data = json.loads(data_file.read())
-        index = 0
-        for x in data:
-            try:
-                shares_before = temp_data[index]['shares']
-                resp = cm.getHtml("quote", data[index]['ticker'])
-                if resp[0] == 200:
-                    try:
-                        df = parse(resp[1], resp[2])
-                        data[index]['current'] = df.iloc[0]['value']
-                    except:
-                        pass
-                data[index]['pnl'] = str(round(float((float(data[index]['current']) - float(data[index]['price']))/float(data[index]['price']))*100, 2))
-                data[index]['div'] = getDiv(resp[1], resp[2])
-                divList = divListNasdaq(data[index]['ticker'], data[index]['shares'])
-                if int(shares_before) != int(data[index]['shares']):
-                    data[index]['total'] = str(round(float(data[index]['pershare'])*int(data[index]['shares']), 2))
-                if len(str(data[index]['date'])) == 0 and len(str(data[index]['pershare'])) == 0 and len(str(data[index]['total'])) == 0:
-                    data[index]['date'] = divList[0]
-                    data[index]['pershare'] = divList[1]
-                    data[index]['total'] = divList[2]
-                elif str(data[index]['date']) != str(divList[0]):
-                    populateDividendRealized(username, data[index]['total'])
-                    data[index]['date'] = divList[0]
-                    data[index]['pershare'] = divList[1]
-                    data[index]['total'] = divList[2]
-                    #populate dividend into realized gains for current month
-                index = index + 1
-            except:
-                pass
-    with open('./data/'+username+'/stocks.json', 'w') as data_file2:
-        data_file2.write(str(data).replace("'", "\""))
-        data_file2.close()
-    with open('./data/'+username+'/stocks_temp.json', 'w') as data_file3:
-        data_file3.write(str(data).replace("'", "\""))
-        data_file3.close()
-    return str(data).replace("'", "\"")
-
-def populateDividendRealized(username, realized):
-    data2 = {}
-    with open('./data/' + username + '/gains.json', 'r') as data_file2:
-        data2 = json.loads(data_file2.read())
-        dt_counter = 0
-        check = 0
-        for vals in data2:
-            for x in vals.keys():
-                if str(x) == str(dt.datetime.strptime(str(dt.date.today()), '%Y-%m-%d').strftime('%Y-%m')):
-                    try:
-                        check = 1
-                        data2[dt_counter][x]['realized'] = str(round(float(data2[dt_counter][x]['realized']) + float(realized)))
-                        break
-                    except:
-                        pass
-            dt_counter = dt_counter + 1
-        if check == 0:
-            gains = "{'" + str(dt.datetime.strptime(str(dt.date.today()), '%Y-%m-%d').date().strftime("%Y-%m")) + "': {'realized': "+str(round(float(realized)))+",'unrealized': 0,'expected': 0}}"
-            data2.append(json.loads(gains.replace("'", "\"")))
-            with open('./data/' + username + '/gains.json', 'w') as file2:
-                file2.write(str(data2).replace("'", "\""))
-                file2.close()
-    with open('./data/'+username+'/gains.json', 'w') as file2:
-        file2.write(str(data2).replace("'", "\""))
-        file2.close()
-
-def divListNasdaq(stock, shares):
-    try:
-        req = r.get("https://finance.yahoo.com/quote/"+stock+"/history?filter=div&frequency=1d&includeAdjustedClose=true").text
-        print(req)
-        soup = BeautifulSoup(req, 'html.parser')
-        l1 = soup.select(y.yahoo_dividend_table_first())
-        l4 = soup.select(y.yahoo_dividend_table_fourth())
-        return [str(l4[0].text.split(" ")[0] + " " + l4[0].text.split(" ")[1])[:-1], str(l1[1].text).split(" ")[0], str(round(float(str(l1[1].text).split(" ")[0])*float(shares), 2))]
-    except:
-        return ["Err", "Err", "0"]
-
-@app.route('/data/<username>/stocks/get/temp')
-def getLongStockTemp(username):
-    data = {}
-    with open('./data/'+username+'/stocks.json', 'r') as data_file:
-        data = json.loads(data_file.read())
-    with open('./data/'+username+'/stocks_temp.json', 'w') as data_file2:
-        data_file2.write(str(data).replace("'", "\""))
-        data_file2.close()
-    return str(data).replace("'", "\"")
-
-@app.route('/data/<username>/stocks/<stock>/<price>/<account>/<shares>')
-def addLongStock(username, stock, price, account, shares):
-    data = []
-    counter = 0
+    history = []
     index = 0
-    with open('./data/' + username + '/stocks.json', 'r') as data_file:
-        data = json.loads(data_file.read())
-        for x in data:
-            if str(x['ticker']) == str(stock) and str(x['account']) == str(account):
-                data[index]['price'] = str(round((float(data[index]['price'])*float(data[index]['shares']) + float(price)*float(shares))/(int(shares) + int(data[index]['shares'])), 2))
-                data[index]['shares'] = str(int(data[index]['shares']) + int(shares))
-                counter = 1
-                break
-            index = index + 1
-        if counter ==0:
-            gains = "{'ticker': '"+stock+"', 'price':'"+price+"', 'account':'"+account+"', 'pnl': '','shares': '"+shares+"','current': '','div': '','date': '','pershare': '','total': ''}"
-            data.append(json.loads(gains.replace("'", "\"")))
-    with open('./data/'+username+'/stocks.json', 'w') as file2:
-        file2.write(str(data).replace("'", "\""))
-        file2.close()
-    return str(data).replace("'", "\"")
+    data = json.loads(dumps(con.getCollection("PayHist").find({"_id": username})))[0]['hist']
+    history = data['history']
 
-@app.route('/data/<username>/delstocks/<stock>/<account>/<shares>')
-def delLongStock(username, stock, account, shares):
-    data = []
-    with open('./data/' + username + '/stocks.json', 'r') as data_file:
-        data = json.loads(data_file.read())
-        index = 0
-        for x in data:
-            if x['ticker'] == stock and int(shares) >= int(x['shares']) and x['account'] == account:
-                data.pop(index)
-            elif x['ticker'] == stock and int(shares) < int(x['shares']) and x['account'] == account:
-                data[index]['shares'] = str(int(data[index]['shares']) - int(shares))
-            index = index + 1
-    with open('./data/'+username+'/stocks.json', 'w') as file2:
-        file2.write(str(data).replace("'", "\""))
-        file2.close()
-    return str(data).replace("'", "\"")
-
-@app.route('/data/<username>/notification/get')
-def getRawTradeNotifications(username):
-    data = {}
-    if os.path.isfile('./data/' + username + '/notification.json'):
-        with open('./data/' + username + '/notification.json', "r") as data_file:
-            data = json.loads(data_file.read())
-    else:
-        with open('./data/' + username + '/notification.json', "w") as data_file2:
-            data_file2.write("[]")
-            data_file2.close()
-        with open('./data/' + username + '/notification.json', "r") as data_file:
-            data = json.loads(data_file.read())
-    return str(data).replace("'", "\"")
-
-@app.route('/data/<username>/notification/get/<date>/<ticker>/<trade_type>/<pnl>')
-def getTradeNotifications(username, date, ticker, trade_type, pnl):
-    data = {}
-    if os.path.isfile('./data/' + username + '/notification.json'):
-        with open('./data/' + username + '/notification.json', "r") as data_file:
-            data = notificationDataFilter(json.loads(data_file.read()), date, ticker, trade_type, pnl)
-    else:
-        with open('./data/' + username + '/notification.json', "w") as data_file2:
-            data_file2.write("[]")
-            data_file2.close()
-        with open('./data/' + username + '/notification.json', "r") as data_file:
-            data = json.loads(data_file.read())
-    return str(data).replace("'", "\"")
-
-@app.route('/data/<username>/notification/update')
-def updateTradeNotifications(username):
-    data = []
-    with open('./data/' + username + '/notification.json', "r") as data_file:
-        data = json.loads(data_file.read())
-    with open('./data/' + username + '/notification.json', "w") as data_file2:
-        count = 0
-        for x in data:
-            if x['status'] == "read":
-                break
-            data[count]['status'] = "read"
-            count = count + 1
-        data_file2.write(str(data).replace("'", "\""))
-        data_file2.close()
-    return str(data).replace("'", "\"")
-
-@app.route('/data/<username>/notification/add', methods=["GET", "POST"])
-def addTradeNotifications(username):
-    data = []
-    with open('./data/' + username + '/notification.json', "r") as data_file:
-        data = json.loads(data_file.read())
-    with open('./data/' + username + '/notification.json', "w") as data_file2:
-        data.insert(0, request.json)
-        data_file2.write(str(data).replace("'", "\""))
-        data_file2.close()
-    return str(data).replace("'", "\"")
-
-@app.route('/data/<username>/notification/del')
-def delTradeNotifications(username):
-    data = {}
-    with open('./data/' + username + '/notification.json', "w") as data_file:
-        data_file.write(request.json)
-        data_file2.close()
-    with open('./data/' + username + '/notification.json', "r") as data_file:
-        data = json.loads(data_file.read())
-    return str(data).replace("'", "\"")
-
-@app.route('/data/<username>/networth/get')
-def getNetWorth(username):
-    data = []
-    if os.path.isfile('./data/' + username + '/networth.json'):
-        with open('./data/' + username + '/networth.json', "r") as data_file:
-            data = json.loads(data_file.read())
-    else:
-        with open('./data/' + username + '/networth.json', "w") as data_file2:
-            fid = ""
-            rob = ""
-            tasty = ""
-            ret = ""
-            fidelity = ""
-            robinhood = ""
-            tastyworks = ""
-            date = str(dt.datetime.strptime(str(dt.date.today()), '%Y-%m-%d').date().strftime('%m/%d/%Y'))
-            with open('./data/' + username + '/accounts.json', 'r') as data_file:
-                data2 = json.loads(data_file.read())
-                fidelity = str(data2['fidelity'])
-                robinhood = str(data2['robinhood'])
-                tastyworks = str(data2['tastyworks'])
-            with open('./data/' + username + '/daily.json', 'r') as data_file:
-                data2 = json.loads(data_file.read())
-                data_lst = list(data2)
-                data_lst[0]['date'] = date
-                fid = str(data_lst[1]['fidelity'][-1])
-                rob = str(data_lst[2]['robinhood'][-1])
-                tasty = str(data_lst[3]['tastyworks'][-1])
-                ret = str(data_lst[4]['retirement'][-1])
-            net = str(int(fid) + int(rob) + int(tasty) + int(ret))
-            _str = "[{'date':'" + date + "','net': " + net + ", 'pos':{ 'real': {}, 'cash':{}, 'retirement':{'default':" + ret + "}, 'investments':{'" + fidelity + "':" + fid + ",'" + robinhood + "':" + rob + ",'" + tastyworks + "':" + tasty + "}, 'other':{}}, 'neg':{ 'real': {}, 'credit':{}, 'other':{}}}]"
-            data_file2.write(str(_str).replace("'", "\""))
-            data_file2.close()
-        with open('./data/' + username + '/networth.json', "r") as data_file:
-            data = json.loads(data_file.read())
-    return str(data).replace("'", "\"")
-
-@app.route('/data/<username>/networth/add', methods=["GET", "POST"])
-def addToNetWorth(username):
-    data = []
-    cur_date = ""
-    with open('./data/' + username + '/networth.json', "r") as data_file:
-        data = json.loads(data_file.read())
-
-    if request.json['date'] == data[-1]['date']:
-        return "['error': 'Current date data already present update it instead']".replace("'", "\"")
-    else:
-        with open('./data/' + username + '/networth.json', "w") as data_file:
-            data.insert(0 ,request.json)
-            data_file.write(str(data).replace("'", "\""))
-        return str(data).replace("'", "\"")
-
-@app.route('/data/<username>/networth/update', methods=["GET", "POST"])
-def updateNetWorth(username):
-    data = []
-    cur_date = ""
-    with open('./data/' + username + '/networth.json', "r") as data_file:
-        data = json.loads(data_file.read())
-    with open('./data/' + username + '/networth.json', "w") as data_file:
-        data.pop(0)
-        data.insert(0 ,request.json)
-        data_file.write(str(data).replace("'", "\""))
-    return str(data).replace("'", "\"")
-
-@app.route('/data/<username>/networth/del')
-def delNetWorth(username):
-    data = []
-    cur_date = ""
-    with open('./data/' + username + '/networth.json', "r") as data_file:
-        data = json.loads(data_file.read())
-    with open('./data/' + username + '/networth.json', "w") as data_file:
-        data.pop(0)
-        data_file.write(str(data).replace("'", "\""))
-    return str(data).replace("'", "\"")
-
-@app.route('/data/calendar/<date>/<vol>/<open_i>')
-def populateCalendar(date, vol, open_i):
-    today = dt.datetime.strptime(date, '%Y-%m-%d')
-    offset_list = ["0", "100", "200", "300"]
-    idx = (today.weekday() + 1) % 7
-    sun = today - dt.timedelta(idx)
-    sat = sun - dt.timedelta(-6)
-    data_list = []
-    data_list_time = []
-    for x in offset_list:
-        calendar = cl.calendar(str(sun).split(" ")[0], str(sat).split(" ")[0], str(today).split(" ")[0], x)
-        l = calendar.return_cal_table()
-        data_time = [j.text for j in l][2::6]
-        data = [j.text for j in l][0::6]
-        if len(data) == 0:
+    for hist in history:
+        if(hist['due_date']==due_date and delete_or_edit=='edit'):
+            history.pop(index)
+            val = "{'due_date': '" + due_date + "', 'paid_date': '"+paid_date+"', 'rent': '" + rent + "', 'utilities': '"+utilities+"', 'late': '"+\
+                  late+"', 'additional': '"+additional+"', 'total': '" + str(int(rent) + int(utilities) + int(late) + int(additional)) + "', 'status': '"+status+"'}"
+            jval = json.loads(val.replace("'", "\""))
+            history.append(jval)
             break
-        for tick, et in zip(data, data_time):
-            data_list_time.append([tick, et])
-        data_list.extend(data)
-    ret = []
-    ticker_list = []
-    for ticker in data_list:
-        time.sleep(0.5)
-        soup = BeautifulSoup(cm.getHtml("options", ticker)[1], 'html.parser')
-        candidate = list(cm.isGoodCandidate(ticker, soup.select(y.options_table("call")), soup.select(y.options_table("put")), int(vol), int(open_i)))
-        for x in data_list_time:
-            if x[0] == ticker:
-                candidate.append(x[1])
-        if candidate[0]:
-            ticker_list.append(candidate[1:])
+        elif(hist['due_date']==due_date and delete_or_edit=='delete'):
+            history.pop(index)
+            break
+        index = index + 1
+    data['history'] = history
+    con.getCollection("PayHist").find_one_and_update({"_id": username}, {"$set": {"hist": data}})
+    return "['Successfully wrote to accounts!']".replace("'", "\"")
+
+@app.route('/data/<username>/rental/history')
+def payment_history(username):
+    return json.loads(dumps(con.getCollection("PayHist").find({"_id": username})))[0]['hist']
+
+@app.route('/data/<username>/rental/outstanding')
+def outstanding(username):
+    total_out = 0
+    data = json.loads(dumps(con.getCollection("PayHist").find({"_id": username})))[0]['hist']
+    for hist in data['history']:
+        if hist['status'] == 'N':
+            total_out = total_out + int(hist['total'])
+    return str(total_out)
+
+@app.route('/data/<username>/rental/extend/<period>')
+def extention(username, period):
     data = {}
-    with open('./data/earnings.json', 'r') as data_file:
-        data = json.loads(data_file.read())
-        data[str(today).split(" ")[0]] = ticker_list
-    with open('./data/earnings.json', 'w') as data_file2:
-        data_file2.write(str(data).replace("'", "\""))
+    total_out = 0
+    data = json.loads(dumps(con.getCollection("PayHist").find({"_id": username})))[0]['hist']
+    data['request'] = period
+    con.getCollection("PayHist").find_one_and_update({"_id": username}, {"$set": {"hist": data}})
+    return data
+
+@app.route('/data/<username>/rental/extend/approve/<period>')
+def extentionApprove(username, period):
+    data = json.loads(dumps(con.getCollection("PayHist").find({"_id": username})))[0]['hist']
+    data['request'] = "false"
+    data['expiry'] = period
+    con.getCollection("PayHist").find_one_and_update({"_id": username}, {"$set": {"hist": data}})
+    return data
+
+@app.route("/properties/add", methods=["POST"])
+def addNewProperty():
+    val = "{'_id': '"+request.json['name']+"', 'address': '"+request.json['address']+"', 'workorders': []}"
+    jval = json.loads(val.replace("'", "\""))
+    con.getCollection("Properties").insert_one(jval)
+    return "['Successfully created new property']".replace("'", "\"")
+
+@app.route("/properties/get")
+def getAllProperties():
+    return str(con.getCollection("Properties").find().distinct('_id')).replace("'", "\"")
+
+@app.route("/properties/<properties>/get")
+def getProperty(properties):
+    return str(json.loads(dumps(con.getCollection("Properties").find({"_id": properties})))[0]).replace("'", "\"")
+
+@app.route("/properties/<properties>/workorder", methods=['GET', 'POST'])
+def createWorkOrder(properties):
+    data = json.loads(dumps(con.getCollection("Properties").find({"_id": properties})))[0]        
+    workorder = data['workorders']
+    workorder.insert(0, request.json)
+    con.getCollection("Properties").find_one_and_update({"_id": properties}, {"$set": {"workorders": workorder}})
     return str(data).replace("'", "\"")
 
-@app.route('/data/calendar/get')
-def getCalendar():
-    data = {}
-    with open('./data/earnings.json', 'r') as data_file:
-        data = json.loads(data_file.read())
-    return str(data).replace("'", "\"")
+@app.route("/properties/inprogress")
+def getAllInprogress():
+    final_data = []
+    onlyfiles = con.getCollection("Properties").find().distinct('_id')
+    for file in onlyfiles:
+        data = json.loads(dumps(con.getCollection("Properties").find({"_id": file})))[0]
+        for x in data['workorders']:
+                if(x['status'] == 'In progress'):
+                    final_data.append(x)
+    return str(final_data).replace("'", "\"")
 
-@app.route('/data/<username>/monitoring/rearrange/update', methods=["GET", "POST"])
-def rearrangeTickers(username):
-    data = []
-    final = []
-    with open('./data/' + username + '/monitoring.json', 'r') as data_file:
-        data = json.loads(data_file.read())
-        for v in request.json:
-            for x in data:
-                if x['ticker'] == str(v):
-                    final.append(x)
-    with open('./data/'+username+'/monitoring.json', 'w') as file:
-        file.write(str(final).replace("'", "\""))
-        file.close()
-    with open('./data/'+username+'/monitoring_temp.json', 'w') as file:
-        file.write(str(final).replace("'", "\""))
-        file.close()
-    return ""
-
-@app.route('/data/<username>/monitoring/rearrange/get')
-def getTickersPosition(username):
-    data = []
-    positions = {}
-    with open('./data/' + username + '/monitoring.json', 'r') as data_file:
-        data = json.loads(data_file.read())
-        count = 0
-        for x in data:
-            positions[str(count)] = x['ticker']
-            count = count + 1
-        return str(positions).replace("'", "\"")
-
-@app.route('/data/<username>/spread/get', methods=["GET", "POST"])
-def getPriceOfSpreads(username):
-    ret_val = "0"
-    incoming = request.json
-    ticker = re.sub(r'[^a-zA-Z0-9 ]',r'', incoming[7])
-    expmonth = dt.datetime.strptime(str(incoming[3]), '%d-%b').date().month
-    nowmonth = dt.datetime.today().month
-    nowyear = dt.datetime.today().year
-    year = str(nowyear)[2:]
-    if nowmonth > expmonth:
-        year = str(nowyear + 1)[2:]
-    date = dt.datetime.strptime(str(incoming[3]), '%d-%b').date().strftime('%m%d')
-    if incoming[2] == '0':
-        strike = float(incoming[4])
-        ret_val = callSide(strike, ticker, year, date)
-    elif incoming[4] == '0' or incoming[5] == '0':
-        if incoming[5] == '0':
-            strike_1 = float(incoming[4])
-            strike_2 = float(incoming[4]) + float(incoming[2])/(float(incoming[1])*100)
-            ret_val_1 = callSide(strike_1, ticker, year, date)
-            ret_val_2 = callSide(strike_2, ticker, year, date)
-            ret_val = float(ret_val_1) - float(ret_val_2)
-        elif incoming[4] == '0':
-            strike_1 = float(incoming[5])
-            strike_2 = float(incoming[5]) - float(incoming[2]) / (float(incoming[1])*100)
-            ret_val_1 = putSide(strike_1, ticker, year, date)
-            ret_val_2 = putSide(strike_2, ticker, year, date)
-            ret_val = float(ret_val_1) - float(ret_val_2)
-    else:
-        strike_1_c = float(incoming[4])
-        strike_2_c = float(incoming[4]) + float(incoming[2]) / (float(incoming[1]) * 100)
-        ret_val_1_c = callSide(strike_1_c, ticker, year, date)
-        ret_val_2_c = callSide(strike_2_c, ticker, year, date)
-        ret_val_c = float(ret_val_1_c) - float(ret_val_2_c)
-        strike_1_p = float(incoming[5])
-        strike_2_p = float(incoming[5]) - float(incoming[2]) / (float(incoming[1]) * 100)
-        ret_val_1_p = putSide(strike_1_p, ticker, year, date)
-        ret_val_2_p = putSide(strike_2_p, ticker, year, date)
-        ret_val_p = float(ret_val_1_p) - float(ret_val_2_p)
-        ret_val = ret_val_c + ret_val_p
-    current = str(float(incoming[6]) - float(ret_val)) + " (" + str(round((float(incoming[6]) - float(ret_val))*100/float(incoming[6]))) + "%)"
-    return str("{'value':'"+current+"'}").replace("'", "\"")
-
-def putSide(strike, ticker, year, date):
-    ret_val = ""
-    if len(str(strike).split(".")[0]) == 1:
-        ret_val = str(int(float((options(str(ticker + year + date + "P0000" + str(int(strike * 1000)))))) * 100))
-    elif len(str(strike).split(".")[0]) == 2:
-        ret_val = str(int(float((options(str(ticker + year + date + "P000" + str(int(strike * 1000)))))) * 100))
-    elif len(str(strike).split(".")[0]) == 3:
-        ret_val = str(int(float((options(str(ticker + year + date + "P00" + str(int(strike * 1000)))))) * 100))
-    elif len(str(strike).split(".")[0]) == 4:
-        ret_val = str(int(float((options(str(ticker + year + date + "P0" + str(int(strike * 1000)))))) * 100))
-    return ret_val
-
-def callSide(strike, ticker, year, date):
-    ret_val = ""
-    if len(str(strike).split(".")[0]) == 1:
-        ret_val = str(int(float((options(str(ticker + year + date + "C0000" + str(int(strike * 1000)))))) * 100))
-    elif len(str(strike).split(".")[0]) == 2:
-        ret_val = str(int(float((options(str(ticker + year + date + "C000" + str(int(strike * 1000)))))) * 100))
-    elif len(str(strike).split(".")[0]) == 3:
-        ret_val = str(int(float((options(str(ticker + year + date + "C00" + str(int(strike * 1000)))))) * 100))
-    elif len(str(strike).split(".")[0]) == 4:
-        ret_val = str(int(float((options(str(ticker + year + date + "C0" + str(int(strike * 1000)))))) * 100))
-    return ret_val
-
-def removeFromProgress(username, removerVals, ticker, account, cost, contracts, premium):
-    data = {}
-    ret = "["
-    year = ""
-    with open('./data/'+username+'/progress.json', 'r') as data_file:
-        data = json.loads(data_file.read())
-        t = dt.datetime.strptime(str(removerVals[2]), '%d-%b')
-        for y in data:
-            try:
-                id = str(y) + str(t.strftime('%m%d')) + ticker.upper() + str(removerVals[4])
-                del data[str(y)][str(t.strftime('%m-%d'))][str(ticker)][id]
-                year = str(y)
-                if len(str(data[year][str(t.strftime('%m-%d'))][str(ticker)])) < 4:
-                    del data[year][str(t.strftime('%m-%d'))][str(ticker)]
-                    if len(str(data[year][str(t.strftime('%m-%d'))])) < 4:
-                        del data[year][str(t.strftime('%m-%d'))]
-            except:
-                pass
-        addSubGains(username, year + "-" + str(t.strftime('%m')), str(int(int(premium) - int(cost))*int(contracts)), "-"+str(int(premium)*int(contracts)))
-    with open('./data/'+username+'/progress.json', 'w') as file:
-        file.write(str(data).replace("'", "\""))
-        file.close()
-    return ""
-
-def addSubGains(username, yearmonth, realizedcost, expectedcost):
-    data = []
-    index = 0
-    with open('./data/' + username + '/gains.json', 'r') as data_file2:
-        data = json.loads(data_file2.read())
-        for x in data:
-            for k in x.keys():
-                if k == yearmonth:
-                    data[index][yearmonth]['realized'] = int(x[yearmonth]['realized']) + int(realizedcost)
-                    data[index][yearmonth]['expected'] = int(x[yearmonth]['expected']) + int(expectedcost)
-            index = index + 1
-    with open('./data/'+username+'/gains.json', 'w') as file2:
-        file2.write(str(data).replace("'", "\""))
-        file2.close()
-    return str(data).replace("'", "\"")
-
-def parse(html, type):
-    soup = BeautifulSoup(html, 'html.parser')
-    if type == "yahoo":
-        dict = {'value':soup.select(y.current_value())[0].text}
-        l = soup.select(y.quote_table())
-        data = [j.text for j in l]
-        for i in range(0, len(data), 2):
-            dict[data[i]] = data[i + 1:i + 2]
-        df = pd.DataFrame(dict)
-        return df
-    elif type == "alt":
-        dict = {'value': soup.select(y.current_value_alt())[1].text}
-        l = soup.select(y.quote_table_alt())
-        del l[2::3]
-        data = [j.text for j in l]
-        for i in range(0, len(data), 2):
-            dict[data[i]] = data[i + 1:i + 2]
-        df = pd.DataFrame(dict)
-        return df
-
-def getDiv(html, type):
-    soup = BeautifulSoup(html, 'html.parser')
-    if type == "yahoo":
-        l = soup.select(y.quote_table())
+@app.route("/properties/workorder/delete", methods=['GET', 'POST'])
+def getDelete():
+    onlyfiles = con.getCollection("Properties").find().distinct('_id')
+    for file in onlyfiles:
+        data = json.loads(dumps(con.getCollection("Properties").find({"_id": file})))[0]
+        lst_data = data['workorders']
         index = 0
-        for vals in l:
-            if "Yield" in vals.text:
-                return l[index + 1].text
-            index = index + 1
-        return "NA"
-    elif type == "alt":
-        l = soup.select(y.quote_table_alt())
-        index = 0
-        val_yield = ""
-        val_div = ""
-        for vals in l:
-            if "Yield" in vals.text:
-                val_yield = l[index + 1].text
-            elif "Dividend" in vals.text:
-                val_div = l[index + 1].text
-            if len(val_yield) > 1 and len(val_div) > 1:
-                return val_div + "(" + val_yield + ")"
-            index = index + 1
-        return "NA"
-
-
-def options(tickers):
-    resp = cm.getHtml("quote", tickers)
-    price = 0.0
-    if resp[0] == 200:
-        try:
-            df = parse(resp[1], resp[2])
-            price = float(df.iloc[0]['value'].replace(',', ''))
-        except Exception:
-            #print(traceback.format_exc())
-            pass
-    return str(price)
-
-def notificationDataFilter(data, date, ticker, trade_type, pnl):
-    retData = []
-    retData_f = []
-    retData_t = []
-    retData_p = []
-    today = dt.datetime.today()
-    if str(date) == "ThisMonth":
-        for x in data:
-            date_val = dt.datetime.strptime(str(x['date']).split(" ")[0], '%m/%d/%Y')
-            if int(date_val.strftime("%m")) == int(today.month):
-                retData.append(x)
-            else:
+        for x in lst_data:
+            if (x['address'] == request.json['address'] and x['submitdate'] == request.json['time']):
+                lst_data.pop(index)
+                data['workorders'] = lst_data
                 break
-    elif str(date) == "PreviousMonth":
-        for x in data:
-            date_val = dt.datetime.strptime(str(x['date']).split(" ")[0], '%m/%d/%Y')
-            if int(date_val.strftime("%m")) == (int(today.month) - 1):
-                retData.append(x)
-    elif str(date) == "ThisWeek":
-        for x in data:
-            date_val = dt.datetime.strptime(str(x['date']).split(" ")[0], '%m/%d/%Y')
-            if int(date_val.strftime("%V")) == int(today.strftime("%V")):
-                retData.append(x)
-    elif str(date) == "PreviousWeek":
-        for x in data:
-            date_val = dt.datetime.strptime(str(x['date']).split(" ")[0], '%m/%d/%Y')
-            if int(date_val.strftime("%V")) == (int(today.strftime("%V")) - 1):
-                retData.append(x)
-    elif str(date) == "YeartoDate":
-        for x in data:
-            date_val = dt.datetime.strptime(str(x['date']).split(" ")[0], '%m/%d/%Y')
-            if int(date_val.strftime("%Y")) == int(today.year):
-                retData.append(x)
-    elif str(date) == "PreviousYear":
-        for x in data:
-            date_val = dt.datetime.strptime(str(x['date']).split(" ")[0], '%m/%d/%Y')
-            if int(date_val.strftime("%Y")) == (int(today.year) - 1):
-                retData.append(x)
-    if str(ticker) != "All":
-        for x in retData:
-            if x['ticker'] == str(ticker).lower():
-                retData_f.append(x)
-    else:
-        retData_f = retData
-    if str(trade_type) != "All":
-        for x in retData_f:
-            if str(x['type']).replace(" ", "").lower() == str(trade_type).replace(" ", "").lower():
-                retData_t.append(x)
-    else:
-        retData_t = retData_f
-    if str(pnl) != "All":
-        for x in retData_t:
-            try:
-                if len(str(x['cost']))>0:
-                    if str(pnl).lower() == "100g":
-                        if int(x['pnl'][:-1])>=100:
-                            retData_p.append(x)
-                    elif str(pnl).lower() == "100to0":
-                        if int(x['pnl'][:-1])<100 and int(x['pnl'][:-1])>=0:
-                            retData_p.append(x)
-                    elif str(pnl).lower() == "0to100":
-                        if int(x['pnl'][:-1])>-100 and int(x['pnl'][:-1])<0:
-                            retData_p.append(x)
-                    elif str(pnl).lower() == "100l":
-                        if int(x['pnl'][:-1])<-100:
-                            retData_p.append(x)
-            except:
-                pass
-    else:
-        retData_p = retData_t
-    return retData_p
+            index = index + 1
+        con.getCollection("Properties").find_one_and_update({"_id": file}, {"$set": {"workorders": lst_data}})
+    return str(['Successfully deleted']).replace("'", "\"")
 
-#Not being used now
-#@app.route('/data/<username>/progress/close')
-def closeExpired(username):
-    counter = 0
-    with open('./data/'+username+'/progress.json', 'r') as data_file:
-        data = json.loads(data_file.read())
-        for y in data:
-            for d in data[y]:
-                for t in data[y][d]:
-                    for id in data[y][d][t]:
-                        nowDate = dt.datetime.strptime(str(dt.date.today()), '%Y-%m-%d').date()
-                        tradeDate = dt.datetime.strptime(str(y)+'-'+str(d), '%Y-%m-%d').date()
-                        if tradeDate<nowDate:
-                            counter = counter + 1
-                            returnMonitoringDelStrike(t, list(data[y][d][t][id])[0], 'call', list(data[y][d][t][id])[3], 0, list(data[y][d][t][id])[6])
-    print("Closed "+str(counter)+" trades!")
-    return str("['Closed "+str(counter)+" trades! Please refresh!!']").replace("'", "\"")
+@app.route("/properties/workorder/completed", methods=['GET', 'POST'])
+def getMarkCompleted():
+    onlyfiles = con.getCollection("Properties").find().distinct('_id')
+    for file in onlyfiles:
+        data = json.loads(dumps(con.getCollection("Properties").find({"_id": file})))[0]
+        lst_data = data['workorders']
+        index = 0
+        for x in lst_data:
+            if (x['address'] == request.json['address'] and x['submitdate'] == request.json['time']):
+                jval = json.loads(str(lst_data[index]).replace("'", "\""))
+                jval['status'] = 'Completed'
+                lst_data.pop(index)
+                lst_data.insert(index, jval)
+                data['workorders'] = lst_data
+                break
+            index = index + 1
+        con.getCollection("Properties").find_one_and_update({"_id": file}, {"$set": {"workorders": lst_data}})
+    return str(['Successfully changed to completed']).replace("'", "\"")
 
-#Not being used now
-#@app.route('/data/<username>/progress/current')
-def getProgressData(username):
-    with open('./data/'+username+'/progress.json', 'r') as data_file:
-        data = json.loads(data_file.read())
-        ret = "["
-        for y in data:
-            year = y[-2:]
-            for d in data[y]:
-                date = str(d).replace("-", "")
-                for t in data[y][d]:
-                    ticker = t
-                    for id in data[y][d][t]:
-                        counter = 0
-                        lst = []
-                        for x in list(data[y][d][t][id]):
-                            if counter==2 or counter==3:
-                                strike = float(data[y][d][t][id][counter])
-                                try:
-                                    if len(str(strike).split(".")[0]) == 1:
-                                        lst.append(int(float((options(str(ticker+year+date+"C0000"+str(int(strike*1000))))))*100))
-                                    elif len(str(strike).split(".")[0]) == 2:
-                                        lst.append(int(float((options(str(ticker+year+date+"C000"+str(int(strike*1000))))))*100))
-                                    elif len(str(strike).split(".")[0]) == 3:
-                                        lst.append(int(float((options(str(ticker+year+date+"C00"+str(int(strike*1000))))))*100))
-                                    elif len(str(strike).split(".")[0]) == 4:
-                                        lst.append(int(float((options(str(ticker+year+date+"C0"+str(int(strike*1000))))))*100))
-                                except Exception:
-                                    lst.append("0")
-                                    #print(traceback.format_exc())
-                                    pass
-                                counter = counter + 1
-                            elif counter == 4 or counter == 5:
-                                strike = float(data[y][d][t][id][counter])
-                                try:
-                                    if len(str(strike).split(".")[0]) == 1:
-                                        lst.append(int(float((options(
-                                            str(ticker + year + date + "P0000" + str(int(strike * 1000)))))) * 100))
-                                    elif len(str(strike).split(".")[0]) == 2:
-                                        lst.append(int(float((options(
-                                            str(ticker + year + date + "P000" + str(int(strike * 1000)))))) * 100))
-                                    elif len(str(strike).split(".")[0]) == 3:
-                                        lst.append(int(float((options(
-                                            str(ticker + year + date + "P00" + str(int(strike * 1000)))))) * 100))
-                                    elif len(str(strike).split(".")[0]) == 4:
-                                        lst.append(int(float((options(
-                                            str(ticker + year + date + "P0" + str(int(strike * 1000)))))) * 100))
-                                except Exception:
-                                    lst.append("0")
-                                    #print(traceback.format_exc())
-                                    pass
-                                counter = counter + 1
-                            elif counter == 6:
-                                lst = [ele*float(data[y][d][t][id][counter]) for ele in lst]
-                                break
-                            else:
-                                counter = counter + 1
-                        cur = int((float(lst[1]) - float(lst[0])) + (float(lst[2]) - float(lst[3])))
-                        pnl = int(int(data[y][d][t][id][1]) - cur)
-                        perc = (int(data[y][d][t][id][1]) - cur)*100/int(data[y][d][t][id][1])
-                        ret = ret + "['"+ data[y][d][t][id][0]+"','"+t+"','"+str(data[y][d][t][id][3] + "-" + data[y][d][t][id][4])+"','"+str(y+"-"+d)+"','"+data[y][d][t][id][1]+"','"+str(cur)+"','"+str(pnl)+"','"+ str(round(perc, 2)) + "'],"
+@app.route("/properties/workorder/inprogress", methods=['GET', 'POST'])
+def getMarkProgress():
+    onlyfiles = con.getCollection("Properties").find().distinct('_id')
+    for file in onlyfiles:
+        data = json.loads(dumps(con.getCollection("Properties").find({"_id": file})))[0]
+        lst_data = data['workorders']
+        index = 0
+        for x in lst_data:
+            print(request.json)
+            if (x['address'] == request.json['address'] and x['submitdate'] == request.json['time']):
+                jval = json.loads(str(lst_data[index]).replace("'", "\""))
+                jval['status'] = 'In progress'
+                lst_data.pop(index)
+                lst_data.insert(index, jval)
+                data['workorders'] = lst_data
+                break
+            index = index + 1
+        con.getCollection("Properties").find_one_and_update({"_id": file}, {"$set": {"workorders": lst_data}})
+    return str(['Successfully changed to in progress']).replace("'", "\"")
 
-        data2 = json.loads(str(ret[:-1]+"]").replace("'", "\""))
-        ur = {}
-        expect = {}
-        for vals in data2:
-            if str(vals[3])[:-3] in ur:
-                ur[str(vals[3])[:-3]] = int(ur[str(vals[3])[:-3]]) + int(vals[6])
-                expect[str(vals[3])[:-3]] = int(expect[str(vals[3])[:-3]]) + int(vals[4])
-            else:
-                ur[str(vals[3])[:-3]] = int(vals[6])
-                expect[str(vals[3])[:-3]] = int(vals[4])
-        with open('./data/'+username+'/gains.json', 'r') as data_file2:
-            data3 = json.loads(data_file2.read())
-            for vals in ur:
-                isFound = False
-                counter = 0
-                for d in data3:
-                    for date in data3[counter]:
-                        if str(date) == str(vals):
-                            data3[counter][date]['unrealized'] = ur[vals]
-                            data3[counter][date]['expected'] = expect[vals]
-                            isFound = True
-                    counter = counter + 1
-                if isFound==False:
-                    data3.append({str(vals): {'realized':0, 'unrealized':ur[vals], 'expected':expect[vals]}})
-            with open('./data/'+username+'/gains.json', 'w') as file2:
-                file2.write(str(data3).replace("'", "\""))
-                file2.close()
-        return str(ret[:-1]+"]").replace("'", "\"")
+@app.route("/data/<username>/updatetenant", methods=['GET', 'POST'])
+def updateTenant(username):
+    data = json.loads(dumps(con.getCollection("PayHist").find({"_id": username})))[0]['hist']
+    data['propetyname'] = request.json['propetyname']
+    prop = json.loads(dumps(con.getCollection("Properties").find({"_id": data['propetyname']})))[0]
+    data['address'] = prop['address']
+    data['recurring'] = request.json['recurring']
+    data['deposit'] = request.json['deposit']
+    data['durations'] = request.json['durations'].split(",")
+    data['status'] = request.json['status']
+    data['email'] = request.json['email']
+    data['phone'] = request.json['phone']
+    data['expiry'] = request.json['expiry']
+    con.getCollection("PayHist").find_one_and_update({"_id": username}, {"$set": {"hist": data}})
+    return str(data).replace("'", "\"")
+
+@app.route("/properties/<properties>/update", methods=['GET', 'POST'])
+def updateProperty(properties):
+    con.getCollection("Properties").find_one_and_update({"_id": properties}, {"$set": {"address": request.json['address']}})
+    con.getCollection("Properties").find_one_and_update({"_id": properties}, {"$set": {"image": request.json['image']}})
+    con.getCollection("Properties").find_one_and_update({"_id": properties}, {"$set": {"desc": request.json['desc']}})
+    con.getCollection("Properties").find_one_and_update({"_id": properties}, {"$set": {"circuitbreaker": request.json['circuitbreaker']}})
+    con.getCollection("Properties").find_one_and_update({"_id": properties}, {"$set": {"watermain": request.json['watermain']}})
+    con.getCollection("Properties").find_one_and_update({"_id": properties}, {"$set": {"alarm'": request.json['alarm']}})
+    con.getCollection("Properties").find_one_and_update({"_id": properties}, {"$set": {"fire": request.json['fire']}})
+    con.getCollection("Properties").find_one_and_update({"_id": properties}, {"$set": {"centralheat": request.json['centralheat']}})
+    con.getCollection("Properties").find_one_and_update({"_id": properties}, {"$set": {"heatage": request.json['heatage']}})
+    con.getCollection("Properties").find_one_and_update({"_id": properties}, {"$set": {"pet": request.json['pet']}})
+    con.getCollection("Properties").find_one_and_update({"_id": properties}, {"$set": {"police": request.json['police']}})
+    con.getCollection("Properties").find_one_and_update({"_id": properties}, {"$set": {"hospital": request.json['hospital']}})
+    con.getCollection("Properties").find_one_and_update({"_id": properties}, {"$set": {"dmv": request.json['dmv']}})
+    return "['Successfully wrote to accounts!']".replace("'", "\"")
 
 ################################################################################
 ###########################CREATE AND DELETE USER###############################
@@ -1681,263 +536,3 @@ def deleteUser(username):
         os.remove(os.path.join(dir, files))
     os.rmdir(dir)
     return str(['Successfully delete user']).replace("'", "\"")
-
-################################################################################
-###################################RENTAL#######################################
-################################################################################
-@app.route('/data/<username>/rental/addquotes')
-def send_rent_quotes(username):
-    data = {}
-    history = []
-    with open('./data/' + username + '/payhist.json', 'r') as data_file:
-        data = json.loads(data_file.read())
-        history = data['history']
-        val = "{'due_date': '" + str(dt.datetime.strptime(str(dt.date.today()), '%Y-%m-%d').date())[
-                                 :-2] + "01" + "', 'paid_date': 'NA', 'rent': '" + str(
-            data['recurring']) + "', 'utilities': '0', 'late': '0', 'additional': '0', 'total': '" + str(
-            data['recurring']) + "', 'status': 'N'}"
-        jval = json.loads(val.replace("'", "\""))
-        history.insert(0, jval)
-        data['history'] = history
-    with open('./data/' + username + '/payhist.json', 'w') as data_file2:
-        data_file2.write(str(data).replace("'", "\""))
-    return "['Successfully wrote to accounts!']".replace("'", "\"")
-
-@app.route('/data/<username>/rental/editquotes/<delete_or_edit>/<due_date>/<paid_date>/<rent>/<utilities>/<late>/<additional>/<total>/<status>')
-def edit_rent_quotes(username, delete_or_edit, due_date, paid_date, rent, utilities, late, additional, total, status):
-    data = {}
-    history = []
-    index = 0
-    with open('./data/' + username + '/payhist.json', 'r') as data_file:
-        data = json.loads(data_file.read())
-        history = data['history']
-
-        for hist in history:
-            if(hist['due_date']==due_date and delete_or_edit=='edit'):
-                history.pop(index)
-                val = "{'due_date': '" + due_date + "', 'paid_date': '"+paid_date+"', 'rent': '" + rent + "', 'utilities': '"+utilities+"', 'late': '"+\
-                      late+"', 'additional': '"+additional+"', 'total': '" + str(int(rent) + int(utilities) + int(late) + int(additional)) + "', 'status': '"+status+"'}"
-                jval = json.loads(val.replace("'", "\""))
-                history.append(jval)
-                break
-            elif(hist['due_date']==due_date and delete_or_edit=='delete'):
-                history.pop(index)
-                break
-            index = index + 1
-        data['history'] = history
-    with open('./data/' + username + '/payhist.json', 'w') as data_file2:
-        data_file2.write(str(data).replace("'", "\""))
-        return "['Successfully wrote to accounts!']".replace("'", "\"")
-
-@app.route('/data/<username>/rental/history')
-def payment_history(username):
-    data = {}
-    history = []
-    with open('./data/' + username + '/payhist.json', 'r') as data_file:
-        data = json.loads(data_file.read())
-        return data
-
-@app.route('/data/<username>/rental/outstanding')
-def outstanding(username):
-    data = {}
-    total_out = 0
-    with open('./data/' + username + '/payhist.json', 'r') as data_file:
-        data = json.loads(data_file.read())
-        for hist in data['history']:
-            if hist['status'] == 'N':
-                total_out = total_out + int(hist['total'])
-        return str(total_out)
-
-@app.route('/data/<username>/rental/extend/<period>')
-def extention(username, period):
-    data = {}
-    total_out = 0
-    with open('./data/' + username + '/payhist.json', 'r') as data_file:
-        data = json.loads(data_file.read())
-        data['request'] = period
-    with open('./data/' + username + '/payhist.json', 'w') as data_file2:
-        data_file2.write(str(data).replace("'", "\""))
-        return data
-
-@app.route('/data/<username>/rental/extend/approve/<period>')
-def extentionApprove(username, period):
-    data = {}
-    total_out = 0
-    with open('./data/' + username + '/payhist.json', 'r') as data_file:
-        data = json.loads(data_file.read())
-        data['request'] = "false"
-        data['expiry'] = period
-    with open('./data/' + username + '/payhist.json', 'w') as data_file2:
-        data_file2.write(str(data).replace("'", "\""))
-        return data
-
-@app.route("/properties/add", methods=["POST"])
-def addNewProperty():
-    with open('./properties/'+request.json['name']+'.json', 'w') as data_file:
-        val = "{'name': '"+request.json['name']+"', 'address': '"+request.json['address']+"', 'workorders': []}"
-        jval = json.loads(val.replace("'", "\""))
-        data_file.write(str(jval).replace("'", "\""))
-        return "['Successfully created new property']".replace("'", "\"")
-
-@app.route("/properties/get")
-def getAllProperties():
-    onlyfiles = [f for f in listdir("./properties/") if isfile(join("./properties/", f))]
-    return str([str(x)[:-5] for x in onlyfiles]).replace("'", "\"")
-
-@app.route("/properties/<properties>/get")
-def getProperty(properties):
-    with open('./properties/' + properties + '.json', 'r') as data_file:
-        return str(json.loads(data_file.read())).replace("'", "\"")
-
-@app.route("/properties/<properties>/workorder", methods=['GET', 'POST'])
-def createWorkOrder(properties):
-    data = {}
-    workorder = []
-    with open('./properties/'+properties+'.json', 'r') as data_file:
-        data = json.loads(data_file.read())
-        workorder = data['workorders']
-        workorder.insert(0, request.json)
-        data['workorders'] = workorder
-    with open('./properties/' + properties + '.json', 'w') as data_file2:
-        data_file2.write(str(data).replace("'", "\""))
-        return str(data).replace("'", "\"")
-
-@app.route("/properties/inprogress")
-def getAllInprogress():
-    data = {}
-    final_data = []
-    onlyfiles = [f for f in listdir("./properties/") if isfile(join("./properties/", f))]
-    for file in onlyfiles:
-        with open('./properties/' + file, 'r') as data_file:
-            data = json.loads(data_file.read())
-            for x in data['workorders']:
-                if(x['status'] == 'In progress'):
-                    final_data.append(x)
-    return str(final_data).replace("'", "\"")
-
-@app.route("/properties/workorder/delete", methods=['GET', 'POST'])
-def getDelete():
-    data = {}
-    final_data = []
-    onlyfiles = [f for f in listdir("./properties/") if isfile(join("./properties/", f))]
-    for file in onlyfiles:
-        with open('./properties/' + file, 'r') as data_file:
-            data = json.loads(data_file.read())
-            lst_data = data['workorders']
-            index = 0
-            for x in lst_data:
-                if (x['address'] == request.json['address'] and x['submitdate'] == request.json['time']):
-                    lst_data.pop(index)
-                    data['workorders'] = lst_data
-                    break
-                index = index + 1
-            with open('./properties/' + file, 'w') as data_file2:
-                data_file2.write(str(data).replace("'", "\""))
-    return str(['Successfully deleted']).replace("'", "\"")
-
-@app.route("/properties/workorder/completed", methods=['GET', 'POST'])
-def getMarkCompleted():
-    data = {}
-    final_data = []
-    onlyfiles = [f for f in listdir("./properties/") if isfile(join("./properties/", f))]
-    for file in onlyfiles:
-        with open('./properties/' + file, 'r') as data_file:
-            data = json.loads(data_file.read())
-            lst_data = data['workorders']
-            index = 0
-            for x in lst_data:
-                if (x['address'] == request.json['address'] and x['submitdate'] == request.json['time']):
-                    jval = json.loads(str(lst_data[index]).replace("'", "\""))
-                    jval['status'] = 'Completed'
-                    lst_data.pop(index)
-                    lst_data.insert(index, jval)
-                    data['workorders'] = lst_data
-                    break
-                index = index + 1
-            with open('./properties/' + file, 'w') as data_file2:
-                data_file2.write(str(data).replace("'", "\""))
-    return str(['Successfully changed to completed']).replace("'", "\"")
-
-@app.route("/properties/workorder/inprogress", methods=['GET', 'POST'])
-def getMarkProgress():
-    data = {}
-    final_data = []
-    onlyfiles = [f for f in listdir("./properties/") if isfile(join("./properties/", f))]
-    for file in onlyfiles:
-        with open('./properties/' + file, 'r') as data_file:
-            data = json.loads(data_file.read())
-            lst_data = data['workorders']
-            index = 0
-            for x in lst_data:
-                print(request.json)
-                if (x['address'] == request.json['address'] and x['submitdate'] == request.json['time']):
-                    jval = json.loads(str(lst_data[index]).replace("'", "\""))
-                    jval['status'] = 'In progress'
-                    lst_data.pop(index)
-                    lst_data.insert(index, jval)
-                    data['workorders'] = lst_data
-                    break
-                index = index + 1
-            with open('./properties/' + file, 'w') as data_file2:
-                data_file2.write(str(data).replace("'", "\""))
-    return str(['Successfully changed to in progress']).replace("'", "\"")
-
-@app.route("/data/<username>/updatetenant", methods=['GET', 'POST'])
-def updateTenant(username):
-    data = {}
-    prop = {}
-    with open('./data/' + username + '/payhist.json', 'r') as data_file:
-        data = json.loads(data_file.read())
-        data['propetyname'] = request.json['propetyname']
-        with open('./properties/' + data['propetyname'] + '.json', 'r') as data_file:
-            prop = json.loads(data_file.read())
-            data['address'] = prop['address']
-        data['recurring'] = request.json['recurring']
-        data['deposit'] = request.json['deposit']
-        data['durations'] = request.json['durations'].split(",")
-        data['status'] = request.json['status']
-        data['email'] = request.json['email']
-        data['phone'] = request.json['phone']
-        data['expiry'] = request.json['expiry']
-    with open('./data/' + username + '/payhist.json', 'w') as data_file2:
-        data_file2.write(str(data).replace("'", "\""))
-        return str(data).replace("'", "\"")
-
-@app.route("/properties/<properties>/update", methods=['GET', 'POST'])
-def updateProperty(properties):
-    data = {}
-    with open('./properties/' + properties + '.json', 'r') as data_file:
-        data = json.loads(data_file.read())
-        data['address'] = request.json['address']
-        data['image'] = request.json['image']
-        data['desc'] = request.json['desc']
-        data['circuitbreaker'] = request.json['circuitbreaker']
-        data['watermain'] = request.json['watermain']
-        data['alarm'] = request.json['alarm']
-        data['fire'] = request.json['fire']
-        data['centralheat'] = request.json['centralheat']
-        data['heatage'] = request.json['heatage']
-        data['pet'] = request.json['pet']
-        data['police'] = request.json['police']
-        data['hospital'] = request.json['hospital']
-        data['dmv'] = request.json['dmv']
-    with open('./properties/' + properties + '.json', 'w') as data_file2:
-        data_file2.write(str(data).replace("'", "\""))
-        return "['Successfully wrote to accounts!']".replace("'", "\"")
-
-#######################################################################################################
-#######################################################################################################
-#######################################################################################################
-
-@app.route('/data/<username>/monitoring/raw')
-def readAccounts(username):
-    with open('./data/' + username + '/monitoring.json', 'r') as data_file:
-        return data_file.read()
-
-
-def getMetadata(input):
-    metadata = []
-    if "_" in input:
-        if os.path.isfile('./data/'+input[0:int(input.index("_"))] + '.csv'):
-            metadata = t.ticker_details(input)
-    return metadata
