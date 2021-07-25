@@ -148,8 +148,17 @@ def addAccounts(username):
 @app.route("/data/<username>/accounts/delete/<account>", methods=['GET', 'POST'])
 def delAccounts(username, account):
     data = json.loads(dumps(con.getCollection("Accounts").find({"_id": str(username)})))[0]['accounts']
+    acc_num = int(str(account).split("_")[1])
+    final_data = {}
     data.pop(account)
-    con.getCollection("Accounts").find_one_and_update({"_id": username}, {"$set": {"accounts": data}})
+    count = 1
+    for x in data:
+        value = data[x]
+        if count >= acc_num:
+            x = str(x).split("_")[0] + "_" + str(count)
+        final_data[x] = value
+        count = count + 1
+    con.getCollection("Accounts").find_one_and_update({"_id": username}, {"$set": {"accounts": final_data}})
     return str(json.loads(dumps(con.getCollection("Accounts").find({"_id": str(username)})))[0]['accounts']).replace("'", "\"")
 
 @app.route("/data/<username>/accounts/update/<account>", methods=['GET', 'POST'])
