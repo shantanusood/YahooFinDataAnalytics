@@ -137,6 +137,27 @@ def updateContact(username, email, phone):
 def readRawData(username):
     return str(json.loads(dumps(con.getCollection("Accounts").find({"_id": str(username)})))[0]['accounts']).replace("'", "\"")
 
+@app.route("/data/<username>/accounts/add", methods=['GET', 'POST'])
+def addAccounts(username):
+    data = json.loads(dumps(con.getCollection("Accounts").find({"_id": str(username)})))[0]['accounts']
+    data.update(request.json)
+    con.getCollection("Accounts").find_one_and_update({"_id": username}, {"$set": {"accounts": data}})
+    return str(json.loads(dumps(con.getCollection("Accounts").find({"_id": str(username)})))[0]['accounts']).replace("'", "\"")
+
+@app.route("/data/<username>/accounts/delete/<account>", methods=['GET', 'POST'])
+def delAccounts(username, account):
+    data = json.loads(dumps(con.getCollection("Accounts").find({"_id": str(username)})))[0]['accounts']
+    data.pop(account)
+    con.getCollection("Accounts").find_one_and_update({"_id": username}, {"$set": {"accounts": data}})
+    return str(json.loads(dumps(con.getCollection("Accounts").find({"_id": str(username)})))[0]['accounts']).replace("'", "\"")
+
+@app.route("/data/<username>/accounts/update/<account>", methods=['GET', 'POST'])
+def updateAccount(username, account):
+    data = json.loads(dumps(con.getCollection("Accounts").find({"_id": str(username)})))[0]['accounts']
+    data[account] = request.json['name']
+    con.getCollection("Accounts").find_one_and_update({"_id": username}, {"$set": {"accounts": data}})
+    return str(json.loads(dumps(con.getCollection("Accounts").find({"_id": str(username)})))[0]['accounts']).replace("'", "\"")
+
 @app.route('/data/<username>/accounts/<account1>/<account2>/<account3>')
 def updateAccounts(username, account1, account2, account3):
     data = json.loads(dumps(con.getCollection("Accounts").find({"_id": str(username)})))[0]['accounts']
