@@ -140,7 +140,8 @@ def readRawData(username):
 @app.route("/data/<username>/accounts/add", methods=['GET', 'POST'])
 def addAccounts(username):
     data = json.loads(dumps(con.getCollection("Accounts").find({"_id": str(username)})))[0]['accounts']
-    data.update(request.json)
+    dct_data = {request.json['acc_name']: request.json['acc_value']}
+    data.update(dct_data)
     con.getCollection("Accounts").find_one_and_update({"_id": username}, {"$set": {"accounts": data}})
     return str(json.loads(dumps(con.getCollection("Accounts").find({"_id": str(username)})))[0]['accounts']).replace("'", "\"")
 
