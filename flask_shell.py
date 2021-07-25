@@ -137,6 +137,17 @@ def updateContact(username, email, phone):
 def readRawData(username):
     return str(json.loads(dumps(con.getCollection("Accounts").find({"_id": str(username)})))[0]['accounts']).replace("'", "\"")
 
+@app.route('/data/<username>/accounts/colors')
+def accountColors(username):
+    colors = json.loads(dumps(con.getCollection("Accounts").find({"_id": str(username)})))[0]['colors']
+    data = json.loads(dumps(con.getCollection("Accounts").find({"_id": str(username)})))[0]['accounts']
+    final_data = {}
+    count = 0
+    for x in data:
+        final_data[data[x]] = colors[count]
+        count = count + 1
+    return str(final_data).replace("'", "\"")
+
 @app.route("/data/<username>/accounts/add", methods=['GET', 'POST'])
 def addAccounts(username):
     data = json.loads(dumps(con.getCollection("Accounts").find({"_id": str(username)})))[0]['accounts']
