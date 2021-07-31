@@ -142,7 +142,7 @@ def readRawData(username):
     return str(final_data).replace("'", "\"")
 
 @app.route('/data/<username>/accounts/get')
-def readRawData(username):
+def getAccountsRaw(username):
     return str(json.loads(dumps(con.getCollection("Accounts").find({"_id": str(username)})))[0]['accounts']).replace("'", "\"")
 
 @app.route('/data/<username>/accounts/colors')
