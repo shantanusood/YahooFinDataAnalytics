@@ -135,56 +135,77 @@ def updateContact(username, email, phone):
 
 @app.route('/data/<username>/accounts')
 def readRawData(username):
-    return str(json.loads(dumps(con.getCollection("Accounts").find({"_id": str(username)})))[0]['accounts']).replace("'", "\"")
+    data = json.loads(dumps(con.getCollection("Accounts").find({"_id": str(username)})))[0]['accounts']
+    final_data = {}
+    for x in data:
+        final_data[x['name_id']] = x['name']
+    return str(final_data).replace("'", "\"")
 
 @app.route('/data/<username>/accounts/colors')
 def accountColors(username):
-    colors = json.loads(dumps(con.getCollection("Accounts").find({"_id": str(username)})))[0]['colors']
     data = json.loads(dumps(con.getCollection("Accounts").find({"_id": str(username)})))[0]['accounts']
     final_data = {}
-    count = 0
     for x in data:
-        final_data[data[x]] = colors[count]
-        count = count + 1
+        final_data[x['name']] = x['color']
     return str(final_data).replace("'", "\"")
 
 @app.route("/data/<username>/accounts/add", methods=['GET', 'POST'])
 def addAccounts(username):
     data = json.loads(dumps(con.getCollection("Accounts").find({"_id": str(username)})))[0]['accounts']
-    dct_data = {request.json['acc_name']: request.json['acc_value']}
-    data.update(dct_data)
+    dict_add ={
+        "id": int(data[-1]['id']) + 1,
+        "name_id": request.json['acc_name'],
+        "name": request.json['acc_value'],
+        "color": "wheat",
+    }
+    data.append(dict_add)
     con.getCollection("Accounts").find_one_and_update({"_id": username}, {"$set": {"accounts": data}})
-    return str(json.loads(dumps(con.getCollection("Accounts").find({"_id": str(username)})))[0]['accounts']).replace("'", "\"")
+    return readRawData(username)
 
 @app.route("/data/<username>/accounts/delete/<account>", methods=['GET', 'POST'])
 def delAccounts(username, account):
     data = json.loads(dumps(con.getCollection("Accounts").find({"_id": str(username)})))[0]['accounts']
     acc_num = int(str(account).split("_")[1])
-    final_data = {}
-    data.pop(account)
-    count = 1
+    toBePoped = {}
     for x in data:
-        value = data[x]
+        if str(account) == x['name_id']:
+            toBePoped = x
+            break
+    data.remove(toBePoped)
+    count = 1
+    acc_count = 0
+    for acc in data:
         if count >= acc_num:
-            x = str(x).split("_")[0] + "_" + str(count)
-        final_data[x] = value
+            data[acc_count]['name_id'] = "account_" + str(count)  
+        acc_count = acc_count + 1
         count = count + 1
-    con.getCollection("Accounts").find_one_and_update({"_id": username}, {"$set": {"accounts": final_data}})
-    return str(json.loads(dumps(con.getCollection("Accounts").find({"_id": str(username)})))[0]['accounts']).replace("'", "\"")
+    con.getCollection("Accounts").find_one_and_update({"_id": username}, {"$set": {"accounts": data}})
+    return readRawData(username)
 
 @app.route("/data/<username>/accounts/update/<account>", methods=['GET', 'POST'])
 def updateAccount(username, account):
     data = json.loads(dumps(con.getCollection("Accounts").find({"_id": str(username)})))[0]['accounts']
-    data[account] = request.json['name']
+    count = 0
+    for x in data:
+        if str(account) in x['name_id']:
+            data[count]['name'] = request.json['name']
+            break
+        count = count + 1
     con.getCollection("Accounts").find_one_and_update({"_id": username}, {"$set": {"accounts": data}})
-    return str(json.loads(dumps(con.getCollection("Accounts").find({"_id": str(username)})))[0]['accounts']).replace("'", "\"")
+    return readRawData(username)
 
 @app.route('/data/<username>/accounts/<account1>/<account2>/<account3>')
 def updateAccounts(username, account1, account2, account3):
     data = json.loads(dumps(con.getCollection("Accounts").find({"_id": str(username)})))[0]['accounts']
-    data['fidelity'] = account1
-    data['robinhood'] = account2
-    data['tastyworks'] = account3
+    count = 0
+    for x in data:
+        if "fidelity" in x['name_id']:
+            data[count]['name'] = account1
+        elif "robinhood" in x['name_id']:
+            data[count]['name'] = account2
+        elif "tastyworks" in x['name_id']:
+            data[count]['name'] = account3
+        count = count + 1
     con.getCollection("Accounts").find_one_and_update({"_id": username}, {"$set": {"accounts": data}})
     return "['Successfully wrote to accounts!']".replace("'", "\"")
 
