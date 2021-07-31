@@ -141,6 +141,10 @@ def readRawData(username):
         final_data[x['name_id']] = x['name']
     return str(final_data).replace("'", "\"")
 
+@app.route('/data/<username>/accounts/get')
+def readRawData(username):
+    return str(json.loads(dumps(con.getCollection("Accounts").find({"_id": str(username)})))[0]['accounts']).replace("'", "\"")
+
 @app.route('/data/<username>/accounts/colors')
 def accountColors(username):
     data = json.loads(dumps(con.getCollection("Accounts").find({"_id": str(username)})))[0]['accounts']
