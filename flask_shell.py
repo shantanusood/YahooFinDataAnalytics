@@ -213,6 +213,66 @@ def updateAccounts(username, account1, account2, account3):
     con.getCollection("Accounts").find_one_and_update({"_id": username}, {"$set": {"accounts": data}})
     return "['Successfully wrote to accounts!']".replace("'", "\"")
 
+@app.route('/data/<username>/accounts/groups/get')
+def getAccGroups(username):
+    data = json.loads(dumps(con.getCollection("AccGroups").find({"_id": str(username)})))
+    acc_data = json.loads(dumps(con.getCollection("Accounts").find({"_id": str(username)})))[0]['accounts']
+    if len(data) > 0:
+        for x in data[0]['groups']:
+            count = 0
+            for y in data[0]['groups'][x]:
+                for z in acc_data:
+                    if y['id'] == z['id']:
+                        data[0]['groups'][x][count]['color'] = z['color']
+                count = count + 1
+        con.getCollection("AccGroups").find_one_and_update({"_id": username}, {"$set": {"groups": data[0]['groups']}})
+        return str(data).replace("'", "\"")
+    else:
+        acc_data = json.loads(dumps(con.getCollection("Accounts").find({"_id": str(username)})))[0]['accounts']
+        val = "{'_id': '" + username + "', 'groups': {'other': " + str(acc_data) + "}}"
+        jval = json.loads(val.replace("'", "\""))
+        con.getCollection("AccGroups").insert_one(jval)
+        data = json.loads(dumps(con.getCollection("AccGroups").find({"_id": str(username)})))
+        return str(data).replace("'", "\"")
+
+@app.route('/data/<username>/accounts/groups/add', methods=["GET", "POST"])
+def addAccGroups(username):
+    data = json.loads(dumps(con.getCollection("AccGroups").find({"_id": str(username)})))[0]['groups']
+    acc_data = json.loads(dumps(con.getCollection("Accounts").find({"_id": str(username)})))[0]['accounts']
+    incoming = request.json
+    if incoming['group'] not in data:
+        data[incoming['group']] = []
+    for x in acc_data:
+        if x['id'] in incoming['id_list']:
+            data[incoming['group']].append(x)
+    con.getCollection("AccGroups").find_one_and_update({"_id": username}, {"$set": {"groups": data}})
+    return str(data).replace("'", "\"")
+
+@app.route('/data/<username>/accounts/groups/delete', methods=["GET", "POST"])
+def delAccGroups(username):
+    data = json.loads(dumps(con.getCollection("AccGroups").find({"_id": str(username)})))[0]['groups']
+    incoming = request.json
+    count = 0
+    for x in data[incoming['group']]:
+        if x['id'] == incoming['id_list']:
+            data[incoming['group']].remove(x)
+            break
+        count = count + 1
+    con.getCollection("AccGroups").find_one_and_update({"_id": username}, {"$set": {"groups": data}})
+    return str(data).replace("'", "\"")
+
+@app.route('/data/<username>/accounts/groups/<group>/delete')
+def delGroup(username, group):
+    data = json.loads(dumps(con.getCollection("AccGroups").find({"_id": str(username)})))[0]['groups']
+    del data[group]
+    con.getCollection("AccGroups").find_one_and_update({"_id": username}, {"$set": {"groups": data}})
+    return str(data).replace("'", "\"")
+
+@app.route('/data/<username>/accounts/groups/<group>/get')
+def getGroup(username, group):
+    data = json.loads(dumps(con.getCollection("AccGroups").find({"_id": str(username)})))[0]['groups'][group]
+    return str(data).replace("'", "\"")
+
 @app.route('/data/<username>/daily')
 def dailyProgress(username):
     return str(json.loads(dumps(con.getCollection("Progress").find({"_id": str(username)})))[0]['daily']).replace("'", "\"")
