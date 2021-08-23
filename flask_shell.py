@@ -223,13 +223,15 @@ def getAccGroups(username):
             count = 0
             for y in data[0]['groups'][x]:
                 for z in acc_data:
-                    if y not in acc_data:
-                        if [x, y] not in toBeRemoved:
-                            toBeRemoved.append([x, y])
                     if y['id'] == z['id']:
                         data[0]['groups'][x][count]['name'] = z['name']
                         data[0]['groups'][x][count]['color'] = z['color']
                 count = count + 1
+        for x in data[0]['groups']:
+            for y in data[0]['groups'][x]:
+                if y not in acc_data:
+                    if [x, y] not in toBeRemoved:
+                        toBeRemoved.append([x, y])
         for val in toBeRemoved:
             data[0]['groups'][val[0]].remove(val[1])
         con.getCollection("AccGroups").find_one_and_update({"_id": username}, {"$set": {"groups": data[0]['groups']}})
