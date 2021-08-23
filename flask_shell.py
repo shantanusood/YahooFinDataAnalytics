@@ -224,6 +224,7 @@ def getAccGroups(username):
             for y in data[0]['groups'][x]:
                 for z in acc_data:
                     if y not in acc_data:
+                        print(x, y)
                         toBeRemoved.append([x, y])
                     if y['id'] == z['id']:
                         data[0]['groups'][x][count]['name'] = z['name']
