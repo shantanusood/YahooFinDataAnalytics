@@ -224,6 +224,7 @@ def getAccGroups(username):
             for y in data[0]['groups'][x]:
                 for z in acc_data:
                     if y['id'] == z['id']:
+                        data[0]['groups'][x][count]['name'] = z['name']
                         data[0]['groups'][x][count]['color'] = z['color']
                 count = count + 1
         con.getCollection("AccGroups").find_one_and_update({"_id": username}, {"$set": {"groups": data[0]['groups']}})
