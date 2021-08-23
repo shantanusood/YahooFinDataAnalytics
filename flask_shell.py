@@ -213,20 +213,24 @@ def updateAccounts(username, account1, account2, account3):
     con.getCollection("Accounts").find_one_and_update({"_id": username}, {"$set": {"accounts": data}})
     return "['Successfully wrote to accounts!']".replace("'", "\"")
 
-#Check if the account even exists anymore!!
 @app.route('/data/<username>/accounts/groups/get')
 def getAccGroups(username):
     data = json.loads(dumps(con.getCollection("AccGroups").find({"_id": str(username)})))
     acc_data = json.loads(dumps(con.getCollection("Accounts").find({"_id": str(username)})))[0]['accounts']
+    toBeRemoved = []
     if len(data) > 0:
         for x in data[0]['groups']:
             count = 0
             for y in data[0]['groups'][x]:
                 for z in acc_data:
+                    if y not in acc_data:
+                        toBeRemoved.append([x, y])
                     if y['id'] == z['id']:
                         data[0]['groups'][x][count]['name'] = z['name']
                         data[0]['groups'][x][count]['color'] = z['color']
                 count = count + 1
+        for val in toBeRemoved:
+            data[0]['groups'][val[0]].remove(val[1])
         con.getCollection("AccGroups").find_one_and_update({"_id": username}, {"$set": {"groups": data[0]['groups']}})
         return str(data).replace("'", "\"")
     else:
