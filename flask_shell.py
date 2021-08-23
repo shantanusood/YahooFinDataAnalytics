@@ -217,7 +217,7 @@ def updateAccounts(username, account1, account2, account3):
 def getAccGroups(username):
     data = json.loads(dumps(con.getCollection("AccGroups").find({"_id": str(username)})))
     acc_data = json.loads(dumps(con.getCollection("Accounts").find({"_id": str(username)})))[0]['accounts']
-    toBeRemoved = []
+    toBeRemoved = set()
     if len(data) > 0:
         for x in data[0]['groups']:
             count = 0
